@@ -16,7 +16,7 @@ public abstract class Tile {
 
     private final int coordinate;
 
-    private static final Map<Integer, EmptyTile> EMPTY_TILES = createAllPossibleEmptyTiles();
+    private static final Map<Integer, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
 
     private static Map<Integer, EmptyTile> createAllPossibleEmptyTiles() {
         final Map<Integer, EmptyTile> emptyTiles = new HashMap<>();
@@ -36,7 +36,7 @@ public abstract class Tile {
      * @return A new tile.
      */
     public Tile create(final int coordinate, final Piece piece) {
-        return piece != null ? new OccupiedTile(coordinate, piece) : EMPTY_TILES.get(coordinate);
+        return piece != null ? new OccupiedTile(coordinate, piece) : EMPTY_TILES_CACHE.get(coordinate);
     }
 
     /**
