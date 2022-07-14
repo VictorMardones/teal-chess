@@ -3,6 +3,8 @@ package piece;
 import board.Board;
 import board.BoardUtils;
 import board.Move;
+import board.Move.AttackingMove;
+import board.Move.MajorMove;
 import com.google.common.collect.ImmutableList;
 import player.Alliance;
 
@@ -23,7 +25,7 @@ public class Knight extends Piece {
 
     //TODO: refactor the logic to make it more readable
     @Override
-    public List<Move> calculateLegalMoves(Board board) {
+    public List<Move> calculateLegalMoves(final Board board) {
 
         final List<Move> legalMoves = new ArrayList<>();
 
@@ -42,13 +44,14 @@ public class Knight extends Piece {
                 final var candidateDestinationTile = board.getTile(candidateDestinationCoordinate);
 
                 if (!candidateDestinationTile.isOccupied()) {
-                    legalMoves.add(new Move());
+                    legalMoves.add(new MajorMove(board, this, candidateDestinationCoordinate));
                 } else {
                     final Piece pieceAtDestination = candidateDestinationTile.getPiece();
                     final Alliance pieceAlliance = pieceAtDestination.getAlliance();
 
                     if (alliance != pieceAlliance) {
-                        legalMoves.add(new Move());
+                        legalMoves.add(new AttackingMove(board, this,
+                                candidateDestinationCoordinate, pieceAtDestination));
                     }
                 }
             }
