@@ -1,4 +1,6 @@
 package player;
 
-public class Alliance {
+public enum Alliance {
+    WHITE,
+    BLACK
 }
