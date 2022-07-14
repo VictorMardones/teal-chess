@@ -9,17 +9,17 @@ class BoardUtilsTest {
 
     @Test
     void validPosition() {
-        assertTrue(BoardUtils.isValidCoordinate(15));
+        assertTrue(BoardUtils.isInsideBoard(15));
     }
 
     @Test
     void tooLowCoordinate() {
-        assertFalse(BoardUtils.isValidCoordinate(-1));
+        assertFalse(BoardUtils.isInsideBoard(-1));
     }
 
     @Test
     void tooHighCoordinate() {
-        assertFalse(BoardUtils.isValidCoordinate(64));
+        assertFalse(BoardUtils.isInsideBoard(64));
     }
 
     @Test
