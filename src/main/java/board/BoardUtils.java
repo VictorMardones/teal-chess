@@ -22,4 +22,8 @@ public class BoardUtils {
         }
         return Alliance.BLACK;
     }
+
+    public static boolean sameColor(final int origin, final int destination) {
+        return getTileColor(origin) == getTileColor(destination);
+    }
 }

@@ -8,17 +8,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class BoardUtilsTest {
 
     @Test
-    void validposition() {
+    void validPosition() {
         assertTrue(BoardUtils.isValidCoordinate(15));
     }
 
     @Test
-    void lowCoordinate() {
+    void tooLowCoordinate() {
         assertFalse(BoardUtils.isValidCoordinate(-1));
     }
 
     @Test
-    void highCoordinate() {
+    void tooHighCoordinate() {
         assertFalse(BoardUtils.isValidCoordinate(64));
     }
 
@@ -29,6 +29,16 @@ class BoardUtilsTest {
 
     @Test
     void getBlackTile() {
-        assertEquals(Alliance.WHITE, BoardUtils.getTileColor(8));
+        assertEquals(Alliance.BLACK, BoardUtils.getTileColor(8));
+    }
+
+    @Test
+    void sameColor() {
+        assertTrue(BoardUtils.sameColor(0, 63));
+    }
+
+    @Test
+    void differentColor() {
+        assertFalse(BoardUtils.sameColor(0, 7));
     }
 }

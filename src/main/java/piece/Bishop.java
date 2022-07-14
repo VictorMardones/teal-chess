@@ -29,7 +29,7 @@ public class Bishop extends Piece {
 
             while (BoardUtils.isValidCoordinate(candidateOffset)) {
 
-                if (BoardUtils.getTileColor(candidateDestination) != BoardUtils.getTileColor(position)) {
+                if (!BoardUtils.sameColor(position, candidateDestination)) {
                     break;
                 }
 

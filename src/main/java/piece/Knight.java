@@ -30,25 +30,25 @@ public class Knight extends Piece {
         final List<Move> legalMoves = new ArrayList<>();
 
         for (final var candidate: CANDIDATE_MOVE_OFFSETS) {
-            var candidateDestinationCoordinate = position + candidate;
+            var candidateDestination = position + candidate;
 
-            if (BoardUtils.isValidCoordinate(candidateDestinationCoordinate)) {
+            if (BoardUtils.isValidCoordinate(candidateDestination)) {
 
-                if (BoardUtils.getTileColor(candidateDestinationCoordinate) == BoardUtils.getTileColor(position)) {
+                if (BoardUtils.sameColor(position, candidateDestination)) {
                     continue;
                 }
 
-                final var candidateDestinationTile = board.getTile(candidateDestinationCoordinate);
+                final var candidateDestinationTile = board.getTile(candidateDestination);
 
                 if (!candidateDestinationTile.isOccupied()) {
-                    legalMoves.add(new MajorMove(board, this, candidateDestinationCoordinate));
+                    legalMoves.add(new MajorMove(board, this, candidateDestination));
                 } else {
                     final Piece pieceAtDestination = candidateDestinationTile.getPiece();
                     final Alliance pieceAlliance = pieceAtDestination.getAlliance();
 
                     if (alliance != pieceAlliance) {
                         legalMoves.add(new AttackingMove(board, this,
-                                candidateDestinationCoordinate, pieceAtDestination));
+                                candidateDestination, pieceAtDestination));
                     }
                 }
             }
