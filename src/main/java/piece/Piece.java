@@ -7,10 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import player.Alliance;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
  * A chess piece.
+ * TODO: Split into sliding and non sliding pieces
  */
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public abstract class Piece {
@@ -24,5 +26,5 @@ public abstract class Piece {
      * @param board Current state of the game board.
      * @return List of possible moves.
      */
-    public abstract List<Move> calculateLegalMoves(final Board board);
+    public abstract Collection<Move> calculateLegalMoves(final Board board);
 }
