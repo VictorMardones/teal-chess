@@ -3,8 +3,6 @@ package piece;
 import board.Board;
 import board.BoardUtils;
 import board.Move;
-import board.Move.AttackingMove;
-import board.Move.MajorMove;
 import com.google.common.collect.ImmutableList;
 import player.Alliance;
 
@@ -12,11 +10,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Bishop extends Piece {
+public class Rook extends Piece {
 
-    private final static int[] CANDIDATE_MOVE_OFFSETS = {-9, -7, 7, 9};
+    private final static int[] CANDIDATE_MOVE_OFFSETS = { -8, -1, 1, 8};
 
-    Bishop(int position, Alliance alliance) {
+    public Rook(int position, Alliance alliance) {
         super(position, alliance);
     }
 
@@ -31,7 +29,8 @@ public class Bishop extends Piece {
 
             while (BoardUtils.isValidCoordinate(candidateOffset)) {
 
-                if (!BoardUtils.sameColor(position, candidateDestination)) {
+                if (!BoardUtils.sameRow(position, candidateDestination) &&
+                        !BoardUtils.sameColumn(position, candidateDestination)) {
                     break;
                 }
 
@@ -42,13 +41,13 @@ public class Bishop extends Piece {
                     final var candidateDestinationTile = board.getTile(candidateDestination);
 
                     if (!candidateDestinationTile.isOccupied()) {
-                        legalMoves.add(new MajorMove(board, this, candidateDestination));
+                        legalMoves.add(new Move.MajorMove(board, this, candidateDestination));
                     } else {
                         final Piece pieceAtDestination = candidateDestinationTile.getPiece();
                         final Alliance pieceAlliance = pieceAtDestination.getAlliance();
 
                         if (alliance != pieceAlliance) {
-                            legalMoves.add(new AttackingMove(board, this,
+                            legalMoves.add(new Move.AttackingMove(board, this,
                                     candidateDestination, pieceAtDestination));
                         }
 

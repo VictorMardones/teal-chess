@@ -59,7 +59,7 @@ class BoardUtilsTest {
 
     @Test
     void getBlackTile() {
-        assertEquals(Alliance.BLACK, BoardUtils.getTileColor(8));
+        assertEquals(Alliance.BLACK, BoardUtils.getTileColor(1));
     }
 
     @Test
