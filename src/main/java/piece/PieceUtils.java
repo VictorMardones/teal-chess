@@ -8,6 +8,10 @@ import board.Tile;
 
 public class PieceUtils {
 
+    private PieceUtils() {
+        throw new IllegalStateException("You cannot instantiate me!");
+    }
+
     /**
      * Checks if the given piece can get the destination.
      * This happens only if the destination is free or has a piece that can be captured.

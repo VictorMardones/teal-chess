@@ -31,7 +31,7 @@ public abstract class SlidingPiece extends Piece {
                 .mapToObj(board::getTile)
                 .filter(tile -> PieceUtils.isAccessible(this, tile))
                 .map(tile -> PieceUtils.createMove(this, tile, board))
-                .collect(Collectors.toList());
+                .toList();
 
         return ImmutableList.copyOf(legalMoves);
     }

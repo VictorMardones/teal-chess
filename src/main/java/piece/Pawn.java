@@ -3,14 +3,13 @@ package piece;
 import board.Board;
 import board.BoardUtils;
 import board.Move;
+import board.Move.CaptureMove;
 import board.Move.NormalMove;
 import com.google.common.collect.ImmutableList;
 import player.Alliance;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public final class Pawn extends Piece {
@@ -18,12 +17,12 @@ public final class Pawn extends Piece {
     // TODO: Actually use this field
     private boolean isFirstMove;
 
-    private final static int FORWARD_MOVE = 8;
-    private final static int FIRST_MOVE = 16;
-    private final static int LEFT_CAPTURE = 7;
-    private final static int RIGHT_CAPTURE = 9;
+    private static final int FORWARD_MOVE = 8;
+    private static final int FIRST_MOVE = 16;
+    private static final int LEFT_CAPTURE = 7;
+    private static final int RIGHT_CAPTURE = 9;
 
-    private final static int[] CANDIDATE_MOVE_OFFSET = { LEFT_CAPTURE, FORWARD_MOVE, RIGHT_CAPTURE, FIRST_MOVE };
+    private static final int[] CANDIDATE_MOVE_OFFSET = { LEFT_CAPTURE, FORWARD_MOVE, RIGHT_CAPTURE, FIRST_MOVE };
 
     public Pawn(final int position, final Alliance alliance) {
         super(position, alliance);
@@ -41,11 +40,11 @@ public final class Pawn extends Piece {
                 // TODO: Fix the next part
                 //.map(handleOffset(offset, board, destination))
 
-                
+
                 .mapToObj(board::getTile)
                 .filter(tile -> PieceUtils.isAccessible(this, tile))
                 .map(tile -> PieceUtils.createMove(this, tile, board))
-                .collect(Collectors.toList());
+                .toList();
 
         return ImmutableList.copyOf(legalMoves);
     }
@@ -65,22 +64,20 @@ public final class Pawn extends Piece {
             }
             case FORWARD_MOVE -> {
                 if (!board.getTile(destination).isOccupied()) {
-                    // TODO: Improve the logic here
+                    // TODO: Deal with promotions
                     return new NormalMove(board, this, destination);
                 }
             }
-            case LEFT_CAPTURE -> {
-                if (!((BoardUtils.getColumn(position) == 7 && isWhite()) ||
-                        (BoardUtils.getColumn(position) == 0 && isBlack()))) {
-                    if (board.getTile(destination).isOccupied()) {
-                        final Piece pieceOnCandidate = board.getTile(destination).getPiece();
+            case LEFT_CAPTURE, RIGHT_CAPTURE -> {
+                if (!isIllegalMove(destination) && board.getTile(destination).isOccupied()) {
+                    final Piece pieceOnCandidate = board.getTile(destination).getPiece();
+
+                    if (!sameAliance(pieceOnCandidate)) {
+                            return new CaptureMove(board, this, destination, pieceOnCandidate);
+                        }
                     }
                 }
             }
-            case RIGHT_CAPTURE -> {
-                // TODO
-            }
-        }
 
         return null;
     }

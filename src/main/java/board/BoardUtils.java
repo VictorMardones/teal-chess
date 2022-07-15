@@ -9,7 +9,7 @@ public class BoardUtils {
     private static final int NUMBER_OF_ROWS = 8;
 
     private BoardUtils() {
-        throw new RuntimeException("You cannot instantiate me!");
+        throw new IllegalStateException("You cannot instantiate me!");
     }
 
     public static boolean isInsideBoard(final int coordinate) {
@@ -33,7 +33,7 @@ public class BoardUtils {
     }
 
     public static Alliance getTileColor(final int coordinate) {
-        if ((coordinate + Math.floor(coordinate / NUMBER_OF_ROWS) % 2) % 2 == 0) {
+        if ((coordinate + (float) coordinate / NUMBER_OF_ROWS % 2) % 2 == 0) {
             return Alliance.WHITE;
         }
         return Alliance.BLACK;

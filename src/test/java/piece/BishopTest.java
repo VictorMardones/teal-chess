@@ -14,7 +14,7 @@ class BishopTest {
     }
 
     @Test
-    void legalMove() {
+    void diagonalMove() {
         var bishop = new Bishop(0, Alliance.BLACK);
         assertFalse(bishop.isIllegalMove(9));
     }

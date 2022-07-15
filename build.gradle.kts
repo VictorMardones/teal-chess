@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("org.sonarqube") version "3.4.0.2513"
 }
 
 group = "cl.vmardones"
@@ -16,6 +17,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.24")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
+    testCompileOnly("org.junit.jupiter:junit-jupiter-params:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 
     testCompileOnly("org.projectlombok:lombok:1.18.24")

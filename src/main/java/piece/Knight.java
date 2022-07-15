@@ -9,7 +9,7 @@ import player.Alliance;
  */
 public final class Knight extends JumpingPiece {
 
-    private final static int[] CANDIDATE_MOVE_OFFSETS = {-17, -15, -10, -6, 6, 10, 15, 17};
+    private static final int[] CANDIDATE_MOVE_OFFSETS = {-17, -15, -10, -6, 6, 10, 15, 17};
 
     public Knight(int position, Alliance alliance) {
         super(position, alliance);
