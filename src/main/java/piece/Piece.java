@@ -35,4 +35,12 @@ public abstract class Piece {
      * @return True if the next move is valid.
      */
     protected abstract boolean isIllegalMove(final int destination);
+
+    public boolean isWhite() {
+        return alliance == Alliance.WHITE;
+    }
+
+    public boolean isBlack() {
+        return !isWhite();
+    }
 }
