@@ -44,6 +44,22 @@ public abstract class Piece {
     }
 
     public boolean isEnemy(Piece other) {
-        return alliance != other.alliance;
+        if (other != null) {
+            return alliance != other.alliance;
+        }
+        return false;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public enum PieceType {
+        PAWN("P"),
+        KNIGHT("N"),
+        BISHOP("B"),
+        ROOK("R"),
+        QUEEN("Q"),
+        KING("K");
+
+        private String pieceName;
     }
 }

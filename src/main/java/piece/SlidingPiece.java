@@ -8,6 +8,7 @@ import player.Alliance;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.IntConsumer;
 
 public abstract class SlidingPiece extends Piece {
@@ -21,12 +22,15 @@ public abstract class SlidingPiece extends Piece {
     @Override
     public Collection<Move> calculateLegalMoves(final Board board) {
 
+        // TODO: Remove these non-null filters, change how the methods work
         final var legalMoves = Arrays.stream(getMoveVectors())
                 .mapMulti(this::calculateOffsets)
                 .filter(offset -> !isIllegalMove(offset))
                 .mapToObj(board::getTile)
+                .filter(Objects::nonNull)
                 .filter(tile -> PieceUtils.isAccessible(this, tile))
                 .map(tile -> PieceUtils.createMove(this, tile, board))
+                .filter(Objects::nonNull)
                 .toList();
 
         return ImmutableList.copyOf(legalMoves);

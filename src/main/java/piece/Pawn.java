@@ -99,4 +99,9 @@ public final class Pawn extends Piece {
         return !board.getTile(position + 8 * alliance.getDirection()).isOccupied()
                 && !board.getTile(position + 16 * alliance.getDirection()).isOccupied();
     }
+
+    @Override
+    public String toString() {
+        return PieceType.PAWN.getPieceName();
+    }
 }

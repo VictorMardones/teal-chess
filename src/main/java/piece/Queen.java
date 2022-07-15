@@ -22,4 +22,9 @@ public final class Queen extends SlidingPiece {
                 !BoardUtils.sameColumn(position, destination) &&
                 !BoardUtils.sameColor(position, destination);
     }
+
+    @Override
+    public String toString() {
+        return PieceType.QUEEN.getPieceName();
+    }
 }

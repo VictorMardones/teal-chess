@@ -24,4 +24,9 @@ public final class Bishop extends SlidingPiece {
     protected boolean isIllegalMove(int destination) {
         return !BoardUtils.sameColor(position, destination);
     }
+
+    @Override
+    public String toString() {
+        return PieceType.BISHOP.getPieceName();
+    }
 }

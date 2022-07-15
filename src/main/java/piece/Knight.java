@@ -24,4 +24,9 @@ public final class Knight extends JumpingPiece {
     protected boolean isIllegalMove(int destination) {
         return BoardUtils.sameColor(position, destination);
     }
+
+    @Override
+    public String toString() {
+        return PieceType.KNIGHT.getPieceName();
+    }
 }

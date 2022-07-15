@@ -5,9 +5,8 @@ import lombok.NoArgsConstructor;
 import piece.*;
 import player.Alliance;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.IntConsumer;
 
 /**
  * The game board, made of 8x8 tiles.
@@ -22,7 +21,11 @@ public class Board {
         gameBoard = createGameBoard(builder);
         whitePieces = calculateActivePieces(gameBoard, Alliance.WHITE);
         blackPieces = calculateActivePieces(gameBoard, Alliance.BLACK);
+
+        final Collection<Move> whiteLegalMoves = calculateLegalMoves(whitePieces);
+        final Collection<Move> blackLegalMoves = calculateLegalMoves(blackPieces);
     }
+
     private List<Tile> createGameBoard(final Builder builder) {
         final var tiles = new Tile[BoardUtils.MAX_TILES];
 
@@ -80,12 +83,42 @@ public class Board {
         return ImmutableList.copyOf(pieces);
     }
 
-    @NoArgsConstructor
+    private Collection<Move> calculateLegalMoves(Collection<Piece> pieces) {
+
+        final List<Move> legalMoves = new ArrayList<>();
+
+        for (final var piece: pieces) {
+            legalMoves.addAll(piece.calculateLegalMoves(this));
+        }
+
+        return ImmutableList.copyOf(legalMoves);
+    }
+
+    @Override
+    public String toString() {
+        final var builder = new StringBuilder();
+
+        for (var i = 0; i < BoardUtils.MAX_TILES; i++) {
+            final var tileText = gameBoard.get(i).toString();
+            builder.append(String.format("%s  ", tileText));
+
+            if ((i + 1) % BoardUtils.NUMBER_OF_ROWS == 0) {
+                builder.append("\n");
+            }
+        }
+
+        return builder.toString();
+    }
+
     public static class Builder {
 
         Map<Integer, Piece> boardConfig;
 
         Alliance nextTurn;
+
+        public Builder() {
+            boardConfig = new HashMap<>();
+        }
 
         public Builder withPiece(final Piece piece) {
             boardConfig.put(piece.getPosition(), piece);
@@ -100,6 +133,5 @@ public class Board {
         public Board build() {
             return new Board(this);
         }
-
     }
 }

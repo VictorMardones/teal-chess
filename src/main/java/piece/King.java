@@ -20,4 +20,9 @@ public final class King extends JumpingPiece {
     protected boolean isIllegalMove(int destination) {
         return Math.abs(BoardUtils.getColumn(position) - BoardUtils.getColumn(destination)) > 1;
     }
+
+    @Override
+    public String toString() {
+        return PieceType.KING.getPieceName();
+    }
 }

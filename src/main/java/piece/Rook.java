@@ -25,4 +25,9 @@ public final class Rook extends SlidingPiece {
         return !BoardUtils.sameRow(position, destination) &&
                 !BoardUtils.sameColumn(position, destination);
     }
+
+    @Override
+    public String toString() {
+        return PieceType.ROOK.getPieceName();
+    }
 }

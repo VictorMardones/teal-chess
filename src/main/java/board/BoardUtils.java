@@ -6,7 +6,7 @@ public class BoardUtils {
 
     public static final int MIN_TILES = 0;
     public static final int MAX_TILES = 64;
-    private static final int NUMBER_OF_ROWS = 8;
+    public static final int NUMBER_OF_ROWS = 8;
 
     private BoardUtils() {
         throw new IllegalStateException("You cannot instantiate me!");
