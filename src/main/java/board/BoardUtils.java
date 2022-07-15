@@ -5,7 +5,7 @@ import player.Alliance;
 public class BoardUtils {
 
     public static final int MIN_TILES = 0;
-    public static final int MAX_TILES = 63;
+    public static final int MAX_TILES = 64;
     private static final int NUMBER_OF_ROWS = 8;
 
     private BoardUtils() {
@@ -13,7 +13,7 @@ public class BoardUtils {
     }
 
     public static boolean isInsideBoard(final int coordinate) {
-        return coordinate >= MIN_TILES && coordinate <= MAX_TILES;
+        return coordinate >= MIN_TILES && coordinate < MAX_TILES;
     }
 
     public static int getRow(final int coordinate) {

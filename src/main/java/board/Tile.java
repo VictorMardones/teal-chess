@@ -23,7 +23,7 @@ public abstract class Tile {
     private static Map<Integer, EmptyTile> createAllPossibleEmptyTiles() {
         final Map<Integer, EmptyTile> emptyTiles = new HashMap<>();
 
-        for (var i = 0; i <= BoardUtils.MAX_TILES; i++) {
+        for (var i = 0; i < BoardUtils.MAX_TILES; i++) {
             emptyTiles.put(i, new EmptyTile(i));
         }
 
@@ -37,7 +37,7 @@ public abstract class Tile {
      * @param piece      The piece on the tile.
      * @return A new tile.
      */
-    public Tile create(final int coordinate, final Piece piece) {
+    public static Tile create(final int coordinate, final Piece piece) {
         return piece != null ? new OccupiedTile(coordinate, piece) : EMPTY_TILES_CACHE.get(coordinate);
     }
 

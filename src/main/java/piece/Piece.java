@@ -12,11 +12,11 @@ import java.util.Collection;
 /**
  * A chess piece.
  */
+@Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Piece {
 
     protected final int position;
-    @Getter
     protected final Alliance alliance;
 
     /**
