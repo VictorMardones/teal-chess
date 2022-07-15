@@ -28,28 +28,10 @@ public abstract class JumpingPiece extends Piece {
                 .filter(BoardUtils::isInsideBoard)
                 .filter(destination -> !isIllegalMove(destination))
                 .mapToObj(board::getTile)
-                .filter(tile -> !isBlocked(tile))
-                .map(tile -> createMove(board, tile))
+                .filter(tile -> PieceUtils.isAccessible(this, tile))
+                .map(tile -> PieceUtils.createMove(this, tile, board))
                 .collect(Collectors.toList());
 
         return ImmutableList.copyOf(legalMoves);
-    }
-
-    private boolean isBlocked(final Tile destination) {
-        return destination.isOccupied() && sameAliance(destination.getPiece());
-    }
-
-    private Move createMove(final Board board, final Tile destination) {
-        if (!destination.isOccupied()) {
-            return new NormalMove(board, this, destination.getCoordinate());
-        }
-
-        final var capturablePiece = destination.getPiece();
-
-        if (!sameAliance(capturablePiece)) {
-            return new CaptureMove(board, this, destination.getCoordinate(), capturablePiece);
-        }
-
-        return null;
     }
 }
