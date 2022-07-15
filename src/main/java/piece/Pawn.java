@@ -8,57 +8,81 @@ import com.google.common.collect.ImmutableList;
 import player.Alliance;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class Pawn extends Piece {
 
     // TODO: Actually use this field
     private boolean isFirstMove;
 
-    private final static int[] CANDIDATE_MOVE_OFFSET = { 7, 8, 9, 16};
+    private final static int FORWARD_MOVE = 8;
+    private final static int FIRST_MOVE = 16;
+    private final static int LEFT_CAPTURE = 7;
+    private final static int RIGHT_CAPTURE = 9;
+
+    private final static int[] CANDIDATE_MOVE_OFFSET = { LEFT_CAPTURE, FORWARD_MOVE, RIGHT_CAPTURE, FIRST_MOVE };
 
     public Pawn(final int position, final Alliance alliance) {
         super(position, alliance);
         isFirstMove = false;
     }
 
+    // TODO: Refactor this code when the pawn is implemented completely
     @Override
     public Collection<Move> calculateLegalMoves(final Board board) {
 
-        final List<Move> legalMoves = new ArrayList<>();
+        final var legalMoves = Arrays.stream(getMoveOffsets())
+                .map(offset -> position + getAlliance().getDirection() * offset)
+                .filter(BoardUtils::isInsideBoard)
+                .filter(destination -> !isIllegalMove(destination))
+                // TODO: Fix the next part
+                //.map(handleOffset(offset, board, destination))
 
-        for (final var currentCandidateOffset: getMoveOffsets()) {
-            var candidateDestination = position + getAlliance().getDirection() * currentCandidateOffset;
+                
+                .mapToObj(board::getTile)
+                .filter(tile -> PieceUtils.isAccessible(this, tile))
+                .map(tile -> PieceUtils.createMove(this, tile, board))
+                .collect(Collectors.toList());
 
-            if (!BoardUtils.isInsideBoard(candidateDestination)) {
-                continue;
+        return ImmutableList.copyOf(legalMoves);
+    }
+
+    private Move handleOffset(int offset, Board board, int destination) {
+        switch (offset) {
+            case FIRST_MOVE -> {
+                if ((BoardUtils.getRow(position) == 2 && isBlack()) ||
+                        (BoardUtils.getRow(position) == 6 && isWhite())) {
+                    final int forwardCoordinate = position + 8 * alliance.getDirection();
+
+                    if (!board.getTile(forwardCoordinate).isOccupied()
+                            && !board.getTile(destination).isOccupied()) {
+                        return new NormalMove(board, this, destination);
+                    }
+                }
             }
-
-            if (currentCandidateOffset == 8 && !board.getTile(candidateDestination).isOccupied()) {
-                // TODO: Improve the logic here
-                legalMoves.add(new NormalMove(board, this, candidateDestination));
-            } else if (currentCandidateOffset == 16 && isFirstMove &&
-                    (BoardUtils.getRow(position) == 2 && isBlack()) ||
-                    (BoardUtils.getRow(position) == 6 && isWhite())) {
-                final int forwardCoordinate = position + 8 * alliance.getDirection();
-
-                if (!board.getTile(forwardCoordinate).isOccupied()
-                        && !board.getTile(candidateDestination).isOccupied()) {
-                    legalMoves.add(new NormalMove(board, this, candidateDestination));
+            case FORWARD_MOVE -> {
+                if (!board.getTile(destination).isOccupied()) {
+                    // TODO: Improve the logic here
+                    return new NormalMove(board, this, destination);
                 }
-            } else if (currentCandidateOffset == 7 &&
-                    !((BoardUtils.getColumn(position) == 7  && isWhite()) ||
-                    (BoardUtils.getColumn(position) == 0  && isBlack()))) {
-                if (board.getTile(candidateDestination).isOccupied()) {
-                    final Piece pieceOnCandidate = board.getTile(candidateDestination).getPiece();
+            }
+            case LEFT_CAPTURE -> {
+                if (!((BoardUtils.getColumn(position) == 7 && isWhite()) ||
+                        (BoardUtils.getColumn(position) == 0 && isBlack()))) {
+                    if (board.getTile(destination).isOccupied()) {
+                        final Piece pieceOnCandidate = board.getTile(destination).getPiece();
+                    }
                 }
-            } else if (currentCandidateOffset == 9) {
-
+            }
+            case RIGHT_CAPTURE -> {
+                // TODO
             }
         }
 
-        return ImmutableList.copyOf(legalMoves);
+        return null;
     }
 
     int[] getMoveOffsets() {
@@ -67,6 +91,6 @@ public final class Pawn extends Piece {
 
     @Override
     protected boolean isIllegalMove(final int destination) {
-        return false;
+        return Math.abs(BoardUtils.getColumn(position) - BoardUtils.getColumn(destination)) > 1;
     }
 }
