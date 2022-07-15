@@ -3,6 +3,7 @@ package board;
 import com.google.common.collect.ImmutableMap;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import piece.Piece;
 
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.Map;
  * A single chess tile, which may or may not contain a piece.
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
 public abstract class Tile {
 
     private final int coordinate;

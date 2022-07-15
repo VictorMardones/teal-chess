@@ -43,4 +43,8 @@ public abstract class Piece {
     public boolean isBlack() {
         return !isWhite();
     }
+
+    public boolean sameAliance(Piece other) {
+        return alliance == other.alliance;
+    }
 }
