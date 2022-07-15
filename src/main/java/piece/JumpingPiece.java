@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableList;
 import player.Alliance;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public abstract class JumpingPiece extends Piece {
@@ -19,7 +20,7 @@ public abstract class JumpingPiece extends Piece {
 
     //TODO: refactor the logic to make it more readable
     @Override
-    public List<Move> calculateLegalMoves(final Board board) {
+    public Collection<Move> calculateLegalMoves(final Board board) {
 
         final List<Move> legalMoves = new ArrayList<>();
 
