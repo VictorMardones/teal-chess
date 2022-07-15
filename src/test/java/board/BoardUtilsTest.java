@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class BoardUtilsTest {
 
     @Test
-    void validPosition() {
+    void validCoordinate() {
         assertTrue(BoardUtils.isInsideBoard(15));
     }
 

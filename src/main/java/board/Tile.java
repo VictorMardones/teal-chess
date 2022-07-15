@@ -59,8 +59,8 @@ public abstract class Tile {
 
     static final class EmptyTile extends Tile {
 
-        private EmptyTile(final int tileCoordinate) {
-            super(tileCoordinate);
+        private EmptyTile(final int coordinate) {
+            super(coordinate);
         }
 
         @Override

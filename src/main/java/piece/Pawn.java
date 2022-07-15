@@ -22,11 +22,10 @@ public final class Pawn extends Piece {
     private static final int LEFT_CAPTURE = 7;
     private static final int RIGHT_CAPTURE = 9;
 
-    private static final int[] CANDIDATE_MOVE_OFFSET = {LEFT_CAPTURE, FORWARD_MOVE, RIGHT_CAPTURE, FIRST_MOVE};
+    private static final int[] MOVE_OFFSET = {LEFT_CAPTURE, FORWARD_MOVE, RIGHT_CAPTURE, FIRST_MOVE};
 
-    public Pawn(final int position, final Alliance alliance) {
+    public Pawn(int position, Alliance alliance) {
         super(position, alliance);
-        isFirstMove = false;
     }
 
     // TODO: Refactor this code when the pawn is implemented completely
@@ -79,16 +78,16 @@ public final class Pawn extends Piece {
         if (board.getTile(destination).isOccupied()) {
             final var capturablePiece = board.getTile(destination).getPiece();
 
-            if (!sameAliance(capturablePiece)) {
+            if (isEnemy(capturablePiece)) {
                 return new CaptureMove(board, this, destination, capturablePiece);
             }
         }
 
         return null;
     }
-    
+
     int[] getMoveOffsets() {
-        return CANDIDATE_MOVE_OFFSET;
+        return MOVE_OFFSET;
     }
 
     @Override

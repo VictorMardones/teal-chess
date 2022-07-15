@@ -11,7 +11,6 @@ import java.util.Collection;
 
 /**
  * A chess piece.
- * TODO: Split into sliding and non sliding pieces
  */
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Piece {
@@ -44,7 +43,7 @@ public abstract class Piece {
         return !isWhite();
     }
 
-    public boolean sameAliance(Piece other) {
-        return alliance == other.alliance;
+    public boolean isEnemy(Piece other) {
+        return alliance != other.alliance;
     }
 }

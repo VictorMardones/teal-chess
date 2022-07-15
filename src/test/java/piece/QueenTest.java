@@ -17,8 +17,8 @@ class QueenTest {
     }
 
     @ParameterizedTest
+    // diagonal, horizontal, vertical
     @ValueSource(ints = {63, 7, 56})
-        // diagonal, horizontal, vertical
     void legalMoves(int destination) {
         var queen = new Queen(0, Alliance.BLACK);
         assertFalse(queen.isIllegalMove(destination));

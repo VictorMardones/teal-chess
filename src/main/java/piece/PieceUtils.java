@@ -21,7 +21,7 @@ public class PieceUtils {
      * @return True if the piece can get to the destination.
      */
     public static boolean isAccessible(final Piece piece, final Tile destination) {
-        return !destination.isOccupied() && !piece.sameAliance(destination.getPiece());
+        return !destination.isOccupied() && piece.isEnemy(destination.getPiece());
     }
 
     /**
@@ -40,7 +40,7 @@ public class PieceUtils {
 
         final var capturablePiece = destination.getPiece();
 
-        if (!piece.sameAliance(capturablePiece)) {
+        if (piece.isEnemy(capturablePiece)) {
             return new CaptureMove(board, piece, destination.getCoordinate(), capturablePiece);
         }
 

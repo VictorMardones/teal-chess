@@ -9,15 +9,15 @@ import player.Alliance;
  */
 public final class Bishop extends SlidingPiece {
 
-    private static final int[] CANDIDATE_MOVE_VECTORS = {-9, -7, 7, 9};
+    private static final int[] MOVE_VECTORS = {-9, -7, 7, 9};
 
-    Bishop(int position, Alliance alliance) {
-        super(position, alliance);
+    public Bishop(int coordinate, Alliance alliance) {
+        super(coordinate, alliance);
     }
 
     @Override
     int[] getMoveVectors() {
-        return CANDIDATE_MOVE_VECTORS;
+        return MOVE_VECTORS;
     }
 
     @Override

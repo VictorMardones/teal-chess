@@ -17,8 +17,8 @@ class RookTest {
     }
 
     @ParameterizedTest
+    // horizontal, vertical
     @ValueSource(ints = {7, 56})
-        // horizontal, vertical
     void legalMoves(int destination) {
         var rook = new Rook(0, Alliance.BLACK);
         assertFalse(rook.isIllegalMove(destination));

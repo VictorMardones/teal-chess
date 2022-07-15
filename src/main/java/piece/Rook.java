@@ -9,7 +9,7 @@ import player.Alliance;
  */
 public final class Rook extends SlidingPiece {
 
-    private static final int[] CANDIDATE_MOVE_VECTORS = {-8, -1, 1, 8};
+    private static final int[] MOVE_VECTORS = {-8, -1, 1, 8};
 
     public Rook(int position, Alliance alliance) {
         super(position, alliance);
@@ -17,7 +17,7 @@ public final class Rook extends SlidingPiece {
 
     @Override
     int[] getMoveVectors() {
-        return CANDIDATE_MOVE_VECTORS;
+        return MOVE_VECTORS;
     }
 
     @Override
