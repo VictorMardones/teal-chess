@@ -2,9 +2,10 @@ package board;
 
 import com.google.common.collect.ImmutableList;
 import lombok.NoArgsConstructor;
-import piece.Piece;
+import piece.*;
 import player.Alliance;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -14,11 +15,14 @@ import java.util.Map;
 public class Board {
 
     private final List<Tile> gameBoard;
+    private final Collection<Piece> whitePieces;
+    private final Collection<Piece> blackPieces;
 
     private Board(Builder builder) {
-        this.gameBoard = createGameBoard(builder);
+        gameBoard = createGameBoard(builder);
+        whitePieces = calculateActivePieces(gameBoard, Alliance.WHITE);
+        blackPieces = calculateActivePieces(gameBoard, Alliance.BLACK);
     }
-
     private List<Tile> createGameBoard(final Builder builder) {
         final var tiles = new Tile[BoardUtils.MAX_TILES];
 
@@ -29,8 +33,51 @@ public class Board {
         return ImmutableList.copyOf(tiles);
     }
 
+    public static Board createStandardBoard() {
+        var builder = new Builder();
+
+        builder.withPiece(new Rook(0, Alliance.BLACK))
+                .withPiece(new Knight(1, Alliance.BLACK))
+                .withPiece(new Bishop(2, Alliance.BLACK))
+                .withPiece(new Queen(3, Alliance.BLACK))
+                .withPiece(new King(4, Alliance.BLACK))
+                .withPiece(new Bishop(5, Alliance.BLACK))
+                .withPiece(new Knight(6, Alliance.BLACK))
+                .withPiece(new Rook(7, Alliance.BLACK));
+
+        for (var i = 8; i <= 15; i++) {
+            builder.withPiece(new Pawn(i, Alliance.BLACK));
+        }
+
+        for (var i = 48; i <= 55; i++) {
+            builder.withPiece(new Pawn(i, Alliance.WHITE));
+        }
+
+        builder.withPiece(new Rook(56, Alliance.WHITE))
+                .withPiece(new Knight(57, Alliance.WHITE))
+                .withPiece(new Bishop(58, Alliance.WHITE))
+                .withPiece(new Queen(59, Alliance.WHITE))
+                .withPiece(new King(60, Alliance.WHITE))
+                .withPiece(new Bishop(61, Alliance.WHITE))
+                .withPiece(new Knight(62, Alliance.WHITE))
+                .withPiece(new Rook(63, Alliance.WHITE));
+
+        return builder.withNextTurn(Alliance.WHITE)
+                .build();
+    }
+
     public Tile getTile(final int coordinate) {
-        return null;
+        return gameBoard.get(coordinate);
+    }
+
+    private Collection<Piece> calculateActivePieces(final List<Tile> gameBoard, final Alliance alliance) {
+        var pieces = gameBoard.stream()
+                .filter(Tile::isOccupied)
+                .map(Tile::getPiece)
+                .filter(tile -> tile.getAlliance() == alliance)
+                .toList();
+
+        return ImmutableList.copyOf(pieces);
     }
 
     @NoArgsConstructor
