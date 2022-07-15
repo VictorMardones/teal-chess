@@ -36,13 +36,13 @@ public abstract class JumpingPiece extends Piece {
                 final var candidateDestinationTile = board.getTile(candidateDestination);
 
                 if (!candidateDestinationTile.isOccupied()) {
-                    legalMoves.add(new Move.MajorMove(board, this, candidateDestination));
+                    legalMoves.add(new Move.NormalMove(board, this, candidateDestination));
                 } else {
                     final Piece pieceAtDestination = candidateDestinationTile.getPiece();
                     final Alliance pieceAlliance = pieceAtDestination.getAlliance();
 
                     if (alliance != pieceAlliance) {
-                        legalMoves.add(new Move.AttackingMove(board, this,
+                        legalMoves.add(new Move.CaptureMove(board, this,
                                 candidateDestination, pieceAtDestination));
                     }
                 }

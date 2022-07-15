@@ -3,7 +3,7 @@ package piece;
 import board.Board;
 import board.BoardUtils;
 import board.Move;
-import board.Move.MajorMove;
+import board.Move.NormalMove;
 import com.google.common.collect.ImmutableList;
 import player.Alliance;
 
@@ -37,7 +37,7 @@ public final class Pawn extends Piece {
 
             if (currentCandidateOffset == 8 && !board.getTile(candidateDestination).isOccupied()) {
                 // TODO: Improve the logic here
-                legalMoves.add(new MajorMove(board, this, candidateDestination));
+                legalMoves.add(new NormalMove(board, this, candidateDestination));
             } else if (currentCandidateOffset == 16 && isFirstMove &&
                     (BoardUtils.getRow(position) == 2 && isBlack()) ||
                     (BoardUtils.getRow(position) == 6 && isWhite())) {
@@ -45,7 +45,7 @@ public final class Pawn extends Piece {
 
                 if (!board.getTile(forwardCoordinate).isOccupied()
                         && !board.getTile(candidateDestination).isOccupied()) {
-                    legalMoves.add(new MajorMove(board, this, candidateDestination));
+                    legalMoves.add(new NormalMove(board, this, candidateDestination));
                 }
             } else if (currentCandidateOffset == 7 &&
                     !((BoardUtils.getColumn(position) == 7  && isWhite()) ||
