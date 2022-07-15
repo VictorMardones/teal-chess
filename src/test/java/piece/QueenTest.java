@@ -5,7 +5,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import player.Alliance;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class QueenTest {
 
@@ -16,7 +17,8 @@ class QueenTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {63, 7, 56}) // diagonal, horizontal, vertical
+    @ValueSource(ints = {63, 7, 56})
+        // diagonal, horizontal, vertical
     void legalMoves(int destination) {
         var queen = new Queen(0, Alliance.BLACK);
         assertFalse(queen.isIllegalMove(destination));

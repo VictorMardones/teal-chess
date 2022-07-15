@@ -3,16 +3,12 @@ package piece;
 import board.Board;
 import board.BoardUtils;
 import board.Move;
-import board.Move.CaptureMove;
-import board.Move.NormalMove;
-import board.Tile;
 import com.google.common.collect.ImmutableList;
 import player.Alliance;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.IntConsumer;
-import java.util.stream.Collectors;
 
 public abstract class SlidingPiece extends Piece {
 

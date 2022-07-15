@@ -5,7 +5,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import player.Alliance;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RookTest {
 
@@ -16,7 +17,8 @@ class RookTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {7, 56}) // horizontal, vertical
+    @ValueSource(ints = {7, 56})
+        // horizontal, vertical
     void legalMoves(int destination) {
         var rook = new Rook(0, Alliance.BLACK);
         assertFalse(rook.isIllegalMove(destination));

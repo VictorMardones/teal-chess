@@ -3,14 +3,11 @@ package piece;
 import board.Board;
 import board.BoardUtils;
 import board.Move;
-import board.Move.CaptureMove;
-import board.Move.NormalMove;
-import board.Tile;
 import com.google.common.collect.ImmutableList;
 import player.Alliance;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.Collection;
 
 public abstract class JumpingPiece extends Piece {
 

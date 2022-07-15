@@ -10,7 +10,7 @@ import player.Alliance;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 public final class Pawn extends Piece {
 
@@ -22,7 +22,7 @@ public final class Pawn extends Piece {
     private static final int LEFT_CAPTURE = 7;
     private static final int RIGHT_CAPTURE = 9;
 
-    private static final int[] CANDIDATE_MOVE_OFFSET = { LEFT_CAPTURE, FORWARD_MOVE, RIGHT_CAPTURE, FIRST_MOVE };
+    private static final int[] CANDIDATE_MOVE_OFFSET = {LEFT_CAPTURE, FORWARD_MOVE, RIGHT_CAPTURE, FIRST_MOVE};
 
     public Pawn(final int position, final Alliance alliance) {
         super(position, alliance);
@@ -34,54 +34,59 @@ public final class Pawn extends Piece {
     public Collection<Move> calculateLegalMoves(final Board board) {
 
         final var legalMoves = Arrays.stream(getMoveOffsets())
-                .map(offset -> position + getAlliance().getDirection() * offset)
-                .filter(BoardUtils::isInsideBoard)
-                .filter(destination -> !isIllegalMove(destination))
-                // TODO: Fix the next part
-                //.map(handleOffset(offset, board, destination))
-
-
-                .mapToObj(board::getTile)
-                .filter(tile -> PieceUtils.isAccessible(this, tile))
-                .map(tile -> PieceUtils.createMove(this, tile, board))
+                .filter(offset -> BoardUtils.isInsideBoard(getDestination(offset)))
+                .filter(offset -> !isIllegalMove(getDestination(offset)))
+                .mapToObj(offset -> handleOffset(offset, board))
+                .filter(Objects::nonNull)
                 .toList();
 
         return ImmutableList.copyOf(legalMoves);
     }
 
-    private Move handleOffset(int offset, Board board, int destination) {
-        switch (offset) {
-            case FIRST_MOVE -> {
-                if ((BoardUtils.getRow(position) == 2 && isBlack()) ||
-                        (BoardUtils.getRow(position) == 6 && isWhite())) {
-                    final int forwardCoordinate = position + 8 * alliance.getDirection();
+    private int getDestination(int offset) {
+        return position + getAlliance().getDirection() * offset;
+    }
 
-                    if (!board.getTile(forwardCoordinate).isOccupied()
-                            && !board.getTile(destination).isOccupied()) {
-                        return new NormalMove(board, this, destination);
-                    }
-                }
-            }
-            case FORWARD_MOVE -> {
-                if (!board.getTile(destination).isOccupied()) {
-                    // TODO: Deal with promotions
-                    return new NormalMove(board, this, destination);
-                }
-            }
-            case LEFT_CAPTURE, RIGHT_CAPTURE -> {
-                if (!isIllegalMove(destination) && board.getTile(destination).isOccupied()) {
-                    final Piece pieceOnCandidate = board.getTile(destination).getPiece();
+    private Move handleOffset(int offset, Board board) {
+        var destination = getDestination(offset);
 
-                    if (!sameAliance(pieceOnCandidate)) {
-                            return new CaptureMove(board, this, destination, pieceOnCandidate);
-                        }
-                    }
-                }
-            }
+        return switch (offset) {
+            case FIRST_MOVE -> createFirstMove(board, destination);
+            case FORWARD_MOVE -> createForwardMove(board, destination);
+            case LEFT_CAPTURE, RIGHT_CAPTURE -> createCaptureMove(board, destination);
+            default -> null;
+        };
+    }
+
+    private Move createFirstMove(Board board, int destination) {
+        if (isFirstMovePossible(board)) {
+            return new NormalMove(board, this, destination);
+        }
 
         return null;
     }
 
+    private Move createForwardMove(Board board, int destination) {
+        if (!board.getTile(destination).isOccupied()) {
+            // TODO: Deal with promotions
+            return new NormalMove(board, this, destination);
+        }
+
+        return null;
+    }
+
+    private Move createCaptureMove(Board board, int destination) {
+        if (board.getTile(destination).isOccupied()) {
+            final var capturablePiece = board.getTile(destination).getPiece();
+
+            if (!sameAliance(capturablePiece)) {
+                return new CaptureMove(board, this, destination, capturablePiece);
+            }
+        }
+
+        return null;
+    }
+    
     int[] getMoveOffsets() {
         return CANDIDATE_MOVE_OFFSET;
     }
@@ -89,5 +94,10 @@ public final class Pawn extends Piece {
     @Override
     protected boolean isIllegalMove(final int destination) {
         return Math.abs(BoardUtils.getColumn(position) - BoardUtils.getColumn(destination)) > 1;
+    }
+
+    private boolean isFirstMovePossible(final Board board) {
+        return !board.getTile(position + 8 * alliance.getDirection()).isOccupied()
+                && !board.getTile(position + 16 * alliance.getDirection()).isOccupied();
     }
 }

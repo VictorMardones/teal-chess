@@ -15,7 +15,8 @@ public class PieceUtils {
     /**
      * Checks if the given piece can get the destination.
      * This happens only if the destination is free or has a piece that can be captured.
-     * @param piece The piece we're currently using.
+     *
+     * @param piece       The piece we're currently using.
      * @param destination The target destination.
      * @return True if the piece can get to the destination.
      */
@@ -25,9 +26,10 @@ public class PieceUtils {
 
     /**
      * Creates a move, based on the piece and the destination.
-     * @param piece The piece we're moving.
+     *
+     * @param piece       The piece we're moving.
      * @param destination The destination tile.
-     * @param board The current game board.
+     * @param board       The current game board.
      * @return A normal or capture move, depending on the destination.
      * Null otherwise.
      */
