@@ -18,6 +18,7 @@ public abstract class Piece {
 
     protected final int position;
     protected final Alliance alliance;
+    protected final PieceType pieceType;
 
     /**
      * Calculates all the moves that a piece can do.
@@ -50,6 +51,15 @@ public abstract class Piece {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return pieceType.pieceName;
+    }
+
+    public boolean isKing() {
+        return pieceType == PieceType.KING;
+    }
+
     @AllArgsConstructor
     @Getter
     public enum PieceType {
@@ -60,6 +70,6 @@ public abstract class Piece {
         QUEEN("Q"),
         KING("K");
 
-        private String pieceName;
+        private final String pieceName;
     }
 }

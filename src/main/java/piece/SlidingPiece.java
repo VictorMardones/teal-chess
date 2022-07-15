@@ -13,8 +13,8 @@ import java.util.function.IntConsumer;
 
 public abstract class SlidingPiece extends Piece {
 
-    protected SlidingPiece(int position, Alliance alliance) {
-        super(position, alliance);
+    protected SlidingPiece(int position, Alliance alliance, PieceType pieceType) {
+        super(position, alliance, pieceType);
     }
 
     abstract int[] getMoveVectors();

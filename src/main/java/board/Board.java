@@ -1,9 +1,12 @@
 package board;
 
 import com.google.common.collect.ImmutableList;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import piece.*;
 import player.Alliance;
+import player.BlackPlayer;
+import player.WhitePlayer;
 
 import java.util.*;
 import java.util.function.IntConsumer;
@@ -14,8 +17,13 @@ import java.util.function.IntConsumer;
 public class Board {
 
     private final List<Tile> gameBoard;
+    @Getter
     private final Collection<Piece> whitePieces;
+    @Getter
     private final Collection<Piece> blackPieces;
+
+    private final WhitePlayer whitePlayer;
+    private final BlackPlayer blackPlayer;
 
     private Board(Builder builder) {
         gameBoard = createGameBoard(builder);
@@ -24,6 +32,10 @@ public class Board {
 
         final Collection<Move> whiteLegalMoves = calculateLegalMoves(whitePieces);
         final Collection<Move> blackLegalMoves = calculateLegalMoves(blackPieces);
+
+        whitePlayer = new WhitePlayer(this, whiteLegalMoves, blackLegalMoves);
+        blackPlayer = new BlackPlayer(this, blackLegalMoves, whiteLegalMoves);
+
     }
 
     private List<Tile> createGameBoard(final Builder builder) {

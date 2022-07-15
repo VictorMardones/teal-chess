@@ -12,7 +12,7 @@ public final class Rook extends SlidingPiece {
     private static final int[] MOVE_VECTORS = {-8, -1, 1, 8};
 
     public Rook(int position, Alliance alliance) {
-        super(position, alliance);
+        super(position, alliance, PieceType.ROOK);
     }
 
     @Override
@@ -24,10 +24,5 @@ public final class Rook extends SlidingPiece {
     protected boolean isIllegalMove(int destination) {
         return !BoardUtils.sameRow(position, destination) &&
                 !BoardUtils.sameColumn(position, destination);
-    }
-
-    @Override
-    public String toString() {
-        return PieceType.ROOK.getPieceName();
     }
 }

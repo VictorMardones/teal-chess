@@ -25,7 +25,7 @@ public final class Pawn extends Piece {
     private static final int[] MOVE_OFFSET = {LEFT_CAPTURE, FORWARD_MOVE, RIGHT_CAPTURE, FIRST_MOVE};
 
     public Pawn(int position, Alliance alliance) {
-        super(position, alliance);
+        super(position, alliance, PieceType.PAWN);
     }
 
     // TODO: Refactor this code when the pawn is implemented completely
@@ -98,10 +98,5 @@ public final class Pawn extends Piece {
     private boolean isFirstMovePossible(final Board board) {
         return !board.getTile(position + 8 * alliance.getDirection()).isOccupied()
                 && !board.getTile(position + 16 * alliance.getDirection()).isOccupied();
-    }
-
-    @Override
-    public String toString() {
-        return PieceType.PAWN.getPieceName();
     }
 }

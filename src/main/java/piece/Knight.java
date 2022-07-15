@@ -12,7 +12,7 @@ public final class Knight extends JumpingPiece {
     private static final int[] MOVE_OFFSETS = {-17, -15, -10, -6, 6, 10, 15, 17};
 
     public Knight(int position, Alliance alliance) {
-        super(position, alliance);
+        super(position, alliance, PieceType.KNIGHT);
     }
 
     @Override
@@ -23,10 +23,5 @@ public final class Knight extends JumpingPiece {
     @Override
     protected boolean isIllegalMove(int destination) {
         return BoardUtils.sameColor(position, destination);
-    }
-
-    @Override
-    public String toString() {
-        return PieceType.KNIGHT.getPieceName();
     }
 }

@@ -12,8 +12,8 @@ import java.util.Objects;
 
 public abstract class JumpingPiece extends Piece {
 
-    protected JumpingPiece(int position, Alliance alliance) {
-        super(position, alliance);
+    protected JumpingPiece(int position, Alliance alliance, PieceType pieceType) {
+        super(position, alliance, pieceType);
     }
 
     abstract int[] getMoveOffsets();
