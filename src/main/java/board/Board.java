@@ -33,8 +33,8 @@ public class Board {
         final Collection<Move> whiteLegalMoves = calculateLegalMoves(whitePieces);
         final Collection<Move> blackLegalMoves = calculateLegalMoves(blackPieces);
 
-        whitePlayer = new WhitePlayer(this, whiteLegalMoves, blackLegalMoves);
-        blackPlayer = new BlackPlayer(this, blackLegalMoves, whiteLegalMoves);
+        whitePlayer = new WhitePlayer(this, builder.whiteKing, whiteLegalMoves, blackLegalMoves);
+        blackPlayer = new BlackPlayer(this, builder.blackKing, blackLegalMoves, whiteLegalMoves);
 
     }
 
@@ -51,11 +51,15 @@ public class Board {
     public static Board createStandardBoard() {
         var builder = new Builder();
 
+        var blackKing = new King(4, Alliance.BLACK);
+        var whiteKing = new King(60, Alliance.WHITE);
+
         builder.withPiece(new Rook(0, Alliance.BLACK))
                 .withPiece(new Knight(1, Alliance.BLACK))
                 .withPiece(new Bishop(2, Alliance.BLACK))
                 .withPiece(new Queen(3, Alliance.BLACK))
-                .withPiece(new King(4, Alliance.BLACK))
+                .withPiece(blackKing)
+                .withBlackKing(blackKing)
                 .withPiece(new Bishop(5, Alliance.BLACK))
                 .withPiece(new Knight(6, Alliance.BLACK))
                 .withPiece(new Rook(7, Alliance.BLACK));
@@ -72,7 +76,8 @@ public class Board {
                 .withPiece(new Knight(57, Alliance.WHITE))
                 .withPiece(new Bishop(58, Alliance.WHITE))
                 .withPiece(new Queen(59, Alliance.WHITE))
-                .withPiece(new King(60, Alliance.WHITE))
+                .withPiece(whiteKing)
+                .withWhiteKing(whiteKing)
                 .withPiece(new Bishop(61, Alliance.WHITE))
                 .withPiece(new Knight(62, Alliance.WHITE))
                 .withPiece(new Rook(63, Alliance.WHITE));
@@ -125,8 +130,9 @@ public class Board {
     public static class Builder {
 
         Map<Integer, Piece> boardConfig;
-
         Alliance nextTurn;
+        King whiteKing;
+        King blackKing;
 
         public Builder() {
             boardConfig = new HashMap<>();
@@ -139,6 +145,16 @@ public class Board {
 
         public Builder withNextTurn(final Alliance nextTurn) {
             this.nextTurn = nextTurn;
+            return this;
+        }
+
+        public Builder withWhiteKing(final King whiteKing) {
+            this.whiteKing = whiteKing;
+            return this;
+        }
+
+        public Builder withBlackKing(final King blackKing) {
+            this.blackKing = blackKing;
             return this;
         }
 
