@@ -16,6 +16,14 @@ public abstract class Move {
     @Getter
     private final int destination;
 
+    /**
+     * When a move is performed, a new board is created, because the board class is immutable.
+     * @return The new board, after the move was performed
+     */
+    public Board execute() {
+        return null;
+    }
+
     public static final class NormalMove extends Move {
         public NormalMove(Board board, Piece piece, int destination) {
             super(board, piece, destination);

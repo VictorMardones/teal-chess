@@ -2,14 +2,13 @@ package board;
 
 import com.google.common.collect.ImmutableList;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import piece.*;
 import player.Alliance;
 import player.BlackPlayer;
+import player.Player;
 import player.WhitePlayer;
 
 import java.util.*;
-import java.util.function.IntConsumer;
 
 /**
  * The game board, made of 8x8 tiles.
@@ -22,6 +21,8 @@ public class Board {
     @Getter
     private final Collection<Piece> blackPieces;
 
+    @Getter
+    private final Player currentPlayer;
     @Getter
     private final WhitePlayer whitePlayer;
     @Getter
@@ -39,6 +40,7 @@ public class Board {
         whitePlayer = new WhitePlayer(this, builder.whiteKing, whiteLegalMoves, blackLegalMoves);
         blackPlayer = new BlackPlayer(this, builder.blackKing, blackLegalMoves, whiteLegalMoves);
 
+        currentPlayer = null;
     }
 
     private List<Tile> createGameBoard(final Builder builder) {
@@ -107,7 +109,7 @@ public class Board {
 
         final List<Move> legalMoves = new ArrayList<>();
 
-        for (final var piece: pieces) {
+        for (final var piece : pieces) {
             legalMoves.addAll(piece.calculateLegalMoves(this));
         }
 
@@ -132,10 +134,10 @@ public class Board {
 
     public static class Builder {
 
-        Map<Integer, Piece> boardConfig;
-        Alliance nextTurn;
-        King whiteKing;
-        King blackKing;
+        private Map<Integer, Piece> boardConfig;
+        private Alliance nextTurn;
+        private King whiteKing;
+        private King blackKing;
 
         public Builder() {
             boardConfig = new HashMap<>();

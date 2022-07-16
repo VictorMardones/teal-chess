@@ -38,6 +38,7 @@ public abstract class Player {
 
     /**
      * Used to check if a specific move can be performed.
+     *
      * @param move The move to check
      * @return True if the move is legal
      */
@@ -47,6 +48,7 @@ public abstract class Player {
 
     /**
      * Checks if the player is in check, which means that the king must be protected.
+     *
      * @return True if the player is in check
      */
     public boolean isInCheck() {
@@ -56,6 +58,7 @@ public abstract class Player {
     /**
      * Checks if the player is in checkmate, which means the game is lost.
      * This happens when the king is in check and there are no escape moves.
+     *
      * @return True if the player is in checkmate
      */
     public boolean isInCheckmate() {
@@ -75,6 +78,7 @@ public abstract class Player {
     /**
      * Checks if the player is in stalemate, which means that game ends in a tie.
      * This happens when the king isn't in check and there are no escape moves.
+     *
      * @return True if the player is in stalemate
      */
     public boolean inInStalemate() {
@@ -85,24 +89,40 @@ public abstract class Player {
         return false;
     }
 
-    public MoveTransition makeMove(Move move){
-        return null;
+    public MoveTransition makeMove(Move move) {
+        if (!isMoveLegal(move)) {
+            return new MoveTransition(board, move, MoveStatus.ILLEGAL);
+        }
+
+        final var transitionBoard = move.execute();
+
+        final Collection<Move> kingAttacks = Player.calculateAttacksOnTile(transitionBoard.getCurrentPlayer().getOpponent().king.getPosition(),
+                transitionBoard.getCurrentPlayer().legalMoves);
+
+        if (!kingAttacks.isEmpty()) {
+            return new MoveTransition(board, move, MoveStatus.LEAVES_PLAYER_IN_CHECK);
+        }
+
+        return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
     }
 
     /**
      * Obtains the player's current pieces on the board.
+     *
      * @return The player's active pieces
      */
     public abstract Collection<Piece> getActivePieces();
 
     /**
      * Obtains the player's side.
+     *
      * @return The player's alliance
      */
     public abstract Alliance getAlliance();
 
     /**
      * Obtains the player in the other side of the board.
+     *
      * @return The opponent
      */
     public abstract Player getOpponent();
