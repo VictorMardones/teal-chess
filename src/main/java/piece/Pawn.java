@@ -104,6 +104,6 @@ public final class Pawn extends Piece {
 
     @Override
     public Pawn movePiece(final Move move) {
-        return new Pawn(move.getDestination(), move.getPiece().alliance);
+        return new Pawn(move.getDestination(), alliance);
     }
 }

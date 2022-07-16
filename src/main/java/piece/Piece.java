@@ -45,7 +45,7 @@ public abstract class Piece {
         return !isWhite();
     }
 
-    public boolean isEnemy(Piece other) {
+    public boolean isEnemy(Piece<?> other) {
         if (other != null) {
             return alliance != other.alliance;
         }
@@ -57,7 +57,7 @@ public abstract class Piece {
         return pieceType.pieceName;
     }
 
-    public abstract Piece movePiece(Move move);
+    public abstract Piece movePiece(final Move move);
 
     @AllArgsConstructor
     @Getter

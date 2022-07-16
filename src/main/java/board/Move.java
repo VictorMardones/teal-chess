@@ -2,13 +2,15 @@ package board;
 
 import board.Board.Builder;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import piece.Piece;
+import piece.*;
 
 /**
  * The action of moving a piece.
  */
 @AllArgsConstructor
+@EqualsAndHashCode
 public abstract class Move {
 
     private Board board;
@@ -50,15 +52,79 @@ public abstract class Move {
     }
 
     /**
-     * A move where a piece captures the piece in another tile.
+     * A move where a piece captures another piece.
      */
-    public static final class CaptureMove extends Move {
+    public static class CaptureMove extends Move {
 
         final Piece attackedPiece;
 
         public CaptureMove(Board board, Piece piece, int destination, Piece attackedPiece) {
             super(board, piece, destination);
             this.attackedPiece = attackedPiece;
+        }
+    }
+
+    /**
+     * A move where a pawn gets to another tile.
+     */
+    public static final class PawnMove extends Move {
+        public PawnMove(Board board, Pawn pawn, int destination) {
+            super(board, pawn, destination);
+        }
+    }
+
+    /**
+     * A move where a pawn captures another piece.
+     */
+    public static class PawnCaptureMove extends CaptureMove {
+        public PawnCaptureMove(Board board, Pawn pawn, int destination, Piece attackedPiece) {
+            super(board, pawn, destination, attackedPiece);
+        }
+    }
+
+    public static final class PawnEnPassantMove extends PawnCaptureMove {
+        public PawnEnPassantMove(Board board, Pawn pawn, int destination, Piece attackedPiece) {
+            super(board, pawn, destination, attackedPiece);
+        }
+    }
+
+    public static final class PawnJump extends Move {
+        public PawnJump(Board board, Pawn pawn, int destination) {
+            super(board, pawn, destination);
+        }
+    }
+
+    public static abstract class CastleMove extends Move {
+        public CastleMove(Board board, Piece piece, int destination) {
+            super(board, piece, destination);
+        }
+    }
+
+    public static abstract class KingCastleMove extends Move {
+        public KingCastleMove(Board board, King king, int destination) {
+            super(board, king, destination);
+        }
+    }
+
+    public static abstract class QueenCastleMove extends Move {
+        public QueenCastleMove(Board board, Queen queen, int destination) {
+            super(board, queen, destination);
+        }
+    }
+
+    public static abstract class NullMove extends Move {
+        public NullMove(Board board, Piece piece, int destination) {
+            super(board, piece, destination);
+        }
+    }
+
+    public static class MoveFactory {
+        private MoveFactory() {
+            throw new IllegalStateException("You cannot instantiate me!");
+        }
+
+        public static Move create(final Board board, final int origin, final int destination) {
+            // TODO: Implement the factory
         }
     }
 }

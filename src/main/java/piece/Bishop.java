@@ -28,6 +28,6 @@ public final class Bishop extends SlidingPiece {
 
     @Override
     public Bishop movePiece(final Move move) {
-        return new Bishop(move.getDestination(), move.getPiece().alliance);
+        return new Bishop(move.getDestination(), alliance);
     }
 }
