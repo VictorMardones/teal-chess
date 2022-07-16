@@ -3,6 +3,10 @@ package piece;
 import board.BoardUtils;
 import player.Alliance;
 
+/**
+ * The queen, strongest piece in the game.
+ * It can move horizontally, vertically and diagonally.
+ */
 public final class Queen extends SlidingPiece {
 
     private static final int[] MOVE_VECTORS = {-9, -8, -7, -1, 1, 7, 8, 9};

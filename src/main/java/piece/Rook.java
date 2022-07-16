@@ -5,7 +5,7 @@ import player.Alliance;
 
 /**
  * The rook piece.
- * It moves horizontally and vertically.
+ * It can move horizontally and vertically.
  */
 public final class Rook extends SlidingPiece {
 

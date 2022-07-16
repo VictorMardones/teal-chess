@@ -5,6 +5,7 @@ import board.Move;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import player.Alliance;
 
 import java.util.Collection;
@@ -13,12 +14,14 @@ import java.util.Collection;
  * A chess piece.
  */
 @Getter
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Piece {
 
     protected final int position;
     protected final Alliance alliance;
     protected final PieceType pieceType;
+    // TODO: Actually use this field
+    protected boolean firstMove;
 
     /**
      * Calculates all the moves that a piece can do.

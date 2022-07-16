@@ -11,6 +11,9 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.function.IntConsumer;
 
+/**
+ * A piece that can move in a specific set of directions.
+ */
 public abstract class SlidingPiece extends Piece {
 
     protected SlidingPiece(int position, Alliance alliance, PieceType pieceType) {

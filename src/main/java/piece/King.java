@@ -3,6 +3,12 @@ package piece;
 import board.BoardUtils;
 import player.Alliance;
 
+/**
+ * The king piece.
+ * The most important piece in the game, must be defended at all costs.
+ * It moves like the queen, but only one space at a time.
+ * It also cannot move into a position where it could be captured.
+ */
 public final class King extends JumpingPiece {
 
     private static final int[] MOVE_OFFSETS = {-9, -8, -7, -1, 1, 7, 8, 9};

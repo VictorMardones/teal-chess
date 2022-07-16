@@ -12,10 +12,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 
+/**
+ * The pawn piece.
+ * It only moves forward (depending on the side) and can eat other pieces diagonally.
+ * A very weak piece, but it can be promoted when getting to the last row at the opposite side.
+ */
 public final class Pawn extends Piece {
-
-    // TODO: Actually use this field
-    private boolean isFirstMove;
 
     private static final int FORWARD_MOVE = 8;
     private static final int FIRST_MOVE = 16;

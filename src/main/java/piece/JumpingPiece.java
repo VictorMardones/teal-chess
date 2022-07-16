@@ -10,6 +10,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 
+/**
+ * A piece that can move in a specific set of spaces.
+ */
 public abstract class JumpingPiece extends Piece {
 
     protected JumpingPiece(int position, Alliance alliance, PieceType pieceType) {

@@ -5,7 +5,7 @@ import player.Alliance;
 
 /**
  * The bishop piece.
- * It moves diagonally.
+ * It can move diagonally.
  */
 public final class Bishop extends SlidingPiece {
 

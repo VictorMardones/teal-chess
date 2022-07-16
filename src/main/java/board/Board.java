@@ -22,7 +22,9 @@ public class Board {
     @Getter
     private final Collection<Piece> blackPieces;
 
+    @Getter
     private final WhitePlayer whitePlayer;
+    @Getter
     private final BlackPlayer blackPlayer;
 
     private Board(Builder builder) {
