@@ -29,6 +29,7 @@ public class Board {
 
     private Board(Builder builder) {
         gameBoard = createGameBoard(builder);
+
         whitePieces = calculateActivePieces(gameBoard, Alliance.WHITE);
         blackPieces = calculateActivePieces(gameBoard, Alliance.BLACK);
 

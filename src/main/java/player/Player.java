@@ -2,6 +2,7 @@ package player;
 
 import board.Board;
 import board.Move;
+import com.google.common.collect.ImmutableList;
 import piece.King;
 import piece.Piece;
 
@@ -16,17 +17,29 @@ public abstract class Player {
     protected final Board board;
     protected final King king;
     protected final Collection<Move> legalMoves;
+    private final boolean inCheck;
+    private Boolean noEscapeMoves;
 
     public Player(Board board, King king, Collection<Move> legalMoves, Collection<Move> opponentMoves) {
         this.board = board;
         this.legalMoves = legalMoves;
         this.king = king;
+
+        inCheck = !Player.calculateAttacksOnTile(king.getPosition(), opponentMoves).isEmpty();
+    }
+
+    private static Collection<Move> calculateAttacksOnTile(int kingPosition, Collection<Move> moves) {
+        var attackMoves = moves.stream()
+                .filter(move -> kingPosition == move.getDestination())
+                .toList();
+
+        return ImmutableList.copyOf(attackMoves);
     }
 
     /**
      * Used to check if a specific move can be performed.
-     * @param move The move to check.
-     * @return True if the move is legal.
+     * @param move The move to check
+     * @return True if the move is legal
      */
     public boolean isMoveLegal(final Move move) {
         return legalMoves.contains(move);
@@ -37,23 +50,35 @@ public abstract class Player {
      * @return True if the player is in check
      */
     public boolean isInCheck() {
-        return false;
+        return inCheck;
     }
 
     /**
      * Checks if the player is in checkmate, which means the game is lost.
+     * This happens when the king is in check and there are no escape moves.
      * @return True if the player is in checkmate
      */
     public boolean isInCheckmate() {
-        return false;
+        return isInCheck() && hasNoEscapeMoves();
+    }
+
+    private boolean hasNoEscapeMoves() {
+        if (noEscapeMoves == null) {
+            noEscapeMoves = legalMoves.stream()
+                    .map(this::makeMove)
+                    .noneMatch(transition -> transition.getMoveStatus().isDone());
+        }
+
+        return noEscapeMoves;
     }
 
     /**
      * Checks if the player is in stalemate, which means that game ends in a tie.
+     * This happens when the king isn't in check and there are no escape moves.
      * @return True if the player is in stalemate
      */
     public boolean inInStalemate() {
-        return false;
+        return !isInCheck() && hasNoEscapeMoves();
     }
 
     public boolean isCastled() {

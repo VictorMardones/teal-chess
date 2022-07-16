@@ -1,6 +1,7 @@
 package board;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import piece.Piece;
 
 /**
@@ -10,7 +11,9 @@ import piece.Piece;
 public abstract class Move {
 
     private final Board board;
+    @Getter
     private final Piece piece;
+    @Getter
     private final int destination;
 
     public static final class NormalMove extends Move {
