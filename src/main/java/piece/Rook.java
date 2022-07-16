@@ -1,6 +1,7 @@
 package piece;
 
 import board.BoardUtils;
+import board.Move;
 import player.Alliance;
 
 /**
@@ -24,5 +25,10 @@ public final class Rook extends SlidingPiece {
     protected boolean isIllegalMove(int destination) {
         return !BoardUtils.sameRow(position, destination) &&
                 !BoardUtils.sameColumn(position, destination);
+    }
+
+    @Override
+    public Rook movePiece(final Move move) {
+        return new Rook(move.getDestination(), move.getPiece().alliance);
     }
 }

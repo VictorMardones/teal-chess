@@ -35,8 +35,7 @@ public abstract class Move {
             builder.withPiece(piece);
         }
 
-        // TODO: Move the piece
-        builder.withPiece(null);
+        builder.withPiece(piece.movePiece(this));
         builder.withNextTurn(board.getCurrentPlayer().getAlliance());
         return builder.build();
     }

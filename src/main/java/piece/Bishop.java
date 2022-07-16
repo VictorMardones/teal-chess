@@ -1,6 +1,7 @@
 package piece;
 
 import board.BoardUtils;
+import board.Move;
 import player.Alliance;
 
 /**
@@ -11,8 +12,8 @@ public final class Bishop extends SlidingPiece {
 
     private static final int[] MOVE_VECTORS = {-9, -7, 7, 9};
 
-    public Bishop(int coordinate, Alliance alliance) {
-        super(coordinate, alliance, PieceType.BISHOP);
+    public Bishop(int position, Alliance alliance) {
+        super(position, alliance, PieceType.BISHOP);
     }
 
     @Override
@@ -23,5 +24,10 @@ public final class Bishop extends SlidingPiece {
     @Override
     protected boolean isIllegalMove(int destination) {
         return !BoardUtils.sameColor(position, destination);
+    }
+
+    @Override
+    public Bishop movePiece(final Move move) {
+        return new Bishop(move.getDestination(), move.getPiece().alliance);
     }
 }

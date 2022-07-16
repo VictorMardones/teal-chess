@@ -132,6 +132,7 @@ public final class Board {
         return builder.toString();
     }
 
+    @lombok.Builder
     public static class Builder {
 
         private final Map<Integer, Piece> boardConfig;

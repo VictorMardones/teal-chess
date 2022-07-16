@@ -57,9 +57,7 @@ public abstract class Piece {
         return pieceType.pieceName;
     }
 
-    public boolean isKing() {
-        return pieceType == PieceType.KING;
-    }
+    public abstract Piece movePiece(Move move);
 
     @AllArgsConstructor
     @Getter

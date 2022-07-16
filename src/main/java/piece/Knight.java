@@ -1,6 +1,7 @@
 package piece;
 
 import board.BoardUtils;
+import board.Move;
 import player.Alliance;
 
 /**
@@ -23,5 +24,10 @@ public final class Knight extends JumpingPiece {
     @Override
     protected boolean isIllegalMove(int destination) {
         return BoardUtils.sameColor(position, destination);
+    }
+
+    @Override
+    public Knight movePiece(final Move move) {
+        return new Knight(move.getDestination(), move.getPiece().alliance);
     }
 }

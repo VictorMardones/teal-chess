@@ -1,6 +1,7 @@
 package piece;
 
 import board.BoardUtils;
+import board.Move;
 import player.Alliance;
 
 /**
@@ -25,5 +26,10 @@ public final class Queen extends SlidingPiece {
         return !BoardUtils.sameRow(position, destination) &&
                 !BoardUtils.sameColumn(position, destination) &&
                 !BoardUtils.sameColor(position, destination);
+    }
+
+    @Override
+    public Queen movePiece(final Move move) {
+        return new Queen(move.getDestination(), move.getPiece().alliance);
     }
 }

@@ -1,6 +1,7 @@
 package piece;
 
 import board.BoardUtils;
+import board.Move;
 import player.Alliance;
 
 /**
@@ -25,5 +26,10 @@ public final class King extends JumpingPiece {
     @Override
     protected boolean isIllegalMove(int destination) {
         return Math.abs(BoardUtils.getColumn(position) - BoardUtils.getColumn(destination)) > 1;
+    }
+
+    @Override
+    public King movePiece(final Move move) {
+        return new King(move.getDestination(), move.getPiece().alliance);
     }
 }
