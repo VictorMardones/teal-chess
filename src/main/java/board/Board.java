@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * The game board, made of 8x8 tiles.
  */
-public class Board {
+public final class Board {
 
     private final List<Tile> gameBoard;
     @Getter
@@ -40,7 +40,7 @@ public class Board {
         whitePlayer = new WhitePlayer(this, builder.whiteKing, whiteLegalMoves, blackLegalMoves);
         blackPlayer = new BlackPlayer(this, builder.blackKing, blackLegalMoves, whiteLegalMoves);
 
-        currentPlayer = null;
+        currentPlayer = builder.nextTurn.choosePlayer(whitePlayer, blackPlayer);
     }
 
     private List<Tile> createGameBoard(final Builder builder) {
@@ -134,7 +134,7 @@ public class Board {
 
     public static class Builder {
 
-        private Map<Integer, Piece> boardConfig;
+        private final Map<Integer, Piece> boardConfig;
         private Alliance nextTurn;
         private King whiteKing;
         private King blackKing;

@@ -2,10 +2,7 @@ package piece;
 
 import board.Board;
 import board.Move;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import player.Alliance;
 
 import java.util.Collection;
@@ -15,6 +12,7 @@ import java.util.Collection;
  */
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode
 public abstract class Piece {
 
     protected final int position;

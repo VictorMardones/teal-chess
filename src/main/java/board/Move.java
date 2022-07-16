@@ -1,5 +1,6 @@
 package board;
 
+import board.Board.Builder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import piece.Piece;
@@ -10,7 +11,7 @@ import piece.Piece;
 @AllArgsConstructor
 public abstract class Move {
 
-    private final Board board;
+    private Board board;
     @Getter
     private final Piece piece;
     @Getter
@@ -21,15 +22,37 @@ public abstract class Move {
      * @return The new board, after the move was performed
      */
     public Board execute() {
-        return null;
+
+        final Builder builder = new Builder();
+
+        for (final var piece : board.getCurrentPlayer().getActivePieces()) {
+            if (!this.piece.equals(piece)) {
+                builder.withPiece(piece);
+            }
+        }
+
+        for (final var piece : board.getCurrentPlayer().getOpponent().getActivePieces()) {
+            builder.withPiece(piece);
+        }
+
+        // TODO: Move the piece
+        builder.withPiece(null);
+        builder.withNextTurn(board.getCurrentPlayer().getAlliance());
+        return builder.build();
     }
 
+    /**
+     * A move where a piece gets to another tile.
+     */
     public static final class NormalMove extends Move {
         public NormalMove(Board board, Piece piece, int destination) {
             super(board, piece, destination);
         }
     }
 
+    /**
+     * A move where a piece captures the piece in another tile.
+     */
     public static final class CaptureMove extends Move {
 
         final Piece attackedPiece;

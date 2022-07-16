@@ -19,4 +19,11 @@ public enum Alliance {
     BLACK(1);
 
     private final int direction;
+
+    public Player choosePlayer(final WhitePlayer whitePlayer, final BlackPlayer blackPlayer) {
+        return switch (this) {
+            case WHITE -> whitePlayer;
+            case BLACK -> blackPlayer;
+        };
+    }
 }

@@ -2,7 +2,7 @@ package board;
 
 import player.Alliance;
 
-public class BoardUtils {
+public final class BoardUtils {
 
     public static final int MIN_TILES = 0;
     public static final int MAX_TILES = 64;
