@@ -1,6 +1,7 @@
 package board;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import lombok.Getter;
 import piece.*;
 import player.Alliance;
@@ -116,6 +117,10 @@ public final class Board {
         return ImmutableList.copyOf(legalMoves);
     }
 
+    public Collection<Move> getCurrentPlayerLegalMoves() {
+        return ImmutableList.copyOf(currentPlayer.getLegalMoves());
+    }
+
     @Override
     public String toString() {
         final var builder = new StringBuilder();
@@ -132,7 +137,6 @@ public final class Board {
         return builder.toString();
     }
 
-    @lombok.Builder
     public static class Builder {
 
         private final Map<Integer, Piece> boardConfig;

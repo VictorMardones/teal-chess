@@ -3,6 +3,7 @@ package player;
 import board.Board;
 import board.Move;
 import com.google.common.collect.ImmutableList;
+import lombok.Getter;
 import piece.King;
 import piece.Piece;
 
@@ -16,6 +17,7 @@ public abstract class Player {
 
     protected final Board board;
     protected final King king;
+    @Getter
     protected final Collection<Move> legalMoves;
     private final boolean inCheck;
     private Boolean noEscapeMoves;

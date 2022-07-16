@@ -13,6 +13,8 @@ import piece.*;
 @EqualsAndHashCode
 public abstract class Move {
 
+    private static final Move NULL_MOVE = new NullMove();
+
     private Board board;
     @Getter
     private final Piece piece;
@@ -40,6 +42,10 @@ public abstract class Move {
         builder.withPiece(piece.movePiece(this));
         builder.withNextTurn(board.getCurrentPlayer().getAlliance());
         return builder.build();
+    }
+
+    public int getCurrentCoordinate() {
+        return piece.getPosition();
     }
 
     /**
@@ -113,18 +119,28 @@ public abstract class Move {
     }
 
     public static abstract class NullMove extends Move {
-        public NullMove(Board board, Piece piece, int destination) {
-            super(board, piece, destination);
+        public NullMove() {
+            super(null, null, -1);
+        }
+
+        @Override
+        public Board execute() {
+            throw new IllegalStateException("Cannot execute an impossible move!");
         }
     }
 
-    public static class MoveFactory {
+    public static final class MoveFactory {
+
         private MoveFactory() {
             throw new IllegalStateException("You cannot instantiate me!");
         }
 
         public static Move create(final Board board, final int origin, final int destination) {
-            // TODO: Implement the factory
+            return board.getCurrentPlayerLegalMoves()
+                    .stream()
+                    .filter(move -> move.piece.getPosition() == origin && move.destination == destination)
+                    .findFirst()
+                    .orElse(NULL_MOVE);
         }
     }
 }
