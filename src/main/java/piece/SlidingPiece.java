@@ -28,7 +28,7 @@ public abstract class SlidingPiece extends Piece {
         // TODO: Remove these non-null filters, change how the methods work
         final var legalMoves = Arrays.stream(getMoveVectors())
                 .mapMulti(this::calculateOffsets)
-                .filter(offset -> !isIllegalMove(offset))
+                .filter(this::isLegalMove)
                 .mapToObj(board::getTile)
                 .filter(Objects::nonNull)
                 .filter(tile -> PieceUtils.isAccessible(this, tile))

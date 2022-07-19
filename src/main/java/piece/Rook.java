@@ -22,9 +22,9 @@ public final class Rook extends SlidingPiece {
     }
 
     @Override
-    protected boolean isIllegalMove(int destination) {
-        return !BoardUtils.sameRow(position, destination) &&
-                !BoardUtils.sameColumn(position, destination);
+    protected boolean isLegalMove(int destination) {
+        return BoardUtils.sameRow(position, destination) ||
+                BoardUtils.sameColumn(position, destination);
     }
 
     @Override

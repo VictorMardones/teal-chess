@@ -1,25 +1,32 @@
 package board;
 
 import board.Board.Builder;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import piece.*;
 
 /**
  * The action of moving a piece.
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @EqualsAndHashCode
 public abstract class Move {
 
-    private static final Move NULL_MOVE = new NullMove();
-
-    private Board board;
+    protected final Board board;
     @Getter
-    private final Piece piece;
+    protected final Piece piece;
     @Getter
     private final int destination;
+
+    @Getter
+    protected boolean castling = false;
+    @Getter
+    protected Piece capturedPiece;
+
+    public boolean isCapturing() {
+        return capturedPiece != null;
+    }
 
     /**
      * When a move is performed, a new board is created, because the board class is immutable.
@@ -27,16 +34,16 @@ public abstract class Move {
      */
     public Board execute() {
 
-        final Builder builder = new Builder();
+        final var builder = new Builder();
 
-        for (final var piece : board.getCurrentPlayer().getActivePieces()) {
-            if (!this.piece.equals(piece)) {
-                builder.withPiece(piece);
+        for (final var activePiece : board.getCurrentPlayer().getActivePieces()) {
+            if (!piece.equals(activePiece)) {
+                builder.withPiece(activePiece);
             }
         }
 
-        for (final var piece : board.getCurrentPlayer().getOpponent().getActivePieces()) {
-            builder.withPiece(piece);
+        for (final var activePiece : board.getCurrentPlayer().getOpponent().getActivePieces()) {
+            builder.withPiece(activePiece);
         }
 
         builder.withPiece(piece.movePiece(this));
@@ -60,13 +67,13 @@ public abstract class Move {
     /**
      * A move where a piece captures another piece.
      */
+    @EqualsAndHashCode(callSuper = true)
     public static class CaptureMove extends Move {
 
-        final Piece attackedPiece;
-
-        public CaptureMove(Board board, Piece piece, int destination, Piece attackedPiece) {
+        public CaptureMove(Board board, Piece piece, int destination, Piece capturedPiece) {
             super(board, piece, destination);
-            this.attackedPiece = attackedPiece;
+
+            this.capturedPiece = capturedPiece;
         }
     }
 
@@ -83,14 +90,14 @@ public abstract class Move {
      * A move where a pawn captures another piece.
      */
     public static class PawnCaptureMove extends CaptureMove {
-        public PawnCaptureMove(Board board, Pawn pawn, int destination, Piece attackedPiece) {
-            super(board, pawn, destination, attackedPiece);
+        public PawnCaptureMove(Board board, Pawn pawn, int destination, Piece capturedPiece) {
+            super(board, pawn, destination, capturedPiece);
         }
     }
 
     public static final class PawnEnPassantMove extends PawnCaptureMove {
-        public PawnEnPassantMove(Board board, Pawn pawn, int destination, Piece attackedPiece) {
-            super(board, pawn, destination, attackedPiece);
+        public PawnEnPassantMove(Board board, Pawn pawn, int destination, Piece capturedPiece) {
+            super(board, pawn, destination, capturedPiece);
         }
     }
 
@@ -98,27 +105,50 @@ public abstract class Move {
         public PawnJump(Board board, Pawn pawn, int destination) {
             super(board, pawn, destination);
         }
+
+        @Override
+        public Board execute() {
+
+            final var builder = new Builder();
+
+            for (final var activePiece : board.getCurrentPlayer().getActivePieces()) {
+                if (!piece.equals(activePiece)) {
+                    builder.withPiece(activePiece);
+                }
+            }
+
+            for (final var activePiece : board.getCurrentPlayer().getOpponent().getActivePieces()) {
+                builder.withPiece(activePiece);
+            }
+
+            final var movedPawn = piece.movePiece(this);
+
+            builder.withPiece(movedPawn);
+            builder.withEnPassantPawn((Pawn) movedPawn);
+            builder.withNextTurn(board.getCurrentPlayer().getAlliance());
+            return builder.build();
+        }
     }
 
-    public static abstract class CastleMove extends Move {
+    public static final class CastleMove extends Move {
         public CastleMove(Board board, Piece piece, int destination) {
             super(board, piece, destination);
         }
     }
 
-    public static abstract class KingCastleMove extends Move {
+    public static final class KingCastleMove extends Move {
         public KingCastleMove(Board board, King king, int destination) {
             super(board, king, destination);
         }
     }
 
-    public static abstract class QueenCastleMove extends Move {
+    public static final class QueenCastleMove extends Move {
         public QueenCastleMove(Board board, Queen queen, int destination) {
             super(board, queen, destination);
         }
     }
 
-    public static abstract class NullMove extends Move {
+    public static class NullMove extends Move {
         public NullMove() {
             super(null, null, -1);
         }
@@ -131,14 +161,16 @@ public abstract class Move {
 
     public static final class MoveFactory {
 
+        private static final Move NULL_MOVE = new NullMove();
+
         private MoveFactory() {
             throw new IllegalStateException("You cannot instantiate me!");
         }
 
-        public static Move create(final Board board, final int origin, final int destination) {
+        public static Move create(final Board board, final int source, final int destination) {
             return board.getCurrentPlayerLegalMoves()
                     .stream()
-                    .filter(move -> move.piece.getPosition() == origin && move.destination == destination)
+                    .filter(move -> move.piece.getPosition() == source && move.destination == destination)
                     .findFirst()
                     .orElse(NULL_MOVE);
         }

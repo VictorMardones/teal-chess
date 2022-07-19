@@ -36,7 +36,7 @@ public final class Pawn extends Piece {
 
         final var legalMoves = Arrays.stream(getMoveOffsets())
                 .filter(offset -> BoardUtils.isInsideBoard(getDestination(offset)))
-                .filter(offset -> !isIllegalMove(getDestination(offset)))
+                .filter(offset -> isLegalMove(getDestination(offset)))
                 .mapToObj(offset -> handleOffset(offset, board))
                 .filter(Objects::nonNull)
                 .toList();
@@ -93,8 +93,8 @@ public final class Pawn extends Piece {
     }
 
     @Override
-    protected boolean isIllegalMove(final int destination) {
-        return Math.abs(BoardUtils.getColumn(position) - BoardUtils.getColumn(destination)) > 1;
+    protected boolean isLegalMove(final int destination) {
+        return Math.abs(BoardUtils.getColumn(position) - BoardUtils.getColumn(destination)) <= 1;
     }
 
     private boolean isFirstMovePossible(final Board board) {

@@ -6,7 +6,7 @@ import board.Move.CaptureMove;
 import board.Move.NormalMove;
 import board.Tile;
 
-public class PieceUtils {
+public final class PieceUtils {
 
     private PieceUtils() {
         throw new IllegalStateException("You cannot instantiate me!");

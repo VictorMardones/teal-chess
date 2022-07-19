@@ -1,7 +1,6 @@
 package board;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import lombok.Getter;
 import piece.*;
 import player.Alliance;
@@ -165,6 +164,11 @@ public final class Board {
 
         public Builder withBlackKing(final King blackKing) {
             this.blackKing = blackKing;
+            return this;
+        }
+
+        public Builder withEnPassantPawn(Pawn pawn) {
+            // TODO: Implement this
             return this;
         }
 

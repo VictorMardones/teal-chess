@@ -13,7 +13,7 @@ class QueenTest {
     @Test
     void illegalMove() {
         var queen = new Queen(0, Alliance.WHITE);
-        assertTrue(queen.isIllegalMove(12));
+        assertFalse(queen.isLegalMove(12));
     }
 
     @ParameterizedTest
@@ -21,6 +21,6 @@ class QueenTest {
     @ValueSource(ints = {63, 7, 56})
     void legalMoves(int destination) {
         var queen = new Queen(0, Alliance.BLACK);
-        assertFalse(queen.isIllegalMove(destination));
+        assertTrue(queen.isLegalMove(destination));
     }
 }

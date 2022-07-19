@@ -24,12 +24,12 @@ public final class BoardUtils {
         return coordinate % NUMBER_OF_ROWS;
     }
 
-    public static boolean sameRow(final int origin, final int destination) {
-        return getRow(origin) == getRow(destination);
+    public static boolean sameRow(final int source, final int destination) {
+        return getRow(source) == getRow(destination);
     }
 
-    public static boolean sameColumn(final int origin, final int destination) {
-        return getColumn(origin) == getColumn(destination);
+    public static boolean sameColumn(final int source, final int destination) {
+        return getColumn(source) == getColumn(destination);
     }
 
     public static Alliance getTileColor(final int coordinate) {
@@ -39,8 +39,8 @@ public final class BoardUtils {
         return Alliance.BLACK;
     }
 
-    public static boolean sameColor(final int origin, final int destination) {
-        return getTileColor(origin) == getTileColor(destination);
+    public static boolean sameColor(final int source, final int destination) {
+        return getTileColor(source) == getTileColor(destination);
     }
 
 }

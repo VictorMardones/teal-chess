@@ -13,7 +13,7 @@ class RookTest {
     @Test
     void illegalMove() {
         var rook = new Rook(0, Alliance.BLACK);
-        assertTrue(rook.isIllegalMove(9));
+        assertFalse(rook.isLegalMove(9));
     }
 
     @ParameterizedTest
@@ -21,6 +21,6 @@ class RookTest {
     @ValueSource(ints = {7, 56})
     void legalMoves(int destination) {
         var rook = new Rook(0, Alliance.BLACK);
-        assertFalse(rook.isIllegalMove(destination));
+        assertTrue(rook.isLegalMove(destination));
     }
 }

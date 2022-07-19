@@ -35,7 +35,7 @@ public abstract class Piece {
      * @param destination Destination coordinate.
      * @return True if the next move is valid.
      */
-    protected abstract boolean isIllegalMove(final int destination);
+    protected abstract boolean isLegalMove(final int destination);
 
     public boolean isWhite() {
         return alliance == Alliance.WHITE;
@@ -45,7 +45,7 @@ public abstract class Piece {
         return !isWhite();
     }
 
-    public boolean isEnemy(Piece<?> other) {
+    public boolean isEnemy(Piece other) {
         if (other != null) {
             return alliance != other.alliance;
         }

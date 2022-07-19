@@ -28,7 +28,7 @@ public abstract class JumpingPiece extends Piece {
         final var legalMoves = Arrays.stream(getMoveOffsets())
                 .map(offset -> position + offset)
                 .filter(BoardUtils::isInsideBoard)
-                .filter(destination -> !isIllegalMove(destination))
+                .filter(this::isLegalMove)
                 .mapToObj(board::getTile)
                 .filter(Objects::nonNull)
                 .filter(tile -> PieceUtils.isAccessible(this, tile))

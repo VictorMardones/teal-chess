@@ -11,12 +11,12 @@ class BishopTest {
     @Test
     void illegalMove() {
         var bishop = new Bishop(0, Alliance.WHITE);
-        assertTrue(bishop.isIllegalMove(1));
+        assertFalse(bishop.isLegalMove(1));
     }
 
     @Test
     void diagonalMove() {
         var bishop = new Bishop(0, Alliance.BLACK);
-        assertFalse(bishop.isIllegalMove(9));
+        assertTrue(bishop.isLegalMove(9));
     }
 }
