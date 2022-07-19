@@ -59,6 +59,10 @@ public abstract class Piece {
 
     public abstract Piece movePiece(final Move move);
 
+    public boolean isRook() {
+        return pieceType == PieceType.ROOK;
+    }
+
     @AllArgsConstructor
     @Getter
     public enum PieceType {

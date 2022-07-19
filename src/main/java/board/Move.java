@@ -136,14 +136,14 @@ public abstract class Move {
         }
     }
 
-    public static final class KingCastleMove extends Move {
-        public KingCastleMove(Board board, King king, int destination) {
+    public static final class KingSideCastleMove extends Move {
+        public KingSideCastleMove(Board board, King king, int destination) {
             super(board, king, destination);
         }
     }
 
-    public static final class QueenCastleMove extends Move {
-        public QueenCastleMove(Board board, Queen queen, int destination) {
+    public static final class QueenSideCastleMove extends Move {
+        public QueenSideCastleMove(Board board, Queen queen, int destination) {
             super(board, queen, destination);
         }
     }

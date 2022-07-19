@@ -1,13 +1,16 @@
 package player;
 
 import board.Board;
+import board.BoardUtils;
 import board.Move;
 import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 import piece.King;
 import piece.Piece;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * The entity that controls the pieces in one side of the board.
@@ -30,7 +33,7 @@ public abstract class Player {
         inCheck = !Player.calculateAttacksOnTile(king.getPosition(), opponentMoves).isEmpty();
     }
 
-    private static Collection<Move> calculateAttacksOnTile(int kingPosition, Collection<Move> moves) {
+    protected static Collection<Move> calculateAttacksOnTile(int kingPosition, Collection<Move> moves) {
         var attackMoves = moves.stream()
                 .filter(move -> kingPosition == move.getDestination())
                 .toList();
@@ -128,4 +131,46 @@ public abstract class Player {
      * @return The opponent
      */
     public abstract Player getOpponent();
+
+    // TODO: Refactor this method
+    protected Collection<Move> calculateCastles(final Collection<Move> legalMoves,
+                                                final Collection<Move> opponentLegalMoves) {
+        final List<Move> castles = new ArrayList<>();
+
+        if (!king.isFirstMove() && !isInCheck() && BoardUtils.getColumn(king.getPosition()) == 4) {
+            final var kingPosition = king.getPosition();
+
+            if (!board.getTile(kingPosition + 1).isOccupied()
+                    && !board.getTile(kingPosition + 2).isOccupied()) {
+                final var rookTile = board.getTile(kingPosition + 3);
+
+                if (rookTile.isOccupied() && rookTile.getPiece().isFirstMove()) {
+                    if (Player.calculateAttacksOnTile(kingPosition + 1, opponentLegalMoves).isEmpty()
+                            && Player.calculateAttacksOnTile(kingPosition + 2, opponentLegalMoves).isEmpty()
+                            && rookTile.getPiece().isRook()) {
+                        // TODO: king-side castle move
+                        castles.add(null);
+                    }
+                }
+            }
+
+            if (!board.getTile(kingPosition - 1).isOccupied()
+                    && !board.getTile(kingPosition - 2).isOccupied()
+                    && !board.getTile(kingPosition - 3).isOccupied()) {
+                final var rookTile = board.getTile(kingPosition - 4);
+
+                if (rookTile.isOccupied() && rookTile.getPiece().isFirstMove()) {
+                    if (Player.calculateAttacksOnTile(kingPosition - 1, opponentLegalMoves).isEmpty()
+                            && Player.calculateAttacksOnTile(kingPosition - 2, opponentLegalMoves).isEmpty()
+                            && Player.calculateAttacksOnTile(kingPosition - 3, opponentLegalMoves).isEmpty()
+                            && rookTile.getPiece().isRook()) {
+                        // TODO: add queen-side castle move
+                        castles.add(null);
+                    }
+                }
+            }
+        }
+
+        return ImmutableList.of(castles);
+    };
 }

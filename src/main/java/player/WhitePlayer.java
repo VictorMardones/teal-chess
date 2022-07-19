@@ -2,10 +2,13 @@ package player;
 
 import board.Board;
 import board.Move;
+import com.google.common.collect.ImmutableList;
 import piece.King;
 import piece.Piece;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * The player that uses the white pieces.
@@ -29,4 +32,5 @@ public class WhitePlayer extends Player {
     public Player getOpponent() {
         return board.getBlackPlayer();
     }
+
 }
