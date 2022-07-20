@@ -17,7 +17,7 @@ abstract class CastleMove extends Move {
 
     @Override
     public Board execute() {
-        final var builder = new Board.Builder();
+        final var builder = new Board.Builder(board.getWhitePlayer().getKing(), board.getBlackPlayer().getKing());
 
         for (final var activePiece : board.getCurrentPlayer().getActivePieces()) {
             if (!piece.equals(activePiece) && !piece.equals(rook)) {

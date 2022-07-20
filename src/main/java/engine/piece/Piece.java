@@ -13,13 +13,14 @@ import java.util.Collection;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode
+@ToString(includeFieldNames = false)
 public abstract class Piece {
 
     protected final int position;
     protected final Alliance alliance;
     protected final PieceType pieceType;
     // TODO: Actually use this field
-    protected boolean firstMove = false;
+    protected boolean firstMove = true;
 
     /**
      * Calculates all the moves that a piece can do.
@@ -52,8 +53,7 @@ public abstract class Piece {
         return false;
     }
 
-    @Override
-    public String toString() {
+    public String toChar() {
         return pieceType.pieceName;
     }
 

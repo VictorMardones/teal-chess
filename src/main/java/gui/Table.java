@@ -31,7 +31,7 @@ public class Table {
 
     private final JFrame gameFrame;
     private final BoardPanel boardPanel;
-    private final Board chessboard;
+    private Board chessboard;
 
     private Tile sourceTile;
     private Tile destinationTile;
@@ -91,9 +91,21 @@ public class Table {
             setPreferredSize(BOARD_PANEL_DIMENSION);
             validate();
         }
+
+        public void drawBoard(final Board board) {
+            removeAll();
+
+            for (final var tilePanel : boardTiles) {
+                tilePanel.drawTile(board);
+                add(tilePanel);
+            }
+
+            validate();
+            repaint();
+        }
     }
 
-    private class TilePanel extends JPanel {
+    private final class TilePanel extends JPanel {
         private final int tileId;
 
         private TilePanel(final BoardPanel boardPanel, final int tileId) {
@@ -101,7 +113,7 @@ public class Table {
             this.tileId = tileId;
             setPreferredSize(TILE_PANEL_DIMENSION);
             assignTileColor();
-            assignTileIcon(chessboard);
+            assignPieceIcon(chessboard);
             validate();
 
             addMouseListener(new MouseListener() {
@@ -118,18 +130,26 @@ public class Table {
                         } else {
                             destinationTile = chessboard.getTile(tileId);
 
-                            final var move = Move.MoveFactory.create(chessboard, sourceTile.getCoordinate(), destinationTile.getCoordinate());
+                            final var move = Move.MoveFactory.create(chessboard,
+                                    sourceTile.getCoordinate(), destinationTile.getCoordinate());
                             final var moveTransition = chessboard.getCurrentPlayer().makeMove(move);
 
                             if (moveTransition.getMoveStatus().isDone()) {
-                                // TODO: Update the chessboard
+                                chessboard = moveTransition.getBoard();
+                                // TODO: Add the move to the move log
                             }
+
+                            sourceTile = null;
+                            destinationTile = null;
+                            selectedPiece = null;
                         }
                     } else if (isRightMouseButton(e)) {
                         sourceTile = null;
                         destinationTile = null;
                         selectedPiece = null;
                     }
+
+                    SwingUtilities.invokeLater(() -> boardPanel.drawBoard(chessboard));
                 }
 
                 @Override
@@ -154,7 +174,14 @@ public class Table {
             });
         }
 
-        private void assignTileIcon(final Board board) {
+        private void drawTile(final Board board) {
+            assignTileColor();
+            assignPieceIcon(board);
+            validate();
+            repaint();
+        }
+
+        private void assignPieceIcon(final Board board) {
             removeAll();
 
             if (board.getTile(tileId).isOccupied()) {
@@ -173,7 +200,7 @@ public class Table {
             return "%s/%s%s.svg"
                     .formatted(PIECE_ICON_PATH,
                            piece.getAlliance().toString().toLowerCase().charAt(0),
-                           piece.toString().toLowerCase());
+                           piece.toChar().toLowerCase());
         }
 
         private void assignTileColor() {

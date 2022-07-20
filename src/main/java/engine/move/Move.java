@@ -6,14 +6,17 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import engine.piece.Piece;
+import lombok.ToString;
 
 /**
  * The action of moving a piece.
  */
 @RequiredArgsConstructor
 @EqualsAndHashCode
+@ToString(includeFieldNames = false)
 public abstract class Move {
 
+    @ToString.Exclude
     protected final Board board;
     @Getter
     protected final Piece piece;
@@ -36,7 +39,7 @@ public abstract class Move {
      */
     public Board execute() {
 
-        final var builder = new Builder();
+        final var builder = new Builder(board.getWhitePlayer().getKing(), board.getBlackPlayer().getKing());
 
         for (final var activePiece : board.getCurrentPlayer().getActivePieces()) {
             if (!piece.equals(activePiece)) {

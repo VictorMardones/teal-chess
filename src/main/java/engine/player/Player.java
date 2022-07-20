@@ -13,6 +13,8 @@ import engine.move.MoveTransition;
 import engine.piece.King;
 import engine.piece.Piece;
 import engine.piece.Rook;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,12 +24,16 @@ import java.util.List;
  * The entity that controls the pieces in one side of the board.
  * It can be controlled either by a human or an AI.
  */
+@Slf4j
+@ToString
 public abstract class Player {
 
+    @ToString.Exclude
     protected final Board board;
     @Getter
     protected final King king;
     @Getter
+    @ToString.Exclude
     protected final Collection<Move> legalMoves;
     private final boolean inCheck;
     private Boolean noEscapeMoves;

@@ -17,7 +17,7 @@ dependencies {
     implementation("org.apache.xmlgraphics:batik-swing:1.14")
 
     implementation("org.slf4j:slf4j-api:1.7.36")
-    runtimeOnly("org.slf4j:slf4j-simple:1.7.36")
+    implementation("org.slf4j:slf4j-simple:1.7.36")
 
     compileOnly("org.projectlombok:lombok:1.18.24")
     annotationProcessor("org.projectlombok:lombok:1.18.24")

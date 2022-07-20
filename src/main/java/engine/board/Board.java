@@ -8,12 +8,16 @@ import engine.player.Alliance;
 import engine.player.BlackPlayer;
 import engine.player.Player;
 import engine.player.WhitePlayer;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
 /**
  * The game board, made of 8x8 tiles.
  */
+@Slf4j
+@ToString
 public final class Board {
 
     private final List<Tile> gameBoard;
@@ -31,17 +35,25 @@ public final class Board {
 
     private Board(Builder builder) {
         gameBoard = createGameBoard(builder);
+        log.debug("Current gameboard: {}", gameBoard);
 
         whitePieces = calculateActivePieces(gameBoard, Alliance.WHITE);
+        log.debug("White pieces: {}", whitePieces);
         blackPieces = calculateActivePieces(gameBoard, Alliance.BLACK);
+        log.debug("Black pieces: {}", blackPieces);
 
         final Collection<Move> whiteLegalMoves = calculateLegalMoves(whitePieces);
+        log.debug("White legal moves: {}", whiteLegalMoves);
         final Collection<Move> blackLegalMoves = calculateLegalMoves(blackPieces);
+        log.debug("Black legal moves: {}", blackLegalMoves);
 
         whitePlayer = new WhitePlayer(this, builder.whiteKing, whiteLegalMoves, blackLegalMoves);
+        log.debug("White player: {}", whitePlayer);
         blackPlayer = new BlackPlayer(this, builder.blackKing, blackLegalMoves, whiteLegalMoves);
+        log.debug("Black player: {}", blackPlayer);
 
         currentPlayer = builder.nextTurn.choosePlayer(whitePlayer, blackPlayer);
+        log.debug("Current player: {}", currentPlayer.getAlliance());
     }
 
     private List<Tile> createGameBoard(final Builder builder) {
@@ -55,17 +67,16 @@ public final class Board {
     }
 
     public static Board createStandardBoard() {
-        final var builder = new Builder();
-
         final var whiteKing = new King(60, Alliance.WHITE);
         final var blackKing = new King(4, Alliance.BLACK);
+
+        final var builder = new Builder(whiteKing, blackKing);
 
         builder.withPiece(new Rook(0, Alliance.BLACK))
                 .withPiece(new Knight(1, Alliance.BLACK))
                 .withPiece(new Bishop(2, Alliance.BLACK))
                 .withPiece(new Queen(3, Alliance.BLACK))
                 .withPiece(blackKing)
-                .withBlackKing(blackKing)
                 .withPiece(new Bishop(5, Alliance.BLACK))
                 .withPiece(new Knight(6, Alliance.BLACK))
                 .withPiece(new Rook(7, Alliance.BLACK));
@@ -83,7 +94,6 @@ public final class Board {
                 .withPiece(new Bishop(58, Alliance.WHITE))
                 .withPiece(new Queen(59, Alliance.WHITE))
                 .withPiece(whiteKing)
-                .withWhiteKing(whiteKing)
                 .withPiece(new Bishop(61, Alliance.WHITE))
                 .withPiece(new Knight(62, Alliance.WHITE))
                 .withPiece(new Rook(63, Alliance.WHITE));
@@ -121,8 +131,7 @@ public final class Board {
         return ImmutableList.copyOf(currentPlayer.getLegalMoves());
     }
 
-    @Override
-    public String toString() {
+    public String toText() {
         final var builder = new StringBuilder();
 
         for (var i = 0; i < BoardUtils.MAX_TILES; i++) {
@@ -144,8 +153,10 @@ public final class Board {
         private King whiteKing;
         private King blackKing;
 
-        public Builder() {
+        public Builder(King whiteKing, King blackKing) {
             boardConfig = new HashMap<>();
+            this.whiteKing = whiteKing;
+            this.blackKing = blackKing;
         }
 
         public Builder withPiece(final Piece piece) {

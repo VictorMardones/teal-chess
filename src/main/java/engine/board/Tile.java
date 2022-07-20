@@ -90,7 +90,7 @@ public abstract class Tile {
 
         @Override
         public String toString() {
-            return piece.isBlack() ? piece.toString().toLowerCase() : piece.toString();
+            return piece.isBlack() ? piece.toChar().toLowerCase() : piece.toChar();
         }
     }
 }

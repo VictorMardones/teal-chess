@@ -1,13 +1,11 @@
 package launcher;
 
-import engine.board.Board;
 import gui.Table;
 
 public final class Chess {
     public static void main(String[] args) {
-        final var board = Board.createStandardBoard();
-        System.out.println(board);
+        System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "Debug");
 
-        final var table = new Table();
+        new Table();
     }
 }
