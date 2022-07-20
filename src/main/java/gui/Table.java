@@ -2,15 +2,22 @@ package gui;
 
 import engine.board.Board;
 import engine.board.BoardUtils;
+import engine.board.Tile;
+import engine.move.Move;
 import engine.piece.Piece;
 import engine.player.Alliance;
 import io.SVGImporter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.swing.SwingUtilities.isLeftMouseButton;
+import static javax.swing.SwingUtilities.isRightMouseButton;
 
 public class Table {
 
@@ -25,6 +32,10 @@ public class Table {
     private final JFrame gameFrame;
     private final BoardPanel boardPanel;
     private final Board chessboard;
+
+    private Tile sourceTile;
+    private Tile destinationTile;
+    private Piece selectedPiece;
 
     public Table() {
         gameFrame = new JFrame("Chess game, made in Java");
@@ -92,6 +103,55 @@ public class Table {
             assignTileColor();
             assignTileIcon(chessboard);
             validate();
+
+            addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(final MouseEvent e) {
+                    if (isLeftMouseButton(e)) {
+                        if (sourceTile == null) {
+                            sourceTile = chessboard.getTile(tileId);
+                            selectedPiece = sourceTile.getPiece();
+
+                            if (selectedPiece == null) {
+                                sourceTile = null;
+                            }
+                        } else {
+                            destinationTile = chessboard.getTile(tileId);
+
+                            final var move = Move.MoveFactory.create(chessboard, sourceTile.getCoordinate(), destinationTile.getCoordinate());
+                            final var moveTransition = chessboard.getCurrentPlayer().makeMove(move);
+
+                            if (moveTransition.getMoveStatus().isDone()) {
+                                // TODO: Update the chessboard
+                            }
+                        }
+                    } else if (isRightMouseButton(e)) {
+                        sourceTile = null;
+                        destinationTile = null;
+                        selectedPiece = null;
+                    }
+                }
+
+                @Override
+                public void mousePressed(final MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseReleased(final MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseEntered(final MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseExited(final MouseEvent e) {
+
+                }
+            });
         }
 
         private void assignTileIcon(final Board board) {
