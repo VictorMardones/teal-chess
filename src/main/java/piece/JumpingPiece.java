@@ -2,7 +2,7 @@ package piece;
 
 import board.Board;
 import board.BoardUtils;
-import board.Move;
+import move.Move;
 import com.google.common.collect.ImmutableList;
 import player.Alliance;
 

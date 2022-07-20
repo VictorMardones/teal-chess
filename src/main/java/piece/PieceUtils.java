@@ -1,9 +1,9 @@
 package piece;
 
 import board.Board;
-import board.Move;
-import board.Move.CaptureMove;
-import board.Move.NormalMove;
+import move.Move;
+import move.CaptureMove;
+import move.NormalMove;
 import board.Tile;
 
 public final class PieceUtils {

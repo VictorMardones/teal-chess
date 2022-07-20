@@ -1,7 +1,7 @@
 package player;
 
 import board.Board;
-import board.Move;
+import move.Move;
 import piece.King;
 import piece.Piece;
 

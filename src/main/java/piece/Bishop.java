@@ -1,7 +1,7 @@
 package piece;
 
 import board.BoardUtils;
-import board.Move;
+import move.Move;
 import player.Alliance;
 
 /**

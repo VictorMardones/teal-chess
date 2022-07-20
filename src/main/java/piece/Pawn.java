@@ -2,9 +2,9 @@ package piece;
 
 import board.Board;
 import board.BoardUtils;
-import board.Move;
-import board.Move.CaptureMove;
-import board.Move.NormalMove;
+import move.Move;
+import move.CaptureMove;
+import move.NormalMove;
 import com.google.common.collect.ImmutableList;
 import player.Alliance;
 

@@ -1,9 +1,10 @@
-package player;
+package move;
 
 import board.Board;
-import board.Move;
+import move.Move;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import move.MoveStatus;
 
 /**
  * The transition from one board to another, triggered when a move is performed or checked.

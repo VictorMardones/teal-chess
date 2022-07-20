@@ -1,7 +1,7 @@
 package piece;
 
 import board.Board;
-import board.Move;
+import move.Move;
 import lombok.*;
 import player.Alliance;
 
@@ -19,7 +19,7 @@ public abstract class Piece {
     protected final Alliance alliance;
     protected final PieceType pieceType;
     // TODO: Actually use this field
-    protected boolean firstMove;
+    protected boolean firstMove = false;
 
     /**
      * Calculates all the moves that a piece can do.

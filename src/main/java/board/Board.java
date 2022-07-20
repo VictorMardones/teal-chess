@@ -2,6 +2,8 @@ package board;
 
 import com.google.common.collect.ImmutableList;
 import lombok.Getter;
+import lombok.ToString;
+import move.Move;
 import piece.*;
 import player.Alliance;
 import player.BlackPlayer;
@@ -54,17 +56,14 @@ public final class Board {
     }
 
     public static Board createStandardBoard() {
-        var builder = new Builder();
-
-        var blackKing = new King(4, Alliance.BLACK);
-        var whiteKing = new King(60, Alliance.WHITE);
+        final var builder = new Builder(new King(60, Alliance.WHITE),
+                new King(4, Alliance.BLACK));
 
         builder.withPiece(new Rook(0, Alliance.BLACK))
                 .withPiece(new Knight(1, Alliance.BLACK))
                 .withPiece(new Bishop(2, Alliance.BLACK))
                 .withPiece(new Queen(3, Alliance.BLACK))
-                .withPiece(blackKing)
-                .withBlackKing(blackKing)
+                .withPiece(builder.blackKing)
                 .withPiece(new Bishop(5, Alliance.BLACK))
                 .withPiece(new Knight(6, Alliance.BLACK))
                 .withPiece(new Rook(7, Alliance.BLACK));
@@ -81,8 +80,7 @@ public final class Board {
                 .withPiece(new Knight(57, Alliance.WHITE))
                 .withPiece(new Bishop(58, Alliance.WHITE))
                 .withPiece(new Queen(59, Alliance.WHITE))
-                .withPiece(whiteKing)
-                .withWhiteKing(whiteKing)
+                .withPiece(builder.whiteKing)
                 .withPiece(new Bishop(61, Alliance.WHITE))
                 .withPiece(new Knight(62, Alliance.WHITE))
                 .withPiece(new Rook(63, Alliance.WHITE));
@@ -143,8 +141,10 @@ public final class Board {
         private King whiteKing;
         private King blackKing;
 
-        public Builder() {
+        public Builder(King whiteKing, King blackKing) {
             boardConfig = new HashMap<>();
+            this.whiteKing = whiteKing;
+            this.blackKing = blackKing;
         }
 
         public Builder withPiece(final Piece piece) {
