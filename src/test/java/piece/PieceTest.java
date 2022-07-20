@@ -1,7 +1,8 @@
 package piece;
 
+import engine.piece.Pawn;
 import org.junit.jupiter.api.Test;
-import player.Alliance;
+import engine.player.Alliance;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
