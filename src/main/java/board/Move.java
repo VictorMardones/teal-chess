@@ -125,26 +125,66 @@ public abstract class Move {
 
             builder.withPiece(movedPawn);
             builder.withEnPassantPawn((Pawn) movedPawn);
-            builder.withNextTurn(board.getCurrentPlayer().getAlliance());
+            builder.withNextTurn(board.getCurrentPlayer().getOpponent().getAlliance());
             return builder.build();
         }
     }
 
-    public static final class CastleMove extends Move {
-        public CastleMove(Board board, Piece piece, int destination) {
+    static abstract class CastleMove extends Move {
+        @Getter
+        protected final Rook rook;
+        protected final int start;
+        protected final int rookDestination;
+
+        public CastleMove(Board board, Piece piece, int destination, Rook rook, int start, int rookDestination) {
             super(board, piece, destination);
+            this.rook = rook;
+            this.start = start;
+            this.rookDestination = rookDestination;
+            castling = true;
+        }
+
+        @Override
+        public Board execute() {
+            final var builder = new Builder();
+
+            for (final var activePiece : board.getCurrentPlayer().getActivePieces()) {
+                if (!piece.equals(activePiece) && !piece.equals(rook)) {
+                    builder.withPiece(activePiece);
+                }
+            }
+
+            for (final var activePiece : board.getCurrentPlayer().getOpponent().getActivePieces()) {
+                builder.withPiece(activePiece);
+            }
+
+            builder.withPiece(piece.movePiece(this))
+                    .withPiece(new Rook(rookDestination, rook.getAlliance()))
+                    .withNextTurn(board.getCurrentPlayer().getOpponent().getAlliance());
         }
     }
 
-    public static final class KingSideCastleMove extends Move {
-        public KingSideCastleMove(Board board, King king, int destination) {
-            super(board, king, destination);
+    public static final class KingSideCastleMove extends CastleMove {
+
+        public KingSideCastleMove(Board board, Piece piece, int destination, Rook rook, int start, int rookDestination) {
+            super(board, piece, destination, rook, start, rookDestination);
+        }
+
+        @Override
+        public String toString() {
+            return "0-0";
         }
     }
 
-    public static final class QueenSideCastleMove extends Move {
-        public QueenSideCastleMove(Board board, Queen queen, int destination) {
-            super(board, queen, destination);
+    public static final class QueenSideCastleMove extends CastleMove {
+
+        public QueenSideCastleMove(Board board, Piece piece, int destination, Rook rook, int start, int rookDestination) {
+            super(board, piece, destination, rook, start, rookDestination);
+        }
+
+        @Override
+        public String toString() {
+            return "0-0-0";
         }
     }
 
