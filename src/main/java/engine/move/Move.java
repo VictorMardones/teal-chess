@@ -52,7 +52,7 @@ public abstract class Move {
         }
 
         builder.withPiece(piece.movePiece(this));
-        builder.withNextTurn(board.getCurrentPlayer().getAlliance());
+        builder.withNextTurn(board.getCurrentPlayer().getOpponent().getAlliance());
         return builder.build();
     }
 

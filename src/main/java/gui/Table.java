@@ -7,6 +7,7 @@ import engine.move.Move;
 import engine.piece.Piece;
 import engine.player.Alliance;
 import io.SVGImporter;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +20,7 @@ import java.util.List;
 import static javax.swing.SwingUtilities.isLeftMouseButton;
 import static javax.swing.SwingUtilities.isRightMouseButton;
 
+@Slf4j
 public class Table {
 
     private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
@@ -121,14 +123,19 @@ public class Table {
                 public void mouseClicked(final MouseEvent e) {
                     if (isLeftMouseButton(e)) {
                         if (sourceTile == null) {
+                            log.debug("Selected the tile {}", tileId);
+
                             sourceTile = chessboard.getTile(tileId);
                             selectedPiece = sourceTile.getPiece();
+                            log.debug("The tile contains {}", selectedPiece);
 
                             if (selectedPiece == null) {
+                                log.debug("The tile is unoccupied, unselecting");
                                 sourceTile = null;
                             }
                         } else {
                             destinationTile = chessboard.getTile(tileId);
+                            log.debug("Selected the destination {}", tileId);
 
                             final var move = Move.MoveFactory.create(chessboard,
                                     sourceTile.getCoordinate(), destinationTile.getCoordinate());
@@ -147,6 +154,7 @@ public class Table {
                         sourceTile = null;
                         destinationTile = null;
                         selectedPiece = null;
+                        log.debug("Pressed right click, unselecting");
                     }
 
                     SwingUtilities.invokeLater(() -> boardPanel.drawBoard(chessboard));
