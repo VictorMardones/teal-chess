@@ -8,6 +8,6 @@ public final class Chess {
         final var board = Board.createStandardBoard();
         System.out.println(board);
 
-        var table = new Table();
+        final var table = new Table();
     }
 }
