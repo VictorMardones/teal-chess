@@ -24,7 +24,7 @@ public final class King extends JumpingPiece {
     }
 
     @Override
-    protected boolean isLegalMove(int destination) {
+    public boolean isLegalMove(int destination) {
         return Math.abs(BoardUtils.getColumn(position) - BoardUtils.getColumn(destination)) <= 1;
     }
 

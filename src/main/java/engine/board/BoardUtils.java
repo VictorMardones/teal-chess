@@ -33,7 +33,7 @@ public final class BoardUtils {
     }
 
     public static Alliance getTileColor(final int coordinate) {
-        if ((coordinate + (float) coordinate / NUMBER_OF_ROWS % 2) % 2 == 0) {
+        if ((coordinate + coordinate / NUMBER_OF_ROWS) % 2 == 0) {
             return Alliance.WHITE;
         }
         return Alliance.BLACK;
@@ -42,5 +42,4 @@ public final class BoardUtils {
     public static boolean sameColor(final int source, final int destination) {
         return getTileColor(source) == getTileColor(destination);
     }
-
 }

@@ -22,7 +22,7 @@ public final class Bishop extends SlidingPiece {
     }
 
     @Override
-    protected boolean isLegalMove(int destination) {
+    public boolean isLegalMove(int destination) {
         return BoardUtils.sameColor(position, destination);
     }
 

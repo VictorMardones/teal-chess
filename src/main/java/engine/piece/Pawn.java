@@ -93,7 +93,7 @@ public final class Pawn extends Piece {
     }
 
     @Override
-    protected boolean isLegalMove(final int destination) {
+    public boolean isLegalMove(final int destination) {
         return Math.abs(BoardUtils.getColumn(position) - BoardUtils.getColumn(destination)) <= 1;
     }
 
