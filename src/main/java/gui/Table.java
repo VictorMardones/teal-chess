@@ -2,14 +2,13 @@ package gui;
 
 import engine.board.Board;
 import engine.board.BoardUtils;
+import engine.piece.Piece;
 import engine.player.Alliance;
+import io.SVGImporter;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,10 +20,11 @@ public class Table {
 
     private static final Color LIGHT_TILE_COLOR = Color.decode("#FFCE9E");
     private static final Color BLACK_TILE_COLOR = Color.decode("#D18B47");
-    private static final String PIECE_ICON_PATH = "";
+    private static final String PIECE_ICON_PATH = "art/pieces";
 
     private final JFrame gameFrame;
     private final BoardPanel boardPanel;
+    private final Board chessboard;
 
     public Table() {
         gameFrame = new JFrame("Chess game, made in Java");
@@ -32,6 +32,8 @@ public class Table {
 
         gameFrame.setJMenuBar(createMenuBar());
         gameFrame.setSize(OUTER_FRAME_DIMENSION);
+
+        chessboard = Board.createStandardBoard();
 
         boardPanel = new BoardPanel();
         gameFrame.add(boardPanel, BorderLayout.CENTER);
@@ -88,6 +90,7 @@ public class Table {
             this.tileId = tileId;
             setPreferredSize(TILE_PANEL_DIMENSION);
             assignTileColor();
+            assignTileIcon(chessboard);
             validate();
         }
 
@@ -95,16 +98,22 @@ public class Table {
             removeAll();
 
             if (board.getTile(tileId).isOccupied()) {
-                try {
-                    final var image = ImageIO.read(new File("%s/%s%s.svg"
-                            .formatted(PIECE_ICON_PATH,
-                                    board.getTile(tileId).getPiece().getAlliance().toString().charAt(0),
-                                    board.getTile(tileId).getPiece().toString())));
+                final var image = SVGImporter.importSVG(
+                        new File(getIconPath(board.getTile(tileId).getPiece())),
+                        TILE_PANEL_DIMENSION.width * 6,
+                        TILE_PANEL_DIMENSION.height * 6);
+
+                if (image != null) {
                     add(new JLabel(new ImageIcon(image)));
-                } catch (IOException e) {
-                    throw new IllegalStateException("Failed to load images!");
                 }
             }
+        }
+
+        private String getIconPath(Piece piece) {
+            return "%s/%s%s.svg"
+                    .formatted(PIECE_ICON_PATH,
+                           piece.getAlliance().toString().toLowerCase().charAt(0),
+                           piece.toString().toLowerCase());
         }
 
         private void assignTileColor() {
