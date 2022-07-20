@@ -6,7 +6,8 @@ public final class BoardUtils {
 
     public static final int MIN_TILES = 0;
     public static final int MAX_TILES = 64;
-    public static final int NUMBER_OF_ROWS = 8;
+    public static final int NUMBER_OF_RANKS = 8;
+    public static final char[] COLUMN_NAMES = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
     private BoardUtils() {
         throw new IllegalStateException("You cannot instantiate me!");
@@ -16,16 +17,16 @@ public final class BoardUtils {
         return coordinate >= MIN_TILES && coordinate < MAX_TILES;
     }
 
-    public static int getRow(final int coordinate) {
-        return coordinate / NUMBER_OF_ROWS;
+    public static int getRank(final int coordinate) {
+        return NUMBER_OF_RANKS - coordinate / NUMBER_OF_RANKS;
     }
 
     public static int getColumn(final int coordinate) {
-        return coordinate % NUMBER_OF_ROWS;
+        return COLUMN_NAMES[coordinate % NUMBER_OF_RANKS];
     }
 
-    public static boolean sameRow(final int source, final int destination) {
-        return getRow(source) == getRow(destination);
+    public static boolean sameRank(final int source, final int destination) {
+        return getRank(source) == getRank(destination);
     }
 
     public static boolean sameColumn(final int source, final int destination) {
@@ -33,7 +34,7 @@ public final class BoardUtils {
     }
 
     public static Alliance getTileColor(final int coordinate) {
-        if ((coordinate + coordinate / NUMBER_OF_ROWS) % 2 == 0) {
+        if ((coordinate + coordinate / NUMBER_OF_RANKS) % 2 == 0) {
             return Alliance.WHITE;
         }
         return Alliance.BLACK;

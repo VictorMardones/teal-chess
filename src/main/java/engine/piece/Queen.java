@@ -23,7 +23,7 @@ public final class Queen extends SlidingPiece {
 
     @Override
     public boolean isLegalMove(int destination) {
-        return BoardUtils.sameRow(position, destination) ||
+        return BoardUtils.sameRank(position, destination) ||
                 BoardUtils.sameColumn(position, destination) ||
                 BoardUtils.sameColor(position, destination);
     }

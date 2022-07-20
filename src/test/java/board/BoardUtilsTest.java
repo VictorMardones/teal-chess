@@ -24,23 +24,23 @@ class BoardUtilsTest {
     }
 
     @Test
-    void getRow() {
-        assertEquals(7, BoardUtils.getRow(61));
+    void getRank() {
+        assertEquals(1, BoardUtils.getRank(61));
     }
 
     @Test
     void getColumn() {
-        assertEquals(0, BoardUtils.getColumn(16));
+        assertEquals('a', BoardUtils.getColumn(16));
     }
 
     @Test
-    void sameRow() {
-        assertTrue(BoardUtils.sameRow(3, 4));
+    void sameRank() {
+        assertTrue(BoardUtils.sameRank(3, 4));
     }
 
     @Test
-    void differentRow() {
-        assertFalse(BoardUtils.sameRow(1, 60));
+    void differentRank() {
+        assertFalse(BoardUtils.sameRank(1, 60));
     }
 
     @Test

@@ -129,7 +129,7 @@ public final class Board {
             final var tileText = gameBoard.get(i).toString();
             builder.append(String.format("%s  ", tileText));
 
-            if ((i + 1) % BoardUtils.NUMBER_OF_ROWS == 0) {
+            if ((i + 1) % BoardUtils.NUMBER_OF_RANKS == 0) {
                 builder.append("\n");
             }
         }

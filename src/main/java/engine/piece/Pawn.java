@@ -15,7 +15,7 @@ import java.util.Objects;
 /**
  * The pawn piece.
  * It only moves forward (depending on the side) and can eat other pieces diagonally.
- * A very weak piece, but it can be promoted when getting to the last row at the opposite side.
+ * A very weak piece, but it can be promoted when getting to the last rank at the opposite side.
  */
 public final class Pawn extends Piece {
 
