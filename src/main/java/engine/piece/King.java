@@ -3,6 +3,8 @@ package engine.piece;
 import engine.board.BoardUtils;
 import engine.move.Move;
 import engine.player.Alliance;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * The king piece.
@@ -10,21 +12,27 @@ import engine.player.Alliance;
  * It moves like the queen, but only one space at a time.
  * It also cannot move into a position where it could be captured.
  */
-public final class King extends JumpingPiece {
+@Getter
+@AllArgsConstructor
+public final class King implements JumpingPiece {
+
+    private int position;
+    private Alliance alliance;
 
     private static final int[] MOVE_OFFSETS = {-9, -8, -7, -1, 1, 7, 8, 9};
 
-    public King(int position, Alliance alliance) {
-        super(position, alliance, PieceType.KING);
-    }
-
     @Override
-    int[] getMoveOffsets() {
+    public int[] getMoveOffsets() {
         return MOVE_OFFSETS;
     }
 
     @Override
-    public boolean isLegalMove(int destination) {
+    public PieceType getPieceType() {
+        return PieceType.KING;
+    }
+
+    @Override
+    public boolean isInMoveRange(int destination) {
         return Math.abs(BoardUtils.getColumn(position) - BoardUtils.getColumn(destination)) <= 2;
     }
 

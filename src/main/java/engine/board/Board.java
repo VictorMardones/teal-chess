@@ -56,7 +56,7 @@ public final class Board {
         blackPlayer = new BlackPlayer(this, builder.blackKing, blackLegalMoves, whiteLegalMoves);
         log.debug("Black player: {}", blackPlayer);
 
-        currentPlayer = builder.nextTurn.choosePlayer(ImmutableList.of(whitePlayer, blackPlayer));
+        currentPlayer = builder.nextTurn.choosePlayer(List.of(whitePlayer, blackPlayer));
         log.debug("Current player: {}", currentPlayer.getAlliance());
     }
 
@@ -135,7 +135,7 @@ public final class Board {
     }
 
     private String getFormat(final int coordinate) {
-        return (coordinate + 1) % BoardUtils.NUMBER_OF_RANKS == 0 ? "%s \n" : "%s ";
+        return (coordinate + 1) % BoardUtils.NUMBER_OF_RANKS == 0 ? "%s  \n" : "%s  ";
     }
 
     public static class Builder {

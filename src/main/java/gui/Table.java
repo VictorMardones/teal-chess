@@ -6,11 +6,13 @@ import engine.board.Tile;
 import engine.piece.Piece;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+@Slf4j
 public class Table {
 
     private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
@@ -63,7 +65,7 @@ public class Table {
         final var fileMenu = new JMenu("File");
 
         final var openPGN = new JMenuItem("Load PGN file");
-        openPGN.addActionListener(e -> System.out.println("Open PGN file!"));
+        openPGN.addActionListener(e -> log.info("Open PGN file!"));
         fileMenu.add(openPGN);
 
         final var exit = new JMenuItem("Exit");

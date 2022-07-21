@@ -8,7 +8,7 @@ abstract class CastleMove extends Move {
     protected final Rook rook;
     protected final int rookDestination;
 
-    public CastleMove(Board board, Piece piece, int destination, Rook rook, int rookDestination) {
+    protected CastleMove(Board board, Piece piece, int destination, Rook rook, int rookDestination) {
         super(board, piece, destination);
         this.rook = rook;
         this.rookDestination = rookDestination;

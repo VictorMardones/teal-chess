@@ -3,26 +3,34 @@ package engine.piece;
 import engine.board.BoardUtils;
 import engine.move.Move;
 import engine.player.Alliance;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * The rook piece.
  * It can move horizontally and vertically.
  */
-public final class Rook extends SlidingPiece {
+@Getter
+@AllArgsConstructor
+public final class Rook implements SlidingPiece {
 
     private static final int[] MOVE_VECTORS = {-8, -1, 1, 8};
 
-    public Rook(int position, Alliance alliance) {
-        super(position, alliance, PieceType.ROOK);
-    }
+    private int position;
+    private Alliance alliance;
 
     @Override
-    int[] getMoveVectors() {
+    public int[] getMoveVectors() {
         return MOVE_VECTORS;
     }
 
     @Override
-    public boolean isLegalMove(int destination) {
+    public PieceType getPieceType() {
+        return PieceType.ROOK;
+    }
+
+    @Override
+    public boolean isInMoveRange(int destination) {
         return BoardUtils.sameRank(position, destination) ||
                 BoardUtils.sameColumn(position, destination);
     }

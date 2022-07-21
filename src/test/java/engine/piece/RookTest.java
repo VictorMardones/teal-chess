@@ -1,6 +1,5 @@
-package piece;
+package engine.piece;
 
-import engine.piece.Rook;
 import engine.player.Alliance;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,14 +14,14 @@ class RookTest {
     @ValueSource(ints = {7, 56})
     void legalMoves(int destination) {
         var rook = new Rook(0, Alliance.BLACK);
-        assertThat(rook.isLegalMove(destination))
+        assertThat(rook.isInMoveRange(destination))
                 .isTrue();
     }
 
     @Test
     void illegalMove() {
         var rook = new Rook(0, Alliance.BLACK);
-        assertThat(rook.isLegalMove(9))
+        assertThat(rook.isInMoveRange(9))
                 .isFalse();
     }
 }

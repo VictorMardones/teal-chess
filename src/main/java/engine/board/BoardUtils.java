@@ -7,7 +7,7 @@ public final class BoardUtils {
     public static final int MIN_TILES = 0;
     public static final int MAX_TILES = 64;
     public static final int NUMBER_OF_RANKS = 8;
-    public static final char[] COLUMN_NAMES = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+    private static final char[] COLUMN_NAMES = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
     private BoardUtils() {
         throw new IllegalStateException("You cannot instantiate me!");

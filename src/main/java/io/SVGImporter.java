@@ -1,9 +1,11 @@
 package io;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.batik.transcoder.SVGAbstractTranscoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 
 import javax.imageio.ImageIO;
@@ -13,12 +15,21 @@ import java.io.*;
 @Slf4j
 public final class SVGImporter {
 
-    public static BufferedImage importSVG(File file, int width, int height) {
+    private SVGImporter() {
+        throw new IllegalStateException("You cannot instantiate me!");
+    }
+
+    public static BufferedImage importSVG(final File file, final int width, final int height) {
+
+        if (!file.exists()) {
+            log.error("The file does not exist!");
+            return null;
+        }
 
         var transcoder = new PNGTranscoder();
 
-        transcoder.addTranscodingHint(PNGTranscoder.KEY_WIDTH, (float) width);
-        transcoder.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, (float) height);
+        transcoder.addTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH, (float) width);
+        transcoder.addTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT, (float) height);
 
         try (var inputStream = new FileInputStream(file)) {
 

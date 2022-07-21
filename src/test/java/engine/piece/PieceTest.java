@@ -1,4 +1,4 @@
-package piece;
+package engine.piece;
 
 import engine.piece.Pawn;
 import engine.player.Alliance;

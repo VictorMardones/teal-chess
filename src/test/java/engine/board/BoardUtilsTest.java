@@ -1,4 +1,4 @@
-package board;
+package engine.board;
 
 import engine.board.BoardUtils;
 import engine.player.Alliance;

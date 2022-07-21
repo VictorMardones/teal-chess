@@ -13,8 +13,8 @@ class BoardPanel extends JPanel {
 
     private static final Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
 
-    private final Table table;
-    final List<TilePanel> boardTiles;
+    private final transient Table table;
+    private final List<TilePanel> boardTiles;
 
     BoardPanel(Table table) {
         super(new GridLayout(8, 8));

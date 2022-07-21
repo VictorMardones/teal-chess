@@ -7,54 +7,51 @@ import engine.move.CaptureMove;
 import engine.move.MajorPieceMove;
 import engine.move.Move;
 import engine.player.Alliance;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Objects;
 
 /**
  * The pawn piece.
  * It only moves forward (depending on the side) and can eat other pieces diagonally.
  * A very weak piece, but it can be promoted when getting to the last rank at the opposite side.
  */
-public final class Pawn extends Piece {
+@Getter
+@AllArgsConstructor
+public final class Pawn implements Piece {
 
-    private static final int FORWARD_MOVE = 8;
-    private static final int FIRST_MOVE = 16;
-    private static final int LEFT_CAPTURE = 7;
-    private static final int RIGHT_CAPTURE = 9;
+    private int position;
+    private Alliance alliance;
 
-    // TODO: This could be an enum
-    private static final int[] MOVE_OFFSET = {LEFT_CAPTURE, FORWARD_MOVE, RIGHT_CAPTURE, FIRST_MOVE};
-
-    public Pawn(int position, Alliance alliance) {
-        super(position, alliance, PieceType.PAWN);
+    @Override
+    public PieceType getPieceType() {
+        return PieceType.PAWN;
     }
 
     // TODO: Refactor this code when the pawn is implemented completely
     @Override
     public Collection<Move> calculateLegalMoves(final Board board) {
 
-        return Arrays.stream(getMoveOffsets())
-                .filter(offset -> BoardUtils.isInsideBoard(getDestination(offset)))
-                .filter(offset -> isLegalMove(getDestination(offset)))
-                .mapToObj(offset -> handleOffset(offset, board))
-                .filter(Objects::nonNull)
+        return Arrays.stream(PawnOffset.values())
+                .filter(pawnOffset -> BoardUtils.isInsideBoard(getDestination(pawnOffset)))
+                .filter(pawnOffset -> isInMoveRange(getDestination(pawnOffset)))
+                .map(pawnOffset -> handleOffset(pawnOffset, board))
                 .collect(ImmutableList.toImmutableList());
     }
 
-    private int getDestination(int offset) {
-        return position + getAlliance().getDirection() * offset;
+    private int getDestination(PawnOffset pawnOffset) {
+        return position + getAlliance().getDirection() * pawnOffset.offset;
     }
 
-    private Move handleOffset(int offset, Board board) {
-        var destination = getDestination(offset);
+    private Move handleOffset(PawnOffset pawnOffset, Board board) {
+        var destination = getDestination(pawnOffset);
 
-        return switch (offset) {
+        return switch (pawnOffset) {
             case FIRST_MOVE -> createFirstMove(board, destination);
             case FORWARD_MOVE -> createForwardMove(board, destination);
             case LEFT_CAPTURE, RIGHT_CAPTURE -> createCaptureMove(board, destination);
-            default -> null;
         };
     }
 
@@ -87,12 +84,8 @@ public final class Pawn extends Piece {
         return null;
     }
 
-    int[] getMoveOffsets() {
-        return MOVE_OFFSET;
-    }
-
     @Override
-    public boolean isLegalMove(final int destination) {
+    public boolean isInMoveRange(final int destination) {
         return Math.abs(BoardUtils.getColumn(position) - BoardUtils.getColumn(destination)) <= 1;
     }
 
@@ -104,5 +97,15 @@ public final class Pawn extends Piece {
     @Override
     public Pawn movePiece(final Move move) {
         return new Pawn(move.getDestination(), alliance);
+    }
+
+    @AllArgsConstructor
+    private enum PawnOffset {
+        FIRST_MOVE(8),
+        FORWARD_MOVE(16),
+        LEFT_CAPTURE(7),
+        RIGHT_CAPTURE(9);
+
+        private final int offset;
     }
 }

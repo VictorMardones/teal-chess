@@ -10,17 +10,16 @@ import java.util.Collection;
 /**
  * A chess piece.
  */
-@Getter
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode
-@ToString(includeFieldNames = false)
-public abstract class Piece {
+public interface Piece {
 
-    protected final int position;
-    protected final Alliance alliance;
-    protected final PieceType pieceType;
-    // TODO: Actually use this field
-    protected boolean firstMove = true;
+    int getPosition();
+    Alliance getAlliance();
+    PieceType getPieceType();
+
+    // TODO: Actually use this method
+    default boolean isFirstMove() {
+        return true;
+    }
 
     /**
      * Calculates all the moves that a piece can do.
@@ -28,45 +27,46 @@ public abstract class Piece {
      * @param board Current state of the game board.
      * @return List of possible moves.
      */
-    public abstract Collection<Move> calculateLegalMoves(final Board board);
+    Collection<Move> calculateLegalMoves(final Board board);
 
     /**
-     * Checks for edge cases to decide if the next move is valid.
+     * Checks for edge cases to decide if the next move could be valid.
+     * This doesn't account for pieces that may block the movement.
      *
      * @param destination Destination coordinate.
      * @return True if the next move is valid.
      */
-    public abstract boolean isLegalMove(final int destination);
+    boolean isInMoveRange(final int destination);
 
-    public boolean isWhite() {
-        return alliance == Alliance.WHITE;
+    default boolean isWhite() {
+        return getAlliance() == Alliance.WHITE;
     }
 
-    public boolean isBlack() {
+    default boolean isBlack() {
         return !isWhite();
     }
 
-    public boolean isEnemy(Piece other) {
+    default boolean isEnemy(Piece other) {
         // TODO: Replace null by EmptyPiece
         if (other != null) {
-            return alliance != other.alliance;
+            return getAlliance() != other.getAlliance();
         }
         return false;
     }
 
-    public String toChar() {
-        return pieceType.pieceName;
+    default String toChar() {
+        return getPieceType().pieceName;
     }
 
-    public abstract Piece movePiece(final Move move);
+    Piece movePiece(final Move move);
 
-    public boolean isRook() {
-        return pieceType == PieceType.ROOK;
+    default boolean isRook() {
+        return getPieceType() == PieceType.ROOK;
     }
 
     @AllArgsConstructor
     @Getter
-    public enum PieceType {
+    enum PieceType {
         PAWN("P"),
         KNIGHT("N"),
         BISHOP("B"),

@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import engine.board.Board;
 import engine.board.BoardUtils;
 import engine.move.Move;
-import engine.player.Alliance;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,21 +13,17 @@ import java.util.function.IntConsumer;
 /**
  * A piece that can move in a specific set of directions.
  */
-public abstract class SlidingPiece extends Piece {
+public interface SlidingPiece extends Piece {
 
-    protected SlidingPiece(int position, Alliance alliance, PieceType pieceType) {
-        super(position, alliance, pieceType);
-    }
-
-    abstract int[] getMoveVectors();
+    int[] getMoveVectors();
 
     @Override
-    public Collection<Move> calculateLegalMoves(final Board board) {
+    default Collection<Move> calculateLegalMoves(final Board board) {
 
         // TODO: Remove these non-null filters, change how the methods work
         return Arrays.stream(getMoveVectors())
                 .mapMulti(this::calculateOffsets)
-                .filter(this::isLegalMove)
+                .filter(this::isInMoveRange)
                 .mapToObj(board::getTile)
                 .filter(Objects::nonNull)
                 .filter(tile -> PieceUtils.isAccessible(this, tile))
@@ -40,8 +35,8 @@ public abstract class SlidingPiece extends Piece {
     private void calculateOffsets(final int vector, final IntConsumer consumer) {
         var multiplier = 1;
 
-        while (BoardUtils.isInsideBoard(position + vector * multiplier)) {
-            consumer.accept(position + vector * multiplier);
+        while (BoardUtils.isInsideBoard(getPosition() + vector * multiplier)) {
+            consumer.accept(getPosition() + vector * multiplier);
             multiplier++;
         }
     }

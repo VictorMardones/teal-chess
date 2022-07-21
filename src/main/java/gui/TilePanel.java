@@ -27,7 +27,7 @@ final class TilePanel extends JPanel {
     private static final Color BLACK_TILE_COLOR = Color.decode("#D18B47");
     private static final String PIECE_ICON_PATH = "art/pieces";
 
-    private final Table table;
+    private final transient Table table;
     private final int tileId;
 
     TilePanel(Table table, final BoardPanel boardPanel, final int tileId) {
@@ -83,22 +83,22 @@ final class TilePanel extends JPanel {
 
             @Override
             public void mousePressed(final MouseEvent e) {
-
+                // Do nothing
             }
 
             @Override
             public void mouseReleased(final MouseEvent e) {
-
+                // Do nothing
             }
 
             @Override
             public void mouseEntered(final MouseEvent e) {
-
+                // Do nothing
             }
 
             @Override
             public void mouseExited(final MouseEvent e) {
-
+                // Do nothing
             }
         });
     }
