@@ -32,8 +32,8 @@ public final class SVGImporter {
             outputStream.flush();
             outputStream.close();
 
-            var imgData = outputStream.toByteArray();
-            return ImageIO.read(new ByteArrayInputStream(imgData));
+            var imageData = outputStream.toByteArray();
+            return ImageIO.read(new ByteArrayInputStream(imageData));
 
         } catch (IOException | TranscoderException e) {
             log.error("Failed to load images!", e);

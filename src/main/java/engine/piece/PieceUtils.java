@@ -1,10 +1,10 @@
 package engine.piece;
 
 import engine.board.Board;
-import engine.move.Move;
+import engine.board.Tile;
 import engine.move.CaptureMove;
 import engine.move.MajorPieceMove;
-import engine.board.Tile;
+import engine.move.Move;
 
 public final class PieceUtils {
 

@@ -24,6 +24,7 @@ public enum Alliance {
 
     /**
      * Chooses the first player of this alliance.
+     *
      * @param players Players to choose from
      * @return The chosen player
      */
@@ -32,5 +33,5 @@ public enum Alliance {
                 .filter(player -> player.getAlliance() == this)
                 .findFirst()
                 .orElse(null);
-    };
+    }
 }
