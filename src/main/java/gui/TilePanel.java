@@ -13,6 +13,8 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.util.Collection;
+import java.util.Collections;
 
 import static javax.swing.SwingUtilities.isLeftMouseButton;
 import static javax.swing.SwingUtilities.isRightMouseButton;
@@ -52,6 +54,8 @@ final class TilePanel extends JPanel {
                         if (table.getSelectedPiece() == null) {
                             log.debug("The tile is unoccupied, unselecting");
                             table.setSourceTile(null);
+                        } else {
+                            log.debug("Highlighting legal moves");
                         }
                     } else {
                         table.setDestinationTile(table.getChessboard().getTile(tileId));
@@ -102,6 +106,7 @@ final class TilePanel extends JPanel {
     void drawTile(final Board board) {
         assignTileColor();
         assignPieceIcon(board);
+        highlightLegals(board);
         validate();
         repaint();
     }
@@ -131,5 +136,30 @@ final class TilePanel extends JPanel {
     private void assignTileColor() {
         setBackground(BoardUtils.getTileColor(tileId) == Alliance.WHITE
                 ? LIGHT_TILE_COLOR : BLACK_TILE_COLOR);
+    }
+
+    private void highlightLegals(final Board board) {
+        if (table.isHighlightLegalMoves()) {
+            pieceLegalMoves(board).stream()
+                    .filter(move -> move.getDestination() == tileId)
+                    .forEach(move -> {
+                        final var image = SVGImporter.importSVG(new File("art/misc/green_dot.svg"),
+                                TILE_PANEL_DIMENSION.width * 4,
+                                TILE_PANEL_DIMENSION.height * 4);
+
+                        if (image != null) {
+                            add(new JLabel(new ImageIcon(image)));
+                        }
+                    });
+        }
+    }
+
+    private Collection<Move> pieceLegalMoves(final Board board) {
+        if (table.getSelectedPiece() != null && table.getSelectedPiece().getAlliance() == board.getCurrentPlayer().getAlliance()) {
+            return table.getSelectedPiece().calculateLegalMoves(board);
+        }
+
+        log.debug("The piece has no legal moves");
+        return Collections.emptyList();
     }
 }

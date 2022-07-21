@@ -36,10 +36,11 @@ class BoardPanel extends JPanel {
     public void drawBoard(final Board board) {
         removeAll();
 
-        boardTiles.forEach(tilePanel -> {
-            tilePanel.drawTile(board);
-            add(tilePanel);
-        });
+        table.getBoardDirection().traverse(boardTiles)
+                .forEach(tilePanel -> {
+                    tilePanel.drawTile(board);
+                    add(tilePanel);
+                });
 
         validate();
         repaint();

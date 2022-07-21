@@ -1,5 +1,6 @@
 package gui;
 
+import com.google.common.collect.Lists;
 import engine.board.Board;
 import engine.board.Tile;
 import engine.piece.Piece;
@@ -8,6 +9,7 @@ import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class Table {
 
@@ -20,16 +22,22 @@ public class Table {
 
     @Getter @Setter
     private Tile sourceTile;
-
     @Getter @Setter
     private Tile destinationTile;
-
     @Getter @Setter
     private Piece selectedPiece;
+
+    @Getter
+    private BoardDirection boardDirection;
+    @Getter
+    private boolean highlightLegalMoves;
 
     public Table() {
         gameFrame = new JFrame("Chess game, made in Java");
         gameFrame.setLayout(new BorderLayout());
+
+        boardDirection = BoardDirection.NORMAL;
+        highlightLegalMoves = true;
 
         gameFrame.setJMenuBar(createMenuBar());
         gameFrame.setSize(OUTER_FRAME_DIMENSION);
@@ -47,6 +55,7 @@ public class Table {
     private JMenuBar createMenuBar() {
         final var menuBar = new JMenuBar();
         menuBar.add(createFileMenu());
+        menuBar.add(createPreferencesMenu());
         return menuBar;
     }
 
@@ -64,9 +73,55 @@ public class Table {
         return fileMenu;
     }
 
+    private JMenu createPreferencesMenu() {
+        final var preferencesMenu = new JMenu("Preferences");
+
+        final var flipBoard = new JMenuItem("Flip Board");
+        flipBoard.addActionListener(e -> {
+            boardDirection = boardDirection.opposite();
+            boardPanel.drawBoard(chessboard);
+        });
+
+        final var highlightCheckbox = new JCheckBoxMenuItem("Highlight Legal Moves", highlightLegalMoves);
+        highlightCheckbox.addActionListener(e -> highlightLegalMoves = highlightCheckbox.isSelected());
+
+        preferencesMenu.add(flipBoard);
+        preferencesMenu.add(highlightCheckbox);
+        return preferencesMenu;
+    }
+
     public void resetSelection() {
         sourceTile = null;
         destinationTile = null;
         selectedPiece = null;
+    }
+
+    public enum BoardDirection {
+        NORMAL {
+            @Override
+            List<TilePanel> traverse(List<TilePanel> boardTiles) {
+                return boardTiles;
+            }
+
+            @Override
+            BoardDirection opposite() {
+                return FLIPPED;
+            }
+        },
+        FLIPPED {
+            @Override
+            List<TilePanel> traverse(List<TilePanel> boardTiles) {
+                return Lists.reverse(boardTiles);
+            }
+
+            @Override
+            BoardDirection opposite() {
+                return NORMAL;
+            }
+        };
+
+
+        abstract List<TilePanel> traverse(final List<TilePanel> boardTiles);
+        abstract BoardDirection opposite();
     }
 }
