@@ -1,11 +1,11 @@
 package engine.piece;
 
+import com.google.common.collect.ImmutableList;
 import engine.board.Board;
 import engine.board.BoardUtils;
-import engine.move.Move;
 import engine.move.CaptureMove;
-import engine.move.NormalMove;
-import com.google.common.collect.ImmutableList;
+import engine.move.MajorPieceMove;
+import engine.move.Move;
 import engine.player.Alliance;
 
 import java.util.Arrays;
@@ -24,6 +24,7 @@ public final class Pawn extends Piece {
     private static final int LEFT_CAPTURE = 7;
     private static final int RIGHT_CAPTURE = 9;
 
+    // TODO: This could be an enum
     private static final int[] MOVE_OFFSET = {LEFT_CAPTURE, FORWARD_MOVE, RIGHT_CAPTURE, FIRST_MOVE};
 
     public Pawn(int position, Alliance alliance) {
@@ -34,14 +35,12 @@ public final class Pawn extends Piece {
     @Override
     public Collection<Move> calculateLegalMoves(final Board board) {
 
-        final var legalMoves = Arrays.stream(getMoveOffsets())
+        return Arrays.stream(getMoveOffsets())
                 .filter(offset -> BoardUtils.isInsideBoard(getDestination(offset)))
                 .filter(offset -> isLegalMove(getDestination(offset)))
                 .mapToObj(offset -> handleOffset(offset, board))
                 .filter(Objects::nonNull)
-                .toList();
-
-        return ImmutableList.copyOf(legalMoves);
+                .collect(ImmutableList.toImmutableList());
     }
 
     private int getDestination(int offset) {
@@ -61,7 +60,7 @@ public final class Pawn extends Piece {
 
     private Move createFirstMove(Board board, int destination) {
         if (isFirstMovePossible(board)) {
-            return new NormalMove(board, this, destination);
+            return new MajorPieceMove(board, this, destination);
         }
 
         return null;
@@ -70,7 +69,7 @@ public final class Pawn extends Piece {
     private Move createForwardMove(Board board, int destination) {
         if (!board.getTile(destination).isOccupied()) {
             // TODO: Deal with promotions
-            return new NormalMove(board, this, destination);
+            return new MajorPieceMove(board, this, destination);
         }
 
         return null;

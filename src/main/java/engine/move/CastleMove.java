@@ -19,15 +19,12 @@ abstract class CastleMove extends Move {
     public Board execute() {
         final var builder = new Board.Builder(board.getWhitePlayer().getKing(), board.getBlackPlayer().getKing());
 
-        for (final var activePiece : board.getCurrentPlayer().getActivePieces()) {
-            if (!piece.equals(activePiece) && !piece.equals(rook)) {
-                builder.withPiece(activePiece);
-            }
-        }
+        board.getCurrentPlayer().getActivePieces().stream()
+                .filter(activePiece -> !piece.equals(activePiece) && !piece.equals(rook))
+                .forEach(builder::withPiece);
 
-        for (final var activePiece : board.getCurrentPlayer().getOpponent().getActivePieces()) {
-            builder.withPiece(activePiece);
-        }
+        board.getCurrentPlayer().getOpponent().getActivePieces()
+                .forEach(builder::withPiece);
 
         builder.withPiece(piece.movePiece(this))
                 .withPiece(new Rook(rookDestination, rook.getAlliance()))

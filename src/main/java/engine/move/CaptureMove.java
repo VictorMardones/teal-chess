@@ -1,8 +1,8 @@
 package engine.move;
 
 import engine.board.Board;
-import lombok.EqualsAndHashCode;
 import engine.piece.Piece;
+import lombok.EqualsAndHashCode;
 
 /**
  * A move where a piece captures another piece.

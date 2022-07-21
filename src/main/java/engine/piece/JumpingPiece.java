@@ -1,9 +1,9 @@
 package engine.piece;
 
+import com.google.common.collect.ImmutableList;
 import engine.board.Board;
 import engine.board.BoardUtils;
 import engine.move.Move;
-import com.google.common.collect.ImmutableList;
 import engine.player.Alliance;
 
 import java.util.Arrays;
@@ -25,7 +25,7 @@ public abstract class JumpingPiece extends Piece {
     public Collection<Move> calculateLegalMoves(final Board board) {
 
         // TODO: Remove these non-null filters, change how the methods work
-        final var legalMoves = Arrays.stream(getMoveOffsets())
+        return Arrays.stream(getMoveOffsets())
                 .map(offset -> position + offset)
                 .filter(BoardUtils::isInsideBoard)
                 .filter(this::isLegalMove)
@@ -34,8 +34,6 @@ public abstract class JumpingPiece extends Piece {
                 .filter(tile -> PieceUtils.isAccessible(this, tile))
                 .map(tile -> PieceUtils.createMove(this, tile, board))
                 .filter(Objects::nonNull)
-                .toList();
-
-        return ImmutableList.copyOf(legalMoves);
+                .collect(ImmutableList.toImmutableList());
     }
 }

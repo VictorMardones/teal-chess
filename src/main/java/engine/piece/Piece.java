@@ -2,8 +2,8 @@ package engine.piece;
 
 import engine.board.Board;
 import engine.move.Move;
-import lombok.*;
 import engine.player.Alliance;
+import lombok.*;
 
 import java.util.Collection;
 
@@ -47,6 +47,7 @@ public abstract class Piece {
     }
 
     public boolean isEnemy(Piece other) {
+        // TODO: Replace null by EmptyPiece
         if (other != null) {
             return alliance != other.alliance;
         }

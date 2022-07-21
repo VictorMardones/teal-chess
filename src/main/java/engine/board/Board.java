@@ -1,17 +1,21 @@
 package engine.board;
 
 import com.google.common.collect.ImmutableList;
-import engine.piece.*;
-import lombok.Getter;
 import engine.move.Move;
+import engine.piece.*;
 import engine.player.Alliance;
 import engine.player.BlackPlayer;
 import engine.player.Player;
 import engine.player.WhitePlayer;
+import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.IntStream;
 
 /**
  * The game board, made of 8x8 tiles.
@@ -52,20 +56,17 @@ public final class Board {
         blackPlayer = new BlackPlayer(this, builder.blackKing, blackLegalMoves, whiteLegalMoves);
         log.debug("Black player: {}", blackPlayer);
 
-        currentPlayer = builder.nextTurn.choosePlayer(whitePlayer, blackPlayer);
+        currentPlayer = builder.nextTurn.choosePlayer(ImmutableList.of(whitePlayer, blackPlayer));
         log.debug("Current player: {}", currentPlayer.getAlliance());
     }
 
     private List<Tile> createGameBoard(final Builder builder) {
-        final var tiles = new Tile[BoardUtils.MAX_TILES];
-
-        for (var i = 0; i < BoardUtils.MAX_TILES; i++) {
-            tiles[i] = Tile.create(i, builder.boardConfig.get(i));
-        }
-
-        return ImmutableList.copyOf(tiles);
+        return IntStream.range(BoardUtils.MIN_TILES, BoardUtils.MAX_TILES)
+                .mapToObj(i -> Tile.create(i, builder.boardConfig.get(i)))
+                .collect(ImmutableList.toImmutableList());
     }
 
+    // TODO: Parse a text file to create the board
     public static Board createStandardBoard() {
         final var whiteKing = new King(60, Alliance.WHITE);
         final var blackKing = new King(4, Alliance.BLACK);
@@ -81,13 +82,11 @@ public final class Board {
                 .withPiece(new Knight(6, Alliance.BLACK))
                 .withPiece(new Rook(7, Alliance.BLACK));
 
-        for (var i = 8; i <= 15; i++) {
-            builder.withPiece(new Pawn(i, Alliance.BLACK));
-        }
+        IntStream.range(8, 16)
+                .forEach(i -> builder.withPiece(new Pawn(i, Alliance.BLACK)));
 
-        for (var i = 48; i <= 55; i++) {
-            builder.withPiece(new Pawn(i, Alliance.WHITE));
-        }
+        IntStream.range(48, 56)
+                .forEach(i -> builder.withPiece(new Pawn(i, Alliance.WHITE)));
 
         builder.withPiece(new Rook(56, Alliance.WHITE))
                 .withPiece(new Knight(57, Alliance.WHITE))
@@ -107,24 +106,18 @@ public final class Board {
     }
 
     private Collection<Piece> calculateActivePieces(final List<Tile> gameBoard, final Alliance alliance) {
-        var pieces = gameBoard.stream()
+        return gameBoard.stream()
                 .filter(Tile::isOccupied)
                 .map(Tile::getPiece)
                 .filter(tile -> tile.getAlliance() == alliance)
-                .toList();
-
-        return ImmutableList.copyOf(pieces);
+                .collect(ImmutableList.toImmutableList());
     }
 
     private Collection<Move> calculateLegalMoves(Collection<Piece> pieces) {
-
-        final List<Move> legalMoves = new ArrayList<>();
-
-        for (final var piece : pieces) {
-            legalMoves.addAll(piece.calculateLegalMoves(this));
-        }
-
-        return ImmutableList.copyOf(legalMoves);
+        return pieces.stream()
+                .map(piece -> piece.calculateLegalMoves(this))
+                .flatMap(Collection::stream)
+                .collect(ImmutableList.toImmutableList());
     }
 
     public Collection<Move> getCurrentPlayerLegalMoves() {
@@ -134,16 +127,15 @@ public final class Board {
     public String toText() {
         final var builder = new StringBuilder();
 
-        for (var i = 0; i < BoardUtils.MAX_TILES; i++) {
-            final var tileText = gameBoard.get(i).toString();
-            builder.append(String.format("%s  ", tileText));
-
-            if ((i + 1) % BoardUtils.NUMBER_OF_RANKS == 0) {
-                builder.append("\n");
-            }
-        }
+        IntStream.range(BoardUtils.MIN_TILES, BoardUtils.MAX_TILES)
+                .mapToObj(i -> String.format(getFormat(i), gameBoard.get(i)))
+                .forEach(builder::append);
 
         return builder.toString();
+    }
+
+    private String getFormat(final int coordinate) {
+        return (coordinate + 1) % BoardUtils.NUMBER_OF_RANKS == 0 ? "%s \n" : "%s ";
     }
 
     public static class Builder {

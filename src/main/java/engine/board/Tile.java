@@ -1,13 +1,13 @@
 package engine.board;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableList;
+import engine.piece.Piece;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import engine.piece.Piece;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * A single chess tile, which may or may not contain a piece.
@@ -18,16 +18,12 @@ public abstract class Tile {
 
     private final int coordinate;
 
-    private static final Map<Integer, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
+    private static final List<EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
 
-    private static Map<Integer, EmptyTile> createAllPossibleEmptyTiles() {
-        final Map<Integer, EmptyTile> emptyTiles = new HashMap<>();
-
-        for (var i = 0; i < BoardUtils.MAX_TILES; i++) {
-            emptyTiles.put(i, new EmptyTile(i));
-        }
-
-        return ImmutableMap.copyOf(emptyTiles);
+    private static List<EmptyTile> createAllPossibleEmptyTiles() {
+        return IntStream.range(BoardUtils.MIN_TILES, BoardUtils.MAX_TILES)
+                .mapToObj(EmptyTile::new)
+                .collect(ImmutableList.toImmutableList());
     }
 
     /**

@@ -2,10 +2,10 @@ package engine.move;
 
 import engine.board.Board;
 import engine.board.Board.Builder;
+import engine.piece.Piece;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import engine.piece.Piece;
 import lombok.ToString;
 
 /**
@@ -41,15 +41,12 @@ public abstract class Move {
 
         final var builder = new Builder(board.getWhitePlayer().getKing(), board.getBlackPlayer().getKing());
 
-        for (final var activePiece : board.getCurrentPlayer().getActivePieces()) {
-            if (!piece.equals(activePiece)) {
-                builder.withPiece(activePiece);
-            }
-        }
+        board.getCurrentPlayer().getActivePieces().stream()
+                .filter(activePiece -> !piece.equals(activePiece))
+                .forEach(builder::withPiece);
 
-        for (final var activePiece : board.getCurrentPlayer().getOpponent().getActivePieces()) {
-            builder.withPiece(activePiece);
-        }
+        board.getCurrentPlayer().getOpponent().getActivePieces()
+                .forEach(builder::withPiece);
 
         builder.withPiece(piece.movePiece(this));
         builder.withNextTurn(board.getCurrentPlayer().getOpponent().getAlliance());

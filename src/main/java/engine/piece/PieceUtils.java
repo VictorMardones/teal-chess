@@ -3,7 +3,7 @@ package engine.piece;
 import engine.board.Board;
 import engine.move.Move;
 import engine.move.CaptureMove;
-import engine.move.NormalMove;
+import engine.move.MajorPieceMove;
 import engine.board.Tile;
 
 public final class PieceUtils {
@@ -35,7 +35,7 @@ public final class PieceUtils {
      */
     public static Move createMove(final Piece piece, final Tile destination, final Board board) {
         if (!destination.isOccupied()) {
-            return new NormalMove(board, piece, destination.getCoordinate());
+            return new MajorPieceMove(board, piece, destination.getCoordinate());
         }
 
         final var capturablePiece = destination.getPiece();

@@ -1,18 +1,14 @@
 package engine.player;
 
-import engine.board.Board;
-import engine.board.BoardUtils;
-import engine.move.Move;
-import engine.move.KingSideCastleMove;
-import engine.move.QueenSideCastleMove;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import lombok.Getter;
-import engine.move.MoveStatus;
-import engine.move.MoveTransition;
+import engine.board.Board;
+import engine.board.BoardUtils;
+import engine.move.*;
 import engine.piece.King;
 import engine.piece.Piece;
 import engine.piece.Rook;
+import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,11 +43,9 @@ public abstract class Player {
     }
 
     protected static Collection<Move> calculateAttacksOnTile(int kingPosition, Collection<Move> moves) {
-        var attackMoves = moves.stream()
+        return moves.stream()
                 .filter(move -> kingPosition == move.getDestination())
-                .toList();
-
-        return ImmutableList.copyOf(attackMoves);
+                .collect(ImmutableList.toImmutableList());
     }
 
     /**
@@ -145,7 +139,7 @@ public abstract class Player {
      */
     public abstract Player getOpponent();
 
-    // TODO: Refactor this method
+    // TODO: Refactor this method, maybe use combinator pattern
     protected Collection<Move> calculateCastles(final Collection<Move> legalMoves,
                                                 final Collection<Move> opponentLegalMoves) {
         final List<Move> castles = new ArrayList<>();

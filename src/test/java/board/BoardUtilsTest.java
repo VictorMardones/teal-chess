@@ -1,8 +1,8 @@
 package board;
 
 import engine.board.BoardUtils;
-import org.junit.jupiter.api.Test;
 import engine.player.Alliance;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 

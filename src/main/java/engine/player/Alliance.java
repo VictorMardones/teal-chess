@@ -3,6 +3,8 @@ package engine.player;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Collection;
+
 /**
  * Represents the chess piece's color, which can be white or black.
  */
@@ -20,10 +22,15 @@ public enum Alliance {
 
     private final int direction;
 
-    public Player choosePlayer(final WhitePlayer whitePlayer, final BlackPlayer blackPlayer) {
-        return switch (this) {
-            case WHITE -> whitePlayer;
-            case BLACK -> blackPlayer;
-        };
-    }
+    /**
+     * Chooses the first player of this alliance.
+     * @param players Players to choose from
+     * @return The chosen player
+     */
+    public Player choosePlayer(final Collection<Player> players) {
+        return players.stream()
+                .filter(player -> player.getAlliance() == this)
+                .findFirst()
+                .orElse(null);
+    };
 }

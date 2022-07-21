@@ -16,6 +16,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static javax.swing.SwingUtilities.isLeftMouseButton;
 import static javax.swing.SwingUtilities.isRightMouseButton;
@@ -84,11 +85,12 @@ public class Table {
 
             boardTiles = new ArrayList<>();
 
-            for (int i = 0; i < BoardUtils.MAX_TILES; i++) {
-                final var tilePanel = new TilePanel(this, i);
-                boardTiles.add(tilePanel);
-                add(tilePanel);
-            }
+            IntStream.range(BoardUtils.MIN_TILES, BoardUtils.MAX_TILES)
+                    .mapToObj(i -> new TilePanel(this, i))
+                    .forEach(tilePanel -> {
+                        boardTiles.add(tilePanel);
+                        add(tilePanel);
+                    });
 
             setPreferredSize(BOARD_PANEL_DIMENSION);
             validate();
@@ -97,10 +99,10 @@ public class Table {
         public void drawBoard(final Board board) {
             removeAll();
 
-            for (final var tilePanel : boardTiles) {
+            boardTiles.forEach(tilePanel -> {
                 tilePanel.drawTile(board);
                 add(tilePanel);
-            }
+            });
 
             validate();
             repaint();
