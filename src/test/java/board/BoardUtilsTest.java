@@ -4,72 +4,91 @@ import engine.board.BoardUtils;
 import engine.player.Alliance;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 class BoardUtilsTest {
 
     @Test
     void validCoordinate() {
-        assertTrue(BoardUtils.isInsideBoard(15));
+        assertThat(BoardUtils.isInsideBoard(15))
+                .isTrue();
     }
 
     @Test
     void tooLowCoordinate() {
-        assertFalse(BoardUtils.isInsideBoard(-1));
+        assertThat(BoardUtils.isInsideBoard(-1))
+                .isFalse();
     }
 
     @Test
     void tooHighCoordinate() {
-        assertFalse(BoardUtils.isInsideBoard(64));
+        assertThat(BoardUtils.isInsideBoard(64))
+                .isFalse();
     }
 
     @Test
     void getRank() {
-        assertEquals(1, BoardUtils.getRank(61));
+        assertThat(BoardUtils.getRank(61))
+                .isEqualTo(1);
     }
 
     @Test
     void getColumn() {
-        assertEquals('a', BoardUtils.getColumn(16));
+        assertThat(BoardUtils.getColumn(11))
+                .isEqualTo(3);
+    }
+
+    @Test
+    void getColumnName() {
+        assertThat(BoardUtils.getColumnName(16))
+                .isEqualTo('a');
     }
 
     @Test
     void sameRank() {
-        assertTrue(BoardUtils.sameRank(3, 4));
+        assertThat(BoardUtils.sameRank(3, 4))
+                .isTrue();
     }
 
     @Test
     void differentRank() {
-        assertFalse(BoardUtils.sameRank(1, 60));
+        assertThat(BoardUtils.sameRank(1, 60))
+                .isFalse();
     }
 
     @Test
     void sameColumn() {
-        assertTrue(BoardUtils.sameColumn(8, 16));
+        assertThat(BoardUtils.sameColumn(8, 16))
+                .isTrue();
     }
 
     @Test
     void differentColumn() {
-        assertFalse(BoardUtils.sameColumn(8, 18));
+        assertThat(BoardUtils.sameColumn(8, 18))
+                .isFalse();
     }
 
     @Test
     void getWhiteTile() {
-        assertEquals(Alliance.WHITE, BoardUtils.getTileColor(0));
+        assertThat(BoardUtils.getTileColor(0))
+                .isEqualTo(Alliance.WHITE);
     }
 
     @Test
     void getBlackTile() {
-        assertEquals(Alliance.BLACK, BoardUtils.getTileColor(1));
+        assertThat(BoardUtils.getTileColor(1))
+                .isEqualTo(Alliance.BLACK);
     }
 
     @Test
     void sameColor() {
-        assertTrue(BoardUtils.sameColor(0, 63));
+        assertThat(BoardUtils.sameColor(0, 63))
+                .isTrue();
     }
 
     @Test
     void differentColor() {
-        assertFalse(BoardUtils.sameColor(0, 7));
+        assertThat(BoardUtils.sameColor(0, 7))
+                .isFalse();
     }
 }

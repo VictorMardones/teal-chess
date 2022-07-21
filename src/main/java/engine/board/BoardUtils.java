@@ -22,7 +22,11 @@ public final class BoardUtils {
     }
 
     public static int getColumn(final int coordinate) {
-        return COLUMN_NAMES[coordinate % NUMBER_OF_RANKS];
+        return coordinate % NUMBER_OF_RANKS;
+    }
+
+    public static int getColumnName(final int coordinate) {
+        return COLUMN_NAMES[getColumn(coordinate)];
     }
 
     public static boolean sameRank(final int source, final int destination) {

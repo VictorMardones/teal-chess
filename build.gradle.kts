@@ -28,6 +28,10 @@ dependencies {
 
     testCompileOnly("org.projectlombok:lombok:1.18.24")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.24")
+
+    testImplementation("org.mockito:mockito-core:4.6.1")
+
+    testImplementation("org.assertj:assertj-core:3.23.1")
 }
 
 tasks.getByName<Test>("test") {

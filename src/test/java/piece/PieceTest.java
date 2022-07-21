@@ -4,32 +4,35 @@ import engine.piece.Pawn;
 import engine.player.Alliance;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 
 class PieceTest {
 
     @Test
     void isWhite() {
         var piece = new Pawn(0, Alliance.WHITE);
-        assertTrue(piece.isWhite());
+        assertThat(piece.isWhite())
+                .isTrue();
     }
 
     @Test
     void isNotWhite() {
         var piece = new Pawn(0, Alliance.BLACK);
-        assertFalse(piece.isWhite());
+        assertThat(piece.isWhite())
+                .isFalse();
     }
 
     @Test
     void isBlack() {
         var piece = new Pawn(0, Alliance.BLACK);
-        assertTrue(piece.isBlack());
+        assertThat(piece.isBlack())
+                .isTrue();
     }
 
     @Test
     void isNotBlack() {
         var piece = new Pawn(0, Alliance.WHITE);
-        assertFalse(piece.isBlack());
+        assertThat(piece.isBlack())
+                .isFalse();
     }
 }

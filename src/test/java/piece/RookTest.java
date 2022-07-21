@@ -6,22 +6,23 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 
 class RookTest {
-
-    @Test
-    void illegalMove() {
-        var rook = new Rook(0, Alliance.BLACK);
-        assertFalse(rook.isLegalMove(9));
-    }
 
     @ParameterizedTest
     // horizontal, vertical
     @ValueSource(ints = {7, 56})
     void legalMoves(int destination) {
         var rook = new Rook(0, Alliance.BLACK);
-        assertTrue(rook.isLegalMove(destination));
+        assertThat(rook.isLegalMove(destination))
+                .isTrue();
+    }
+
+    @Test
+    void illegalMove() {
+        var rook = new Rook(0, Alliance.BLACK);
+        assertThat(rook.isLegalMove(9))
+                .isFalse();
     }
 }
