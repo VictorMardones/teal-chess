@@ -1,5 +1,8 @@
 package engine.piece;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
 import engine.board.BoardService;
 import engine.move.Move;
 import engine.player.Alliance;
@@ -9,54 +12,41 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 class RookTest {
 
-    Rook rook;
-    @Mock
-    BoardService boardService;
-    @Mock
-    Move move;
+  Rook rook;
+  @Mock BoardService boardService;
+  @Mock Move move;
 
-    @BeforeEach
-    void setUp() {
-        rook = new Rook(0, Alliance.BLACK, boardService);
-    }
+  @BeforeEach
+  void setUp() {
+    rook = new Rook(0, Alliance.BLACK, boardService);
+  }
 
-    @Test
-    void horizontalMove() {
-        when(boardService.sameRank(0, 7))
-                .thenReturn(true);
+  @Test
+  void horizontalMove() {
+    when(boardService.sameRank(0, 7)).thenReturn(true);
 
-        assertThat(rook.isInMoveRange(7))
-                .isTrue();
-    }
+    assertThat(rook.isInMoveRange(7)).isTrue();
+  }
 
-    @Test
-    void verticalMove() {
-        when(boardService.sameColumn(0, 56))
-                .thenReturn(true);
+  @Test
+  void verticalMove() {
+    when(boardService.sameColumn(0, 56)).thenReturn(true);
 
-        assertThat(rook.isInMoveRange(56))
-                .isTrue();
-    }
+    assertThat(rook.isInMoveRange(56)).isTrue();
+  }
 
-    @Test
-    void notInMoveRange() {
-        assertThat(rook.isInMoveRange(9))
-                .isFalse();
-    }
+  @Test
+  void notInMoveRange() {
+    assertThat(rook.isInMoveRange(9)).isFalse();
+  }
 
-    @Test
-    void movePiece() {
-        when(move.getDestination())
-                .thenReturn(5);
+  @Test
+  void movePiece() {
+    when(move.getDestination()).thenReturn(5);
 
-        assertThat(rook.move(move))
-                .isInstanceOf(Rook.class)
-                .matches(rook -> rook.getPosition() == 5);
-    }
+    assertThat(rook.move(move)).isInstanceOf(Rook.class).matches(rook -> rook.getPosition() == 5);
+  }
 }

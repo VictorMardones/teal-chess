@@ -2,6 +2,7 @@ plugins {
     java
     jacoco
     id("org.sonarqube") version "3.4.0.2513"
+    id("com.diffplug.spotless") version "6.8.0"
 }
 
 group = "cl.vmardones"
@@ -36,6 +37,10 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.23.1")
 }
 
+tasks.compileJava {
+    dependsOn(tasks.spotlessApply)
+}
+
 tasks.getByName<Test>("test") {
     useJUnitPlatform()
 }
@@ -54,4 +59,20 @@ tasks.jacocoTestReport {
 
 tasks.sonarqube {
     dependsOn(tasks.jacocoTestReport)
+}
+
+spotless {
+    java {
+        importOrder()
+        removeUnusedImports()
+        googleJavaFormat()
+    }
+
+    format("misc") {
+        target("**/*.gradle.kts", "**/*.md", "**/.gitignore")
+
+        trimTrailingWhitespace()
+        indentWithSpaces(4)
+        endWithNewline()
+    }
 }
