@@ -79,7 +79,7 @@ public final class Pawn implements Piece {
     private Optional<Move> createCaptureMove(Board board, int destination) {
         final var capturablePiece = board.getTile(destination).getPiece();
 
-        if (capturablePiece.isPresent() && isEnemy(capturablePiece.get())) {
+        if (capturablePiece.isPresent() && isEnemyOf(capturablePiece.get())) {
             return Optional.of(new CaptureMove(board, this, destination, capturablePiece.get()));
         }
 

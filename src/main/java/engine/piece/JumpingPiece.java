@@ -34,7 +34,7 @@ public abstract class JumpingPiece implements Piece {
                 .filter(getBoardService()::isInside)
                 .filter(this::isInMoveRange)
                 .mapToObj(board::getTile)
-                .filter(tile -> isAccessible(this, tile))
+                .filter(this::isAccessible)
                 .map(tile -> createMove(this, tile, board))
                 .filter(Optional::isPresent)
                 .map(Optional::get)

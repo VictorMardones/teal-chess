@@ -53,11 +53,12 @@ public interface Piece {
         return !isWhite();
     }
 
-    default boolean isEnemy(Piece other) {
-        if (other != null) {
-            return getAlliance() != other.getAlliance();
+    default boolean isEnemyOf(Piece other) {
+        if (other == null) {
+            return false;
         }
-        return false;
+
+        return getAlliance() != other.getAlliance();
     }
 
     default String toChar() {
@@ -74,13 +75,12 @@ public interface Piece {
      * Checks if the given piece can get the destination.
      * This happens only if the destination is free or has a piece that can be captured.
      *
-     * @param piece       The piece we're currently using.
      * @param destination The target destination.
      * @return True if the piece can get to the destination.
      */
-    default boolean isAccessible(final Piece piece, final Tile destination) {
+    default boolean isAccessible(final Tile destination) {
         final var pieceAtDestination = destination.getPiece();
-        return pieceAtDestination.isEmpty() || piece.isEnemy(pieceAtDestination.get());
+        return pieceAtDestination.isEmpty() || isEnemyOf(pieceAtDestination.get());
     }
 
     /**
@@ -98,7 +98,7 @@ public interface Piece {
 
         final var capturablePiece = destination.getPiece();
 
-        if (capturablePiece.isPresent() && piece.isEnemy(capturablePiece.get())) {
+        if (capturablePiece.isPresent() && piece.isEnemyOf(capturablePiece.get())) {
             return Optional.of(new CaptureMove(board, piece, destination.getCoordinate(), capturablePiece.get()));
         }
 

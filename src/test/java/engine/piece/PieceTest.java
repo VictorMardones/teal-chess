@@ -17,11 +17,11 @@ import static org.mockito.Mockito.when;
 class PieceTest {
 
     @Spy
-    static Piece piece;
+    Piece piece;
     @Mock
-    static Tile destinationTile;
+    Tile destinationTile;
     @Mock
-    static Piece destinationPiece;
+    Piece destinationPiece;
 
     @Test
     void isWhite() {
@@ -60,37 +60,65 @@ class PieceTest {
     }
 
     @Test
+    void isEnemy() {
+        when(piece.getAlliance())
+                .thenReturn(Alliance.WHITE);
+        when(destinationPiece.getAlliance())
+                .thenReturn(Alliance.BLACK);
+
+        assertThat(piece.isEnemyOf(destinationPiece))
+                .isTrue();
+    }
+
+    @Test
+    void isAlly() {
+        when(piece.getAlliance())
+                .thenReturn(Alliance.WHITE);
+        when(destinationPiece.getAlliance())
+                .thenReturn(Alliance.WHITE);
+
+        assertThat(piece.isEnemyOf(destinationPiece))
+                .isFalse();
+    }
+
+    @Test
+    void isNullEnemy() {
+        assertThat(piece.isEnemyOf(null))
+                .isFalse();
+    }
+
+    @Test
     void isEmptyAccesible() {
         when(destinationTile.getPiece())
                 .thenReturn(Optional.empty());
 
-        assertThat(piece.isAccessible(piece, destinationTile))
+        assertThat(piece.isAccessible(destinationTile))
                 .isTrue();
     }
 
     @Test
     void isEnemyAccessible() {
-        when(destinationTile.getPiece())
-                .thenReturn(Optional.of(destinationPiece));
         when(piece.getAlliance())
                 .thenReturn(Alliance.BLACK);
+        when(destinationTile.getPiece())
+                .thenReturn(Optional.of(destinationPiece));
         when(destinationPiece.getAlliance())
                 .thenReturn(Alliance.WHITE);
 
-        assertThat(piece.isAccessible(piece, destinationTile))
+        assertThat(piece.isAccessible(destinationTile))
                 .isTrue();
     }
 
     @Test
     void isNotAccesible() {
-        when(destinationTile.getPiece())
-                .thenReturn(Optional.of(destinationPiece));
         when(piece.getAlliance())
                 .thenReturn(Alliance.BLACK);
+        when(destinationTile.getPiece())
+                .thenReturn(Optional.of(destinationPiece));
         when(destinationPiece.getAlliance())
                 .thenReturn(Alliance.BLACK);
 
-        assertThat(piece.isAccessible(piece, destinationTile))
+        assertThat(piece.isAccessible(destinationTile))
                 .isFalse();
     }
 }
