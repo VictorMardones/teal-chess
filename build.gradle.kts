@@ -1,5 +1,6 @@
 plugins {
-    id("java")
+    java
+    jacoco
     id("org.sonarqube") version "3.4.0.2513"
 }
 
@@ -37,4 +38,20 @@ dependencies {
 
 tasks.getByName<Test>("test") {
     useJUnitPlatform()
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+
+    reports {
+       xml.required.set(true)
+    }
+}
+
+tasks.sonarqube {
+    dependsOn(tasks.jacocoTestReport)
 }
