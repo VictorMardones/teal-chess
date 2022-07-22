@@ -20,7 +20,7 @@ public final class PawnJump extends Move {
         board.getCurrentPlayer().getOpponent().getActivePieces()
                 .forEach(builder::withPiece);
 
-        final var movedPawn = piece.movePiece(this);
+        final var movedPawn = piece.move(this);
 
         builder.withPiece(movedPawn);
         builder.withEnPassantPawn((Pawn) movedPawn);

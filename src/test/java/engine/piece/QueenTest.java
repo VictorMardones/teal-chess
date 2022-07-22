@@ -1,35 +1,72 @@
 package engine.piece;
 
 import engine.board.BoardService;
+import engine.move.Move;
 import engine.player.Alliance;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class QueenTest {
 
+    Queen queen;
     @Mock
     BoardService boardService;
+    @Mock
+    Move move;
 
-    @ParameterizedTest
-    // diagonal, horizontal, vertical
-    @ValueSource(ints = {63, 7, 56})
-    void legalMoves(int destination) {
-        var queen = new Queen(0, Alliance.BLACK, boardService);
-        assertThat(queen.isInMoveRange(destination))
+    @BeforeEach
+    void setUp() {
+        queen = new Queen(0, Alliance.BLACK, boardService);
+    }
+
+    @Test
+    void diagonalMove() {
+        when(boardService.sameColor(0, 63))
+                .thenReturn(true);
+
+        assertThat(queen.isInMoveRange(63))
                 .isTrue();
     }
 
     @Test
-    void illegalMove() {
-        var queen = new Queen(0, Alliance.WHITE, boardService);
+    void horizontalMove() {
+        lenient().when(boardService.sameRank(0, 7))
+                .thenReturn(true);
+
+        assertThat(queen.isInMoveRange(7))
+                .isTrue();
+    }
+
+    @Test
+    void verticalMove() {
+        when(boardService.sameColumn(0, 56))
+                .thenReturn(true);
+
+        assertThat(queen.isInMoveRange(56))
+                .isTrue();
+    }
+
+    @Test
+    void notInMoveRange() {
         assertThat(queen.isInMoveRange(12))
                 .isFalse();
+    }
+
+    @Test
+    void move() {
+        when(move.getDestination())
+                .thenReturn(32);
+
+        assertThat(queen.move(move))
+                .isInstanceOf(Queen.class)
+                .matches(queen -> queen.getPosition() == 32);
     }
 }

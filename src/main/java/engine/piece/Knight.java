@@ -32,7 +32,7 @@ public final class Knight extends JumpingPiece {
     }
 
     @Override
-    public Knight movePiece(final Move move) {
+    public Knight move(final Move move) {
         return new Knight(move.getDestination(), alliance, boardService);
     }
 }

@@ -13,9 +13,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class RookTest {
+class KnightTest {
 
-    Rook rook;
+    Knight knight;
     @Mock
     BoardService boardService;
     @Mock
@@ -23,40 +23,31 @@ class RookTest {
 
     @BeforeEach
     void setUp() {
-        rook = new Rook(0, Alliance.BLACK, boardService);
+        knight = new Knight(0, Alliance.WHITE, boardService);
     }
 
     @Test
-    void horizontalMove() {
-        when(boardService.sameRank(0, 7))
-                .thenReturn(true);
-
-        assertThat(rook.isInMoveRange(7))
+    void isInMoveRange() {
+        assertThat(knight.isInMoveRange(17))
                 .isTrue();
     }
 
     @Test
-    void verticalMove() {
-        when(boardService.sameColumn(0, 56))
+    void isNotInMoveRange() {
+        when(boardService.sameColor(0, 8))
                 .thenReturn(true);
 
-        assertThat(rook.isInMoveRange(56))
-                .isTrue();
-    }
-
-    @Test
-    void notInMoveRange() {
-        assertThat(rook.isInMoveRange(9))
+        assertThat(knight.isInMoveRange(8))
                 .isFalse();
     }
 
     @Test
-    void movePiece() {
+    void move() {
         when(move.getDestination())
-                .thenReturn(5);
+                .thenReturn(17);
 
-        assertThat(rook.move(move))
-                .isInstanceOf(Rook.class)
-                .matches(rook -> rook.getPosition() == 5);
+        assertThat(knight.move(move))
+                .isInstanceOf(Knight.class)
+                .matches(knight -> knight.getPosition() == 17);
     }
 }

@@ -50,7 +50,7 @@ public abstract class Move {
         board.getCurrentPlayer().getOpponent().getActivePieces()
                 .forEach(builder::withPiece);
 
-        builder.withPiece(piece.movePiece(this));
+        builder.withPiece(piece.move(this));
         builder.withNextTurn(board.getCurrentPlayer().getOpponent().getAlliance());
         return builder.build();
     }

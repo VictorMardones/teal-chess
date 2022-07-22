@@ -13,9 +13,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class BishopTest {
+class KingTest {
 
-    Bishop bishop;
+    King king;
     @Mock
     BoardService boardService;
     @Mock
@@ -23,21 +23,28 @@ class BishopTest {
 
     @BeforeEach
     void setUp() {
-        bishop = new Bishop(0, Alliance.BLACK, boardService);
+        king = new King(0, Alliance.WHITE, boardService);
     }
 
     @Test
-    void diagonalMove() {
-        when(boardService.sameColor(0, 9))
-                .thenReturn(true);
+    void isInMoveRange() {
+        when(boardService.getColumn(0))
+                .thenReturn(0);
+        when(boardService.getColumn(1))
+                .thenReturn(1);
 
-        assertThat(bishop.isInMoveRange(9))
+        assertThat(king.isInMoveRange(1))
                 .isTrue();
     }
 
     @Test
-    void notInMoveRange() {
-        assertThat(bishop.isInMoveRange(1))
+    void isNotInMoveRange() {
+        when(boardService.getColumn(0))
+                .thenReturn(0);
+        when(boardService.getColumn(4))
+                .thenReturn(4);
+
+        assertThat(king.isInMoveRange(4))
                 .isFalse();
     }
 
@@ -46,8 +53,8 @@ class BishopTest {
         when(move.getDestination())
                 .thenReturn(9);
 
-        assertThat(bishop.move(move))
-                .isInstanceOf(Bishop.class)
-                .matches(bishop -> bishop.getPosition() == 9);
+        assertThat(king.move(move))
+                .isInstanceOf(King.class)
+                .matches(king -> king.getPosition() == 9);
     }
 }

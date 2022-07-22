@@ -32,7 +32,7 @@ public final class Bishop extends SlidingPiece {
     }
 
     @Override
-    public Bishop movePiece(final Move move) {
+    public Bishop move(final Move move) {
         return new Bishop(move.getDestination(), alliance, boardService);
     }
 }

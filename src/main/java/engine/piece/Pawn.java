@@ -97,7 +97,7 @@ public final class Pawn implements Piece {
     }
 
     @Override
-    public Pawn movePiece(final Move move) {
+    public Pawn move(final Move move) {
         return new Pawn(move.getDestination(), alliance, boardService);
     }
 

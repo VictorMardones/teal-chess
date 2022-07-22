@@ -33,7 +33,7 @@ public final class Rook extends SlidingPiece {
     }
 
     @Override
-    public Rook movePiece(final Move move) {
+    public Rook move(final Move move) {
         return new Rook(move.getDestination(), alliance, boardService);
     }
 }

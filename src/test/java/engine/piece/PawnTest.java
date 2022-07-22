@@ -13,9 +13,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class BishopTest {
+class PawnTest {
 
-    Bishop bishop;
+    Pawn pawn;
     @Mock
     BoardService boardService;
     @Mock
@@ -23,31 +23,38 @@ class BishopTest {
 
     @BeforeEach
     void setUp() {
-        bishop = new Bishop(0, Alliance.BLACK, boardService);
+        pawn = new Pawn(0, Alliance.WHITE, boardService);
     }
 
     @Test
-    void diagonalMove() {
-        when(boardService.sameColor(0, 9))
-                .thenReturn(true);
+    void isInMoveRange() {
+        when(boardService.getColumn(0))
+                .thenReturn(0);
+        when(boardService.getColumn(8))
+                .thenReturn(0);
 
-        assertThat(bishop.isInMoveRange(9))
+        assertThat(pawn.isInMoveRange(8))
                 .isTrue();
     }
 
     @Test
-    void notInMoveRange() {
-        assertThat(bishop.isInMoveRange(1))
+    void isNotInMoveRange() {
+        when(boardService.getColumn(0))
+                .thenReturn(0);
+        when(boardService.getColumn(10))
+                .thenReturn(2);
+
+        assertThat(pawn.isInMoveRange(10))
                 .isFalse();
     }
 
     @Test
     void move() {
         when(move.getDestination())
-                .thenReturn(9);
+                .thenReturn(16);
 
-        assertThat(bishop.move(move))
-                .isInstanceOf(Bishop.class)
-                .matches(bishop -> bishop.getPosition() == 9);
+        assertThat(pawn.move(move))
+                .isInstanceOf(Pawn.class)
+                .matches(pawn -> pawn.getPosition() == 16);
     }
 }

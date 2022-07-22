@@ -34,7 +34,7 @@ public final class Queen extends SlidingPiece {
     }
 
     @Override
-    public Queen movePiece(final Move move) {
+    public Queen move(final Move move) {
         return new Queen(move.getDestination(), alliance, boardService);
     }
 }

@@ -64,7 +64,7 @@ public interface Piece {
         return getPieceType().pieceName;
     }
 
-    Piece movePiece(final Move move);
+    Piece move(final Move move);
 
     default boolean isRook() {
         return getPieceType() == PieceType.ROOK;

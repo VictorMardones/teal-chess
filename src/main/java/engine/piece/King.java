@@ -34,7 +34,7 @@ public final class King extends JumpingPiece {
     }
 
     @Override
-    public King movePiece(final Move move) {
+    public King move(final Move move) {
         return new King(move.getDestination(), alliance, boardService);
     }
 }
