@@ -5,12 +5,12 @@ import org.apache.batik.transcoder.SVGAbstractTranscoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
-import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Optional;
 
 @Slf4j
 public final class SVGImporter {
@@ -19,11 +19,11 @@ public final class SVGImporter {
         throw new IllegalStateException("You cannot instantiate me!");
     }
 
-    public static BufferedImage importSVG(final File file, final int width, final int height) {
+    public static Optional<BufferedImage> importSVG(final File file, final int width, final int height) {
 
         if (!file.exists()) {
             log.error("The file does not exist!");
-            return null;
+            return Optional.empty();
         }
 
         var transcoder = new PNGTranscoder();
@@ -44,13 +44,13 @@ public final class SVGImporter {
             outputStream.close();
 
             var imageData = outputStream.toByteArray();
-            return ImageIO.read(new ByteArrayInputStream(imageData));
+            return Optional.ofNullable(ImageIO.read(new ByteArrayInputStream(imageData)));
 
         } catch (IOException | TranscoderException e) {
             log.error("Failed to load images!", e);
         }
 
-        return null;
+        return Optional.empty();
     }
 
 }

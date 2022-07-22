@@ -1,31 +1,23 @@
 package engine.player;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class AllianceTest {
 
-    static List<Player> players;
-    static Player whitePlayer;
-    static Player blackPlayer;
-
-    @BeforeAll
-    static void setUp() {
-        whitePlayer = mock(Player.class);
-        when(whitePlayer.getAlliance())
-                .thenReturn(Alliance.WHITE);
-
-        blackPlayer = mock(Player.class);
-        when(blackPlayer.getAlliance())
-                .thenReturn(Alliance.BLACK);
-
-        players = List.of(blackPlayer, whitePlayer);
-    }
+    List<Player> players;
+    @Mock
+    Player whitePlayer;
+    @Mock
+    Player blackPlayer;
 
     @Test
     void getWhiteDirection() {
@@ -43,12 +35,26 @@ class AllianceTest {
 
     @Test
     void chooseWhitePlayer() {
+        when(whitePlayer.getAlliance())
+                .thenReturn(Alliance.WHITE);
+        when(blackPlayer.getAlliance())
+                .thenReturn(Alliance.BLACK);
+
+        players = List.of(blackPlayer, whitePlayer);
+
         assertThat(Alliance.WHITE.choosePlayer(players))
                 .isEqualTo(whitePlayer);
     }
 
     @Test
     void chooseBlackPlayer() {
+        when(whitePlayer.getAlliance())
+                .thenReturn(Alliance.WHITE);
+        when(blackPlayer.getAlliance())
+                .thenReturn(Alliance.BLACK);
+
+        players = List.of(whitePlayer, blackPlayer);
+
         assertThat(Alliance.BLACK.choosePlayer(players))
                 .isEqualTo(blackPlayer);
     }

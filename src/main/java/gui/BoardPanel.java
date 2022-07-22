@@ -1,7 +1,7 @@
 package gui;
 
 import engine.board.Board;
-import engine.board.BoardUtils;
+import engine.board.BoardService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +22,7 @@ class BoardPanel extends JPanel {
 
         boardTiles = new ArrayList<>();
 
-        IntStream.range(BoardUtils.MIN_TILES, BoardUtils.MAX_TILES)
+        IntStream.range(BoardService.MIN_TILES, BoardService.MAX_TILES)
                 .mapToObj(i -> new TilePanel(table, this, i))
                 .forEach(tilePanel -> {
                     boardTiles.add(tilePanel);

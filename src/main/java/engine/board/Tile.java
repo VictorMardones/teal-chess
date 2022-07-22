@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 /**
@@ -21,7 +22,7 @@ public abstract class Tile {
     private static final List<EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
 
     private static List<EmptyTile> createAllPossibleEmptyTiles() {
-        return IntStream.range(BoardUtils.MIN_TILES, BoardUtils.MAX_TILES)
+        return IntStream.range(BoardService.MIN_TILES, BoardService.MAX_TILES)
                 .mapToObj(EmptyTile::new)
                 .collect(ImmutableList.toImmutableList());
     }
@@ -38,20 +39,11 @@ public abstract class Tile {
     }
 
     /**
-     * Checks whether the tile contains a piece or not.
-     *
-     * @return True if the piece contains a piece.
-     */
-    public boolean isOccupied() {
-        return getPiece() != null;
-    }
-
-    /**
      * Obtains the piece contained by the tile.
      *
      * @return Piece on the tile.
      */
-    public abstract Piece getPiece();
+    public abstract Optional<Piece> getPiece();
 
     static final class EmptyTile extends Tile {
 
@@ -60,8 +52,8 @@ public abstract class Tile {
         }
 
         @Override
-        public Piece getPiece() {
-            return null;
+        public Optional<Piece> getPiece() {
+            return Optional.empty();
         }
 
         @Override
@@ -80,8 +72,8 @@ public abstract class Tile {
         }
 
         @Override
-        public Piece getPiece() {
-            return piece;
+        public Optional<Piece> getPiece() {
+            return Optional.ofNullable(piece);
         }
 
         @Override

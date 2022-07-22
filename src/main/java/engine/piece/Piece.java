@@ -1,11 +1,16 @@
 package engine.piece;
 
 import engine.board.Board;
+import engine.board.Tile;
+import engine.move.CaptureMove;
+import engine.move.MajorPieceMove;
 import engine.move.Move;
 import engine.player.Alliance;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * A chess piece.
@@ -13,7 +18,9 @@ import java.util.Collection;
 public interface Piece {
 
     int getPosition();
+
     Alliance getAlliance();
+
     PieceType getPieceType();
 
     // TODO: Actually use this method
@@ -47,7 +54,6 @@ public interface Piece {
     }
 
     default boolean isEnemy(Piece other) {
-        // TODO: Replace null by EmptyPiece
         if (other != null) {
             return getAlliance() != other.getAlliance();
         }
@@ -62,6 +68,41 @@ public interface Piece {
 
     default boolean isRook() {
         return getPieceType() == PieceType.ROOK;
+    }
+
+    /**
+     * Checks if the given piece can get the destination.
+     * This happens only if the destination is free or has a piece that can be captured.
+     *
+     * @param piece       The piece we're currently using.
+     * @param destination The target destination.
+     * @return True if the piece can get to the destination.
+     */
+    default boolean isAccessible(final Piece piece, final Tile destination) {
+        final var pieceAtDestination = destination.getPiece();
+        return pieceAtDestination.isEmpty() || piece.isEnemy(pieceAtDestination.get());
+    }
+
+    /**
+     * Creates a move, based on the piece and the destination.
+     *
+     * @param piece       The piece we're moving.
+     * @param destination The destination tile.
+     * @param board       The current game board.
+     * @return A move, selected depending on the source and destination.
+     */
+    default Optional<Move> createMove(final Piece piece, final Tile destination, final Board board) {
+        if (destination.getPiece().isEmpty()) {
+            return Optional.of(new MajorPieceMove(board, piece, destination.getCoordinate()));
+        }
+
+        final var capturablePiece = destination.getPiece();
+
+        if (capturablePiece.isPresent() && piece.isEnemy(capturablePiece.get())) {
+            return Optional.of(new CaptureMove(board, piece, destination.getCoordinate(), capturablePiece.get()));
+        }
+
+        return Optional.empty();
     }
 
     @AllArgsConstructor

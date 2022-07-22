@@ -1,23 +1,20 @@
 package engine.piece;
 
-import engine.board.BoardUtils;
+import engine.board.BoardService;
 import engine.move.Move;
 import engine.player.Alliance;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 /**
  * The queen, strongest piece in the game.
  * It can move horizontally, vertically and diagonally.
  */
-@Getter
-@AllArgsConstructor
-public final class Queen implements SlidingPiece {
+public final class Queen extends SlidingPiece {
 
     private static final int[] MOVE_VECTORS = {-9, -8, -7, -1, 1, 7, 8, 9};
 
-    private int position;
-    private Alliance alliance;
+    public Queen(int position, Alliance alliance, BoardService boardService) {
+        super(position, alliance, boardService);
+    }
 
     @Override
     public int[] getMoveVectors() {
@@ -31,13 +28,13 @@ public final class Queen implements SlidingPiece {
 
     @Override
     public boolean isInMoveRange(int destination) {
-        return BoardUtils.sameRank(position, destination) ||
-                BoardUtils.sameColumn(position, destination) ||
-                BoardUtils.sameColor(position, destination);
+        return boardService.sameRank(position, destination) ||
+                boardService.sameColumn(position, destination) ||
+                boardService.sameColor(position, destination);
     }
 
     @Override
     public Queen movePiece(final Move move) {
-        return new Queen(move.getDestination(), alliance);
+        return new Queen(move.getDestination(), alliance, boardService);
     }
 }

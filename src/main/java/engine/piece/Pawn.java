@@ -2,7 +2,7 @@ package engine.piece;
 
 import com.google.common.collect.ImmutableList;
 import engine.board.Board;
-import engine.board.BoardUtils;
+import engine.board.BoardService;
 import engine.move.CaptureMove;
 import engine.move.MajorPieceMove;
 import engine.move.Move;
@@ -12,6 +12,7 @@ import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * The pawn piece.
@@ -24,6 +25,7 @@ public final class Pawn implements Piece {
 
     private int position;
     private Alliance alliance;
+    private BoardService boardService;
 
     @Override
     public PieceType getPieceType() {
@@ -35,9 +37,11 @@ public final class Pawn implements Piece {
     public Collection<Move> calculateLegalMoves(final Board board) {
 
         return Arrays.stream(PawnOffset.values())
-                .filter(pawnOffset -> BoardUtils.isInsideBoard(getDestination(pawnOffset)))
+                .filter(pawnOffset -> boardService.isInside(getDestination(pawnOffset)))
                 .filter(pawnOffset -> isInMoveRange(getDestination(pawnOffset)))
                 .map(pawnOffset -> handleOffset(pawnOffset, board))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(ImmutableList.toImmutableList());
     }
 
@@ -45,7 +49,7 @@ public final class Pawn implements Piece {
         return position + getAlliance().getDirection() * pawnOffset.offset;
     }
 
-    private Move handleOffset(PawnOffset pawnOffset, Board board) {
+    private Optional<Move> handleOffset(PawnOffset pawnOffset, Board board) {
         var destination = getDestination(pawnOffset);
 
         return switch (pawnOffset) {
@@ -55,48 +59,46 @@ public final class Pawn implements Piece {
         };
     }
 
-    private Move createFirstMove(Board board, int destination) {
-        if (isFirstMovePossible(board)) {
-            return new MajorPieceMove(board, this, destination);
+    private Optional<Move> createFirstMove(Board board, int destination) {
+        if (!isFirstMovePossible(board)) {
+            return Optional.empty();
         }
 
-        return null;
+        return Optional.of(new MajorPieceMove(board, this, destination));
     }
 
-    private Move createForwardMove(Board board, int destination) {
-        if (!board.getTile(destination).isOccupied()) {
-            // TODO: Deal with promotions
-            return new MajorPieceMove(board, this, destination);
+    private Optional<Move> createForwardMove(Board board, int destination) {
+        if (board.getTile(destination).getPiece().isPresent()) {
+            return Optional.empty();
         }
 
-        return null;
+        // TODO: Deal with promotions
+        return Optional.of(new MajorPieceMove(board, this, destination));
     }
 
-    private Move createCaptureMove(Board board, int destination) {
-        if (board.getTile(destination).isOccupied()) {
-            final var capturablePiece = board.getTile(destination).getPiece();
+    private Optional<Move> createCaptureMove(Board board, int destination) {
+        final var capturablePiece = board.getTile(destination).getPiece();
 
-            if (isEnemy(capturablePiece)) {
-                return new CaptureMove(board, this, destination, capturablePiece);
-            }
+        if (capturablePiece.isPresent() && isEnemy(capturablePiece.get())) {
+            return Optional.of(new CaptureMove(board, this, destination, capturablePiece.get()));
         }
 
-        return null;
+        return Optional.empty();
     }
 
     @Override
     public boolean isInMoveRange(final int destination) {
-        return Math.abs(BoardUtils.getColumn(position) - BoardUtils.getColumn(destination)) <= 1;
+        return Math.abs(boardService.getColumn(position) - boardService.getColumn(destination)) <= 1;
     }
 
     private boolean isFirstMovePossible(final Board board) {
-        return !board.getTile(position + 8 * alliance.getDirection()).isOccupied()
-                && !board.getTile(position + 16 * alliance.getDirection()).isOccupied();
+        return board.getTile(position + 8 * alliance.getDirection()).getPiece().isEmpty()
+                && board.getTile(position + 16 * alliance.getDirection()).getPiece().isEmpty();
     }
 
     @Override
     public Pawn movePiece(final Move move) {
-        return new Pawn(move.getDestination(), alliance);
+        return new Pawn(move.getDestination(), alliance, boardService);
     }
 
     @AllArgsConstructor

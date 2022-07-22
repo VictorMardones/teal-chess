@@ -27,7 +27,7 @@ abstract class CastleMove extends Move {
                 .forEach(builder::withPiece);
 
         builder.withPiece(piece.movePiece(this))
-                .withPiece(new Rook(rookDestination, rook.getAlliance()))
+                .withPiece(new Rook(rookDestination, rook.getAlliance(), rook.getBoardService()))
                 .withNextTurn(board.getCurrentPlayer().getOpponent().getAlliance());
 
         return builder.build();

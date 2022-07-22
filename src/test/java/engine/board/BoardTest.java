@@ -3,14 +3,13 @@ package engine.board;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
 
+    Board board = Board.createStandardBoard();
+
     @Test
     void toText() {
-        var board = Board.createStandardBoard();
-
         assertThat(board.toText())
                 .contains("r  n  b  q  k  b  n  r")
                 .contains("p  p  p  p  p  p  p  p")

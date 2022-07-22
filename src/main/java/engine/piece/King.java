@@ -1,9 +1,8 @@
 package engine.piece;
 
-import engine.board.BoardUtils;
+import engine.board.BoardService;
 import engine.move.Move;
 import engine.player.Alliance;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
@@ -13,17 +12,15 @@ import lombok.Getter;
  * It also cannot move into a position where it could be captured.
  */
 @Getter
-@AllArgsConstructor
-public final class King implements JumpingPiece {
+public final class King extends JumpingPiece {
 
-    private int position;
-    private Alliance alliance;
-
-    private static final int[] MOVE_OFFSETS = {-9, -8, -7, -1, 1, 7, 8, 9};
+    public King(int position, Alliance alliance, BoardService boardService) {
+        super(position, alliance, boardService);
+    }
 
     @Override
     public int[] getMoveOffsets() {
-        return MOVE_OFFSETS;
+        return new int[]{-9, -8, -7, -1, 1, 7, 8, 9};
     }
 
     @Override
@@ -33,11 +30,11 @@ public final class King implements JumpingPiece {
 
     @Override
     public boolean isInMoveRange(int destination) {
-        return Math.abs(BoardUtils.getColumn(position) - BoardUtils.getColumn(destination)) <= 2;
+        return Math.abs(boardService.getColumn(position) - boardService.getColumn(destination)) <= 2;
     }
 
     @Override
     public King movePiece(final Move move) {
-        return new King(move.getDestination(), alliance);
+        return new King(move.getDestination(), alliance, boardService);
     }
 }

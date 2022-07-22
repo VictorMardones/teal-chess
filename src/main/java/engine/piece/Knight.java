@@ -1,23 +1,20 @@
 package engine.piece;
 
-import engine.board.BoardUtils;
+import engine.board.BoardService;
 import engine.move.Move;
 import engine.player.Alliance;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 /**
  * The knight piece.
  * It moves in an L shape.
  */
-@Getter
-@AllArgsConstructor
-public final class Knight implements JumpingPiece {
-
-    private int position;
-    private Alliance alliance;
+public final class Knight extends JumpingPiece {
 
     private static final int[] MOVE_OFFSETS = {-17, -15, -10, -6, 6, 10, 15, 17};
+
+    public Knight(int position, Alliance alliance, BoardService boardService) {
+        super(position, alliance, boardService);
+    }
 
     @Override
     public int[] getMoveOffsets() {
@@ -31,11 +28,11 @@ public final class Knight implements JumpingPiece {
 
     @Override
     public boolean isInMoveRange(int destination) {
-        return !BoardUtils.sameColor(position, destination);
+        return !boardService.sameColor(position, destination);
     }
 
     @Override
     public Knight movePiece(final Move move) {
-        return new Knight(move.getDestination(), alliance);
+        return new Knight(move.getDestination(), alliance, boardService);
     }
 }

@@ -3,14 +3,13 @@ package engine.player;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import engine.board.Board;
-import engine.board.BoardUtils;
+import engine.board.BoardService;
 import engine.move.*;
 import engine.piece.King;
 import engine.piece.Piece;
 import engine.piece.Rook;
 import lombok.Getter;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,7 +19,6 @@ import java.util.List;
  * The entity that controls the pieces in one side of the board.
  * It can be controlled either by a human or an AI.
  */
-@Slf4j
 @ToString
 public abstract class Player {
 
@@ -33,12 +31,15 @@ public abstract class Player {
     protected final Collection<Move> legalMoves;
     private final boolean inCheck;
     private Boolean noEscapeMoves;
+    private final BoardService boardService;
 
-    public Player(Board board, King king, Collection<Move> legalMoves, Collection<Move> opponentMoves) {
+    protected Player(Board board, King king, Collection<Move> legalMoves,
+                     Collection<Move> opponentMoves, BoardService boardService) {
         this.board = board;
         this.king = king;
+        this.boardService = boardService;
 
-        this.legalMoves = ImmutableList.copyOf(Iterables.concat(legalMoves, calculateCastles(legalMoves, opponentMoves)));
+        this.legalMoves = ImmutableList.copyOf(Iterables.concat(legalMoves, calculateCastles(opponentMoves)));
         inCheck = !Player.calculateAttacksOnTile(king.getPosition(), opponentMoves).isEmpty();
     }
 
@@ -140,41 +141,42 @@ public abstract class Player {
     public abstract Player getOpponent();
 
     // TODO: Refactor this method, maybe use combinator pattern
-    protected Collection<Move> calculateCastles(final Collection<Move> legalMoves,
-                                                final Collection<Move> opponentLegalMoves) {
+    protected Collection<Move> calculateCastles(final Collection<Move> opponentLegalMoves) {
+
         final List<Move> castles = new ArrayList<>();
 
-        if (!king.isFirstMove() && !isInCheck() && BoardUtils.getColumn(king.getPosition()) == 4) {
-            final var kingPosition = king.getPosition();
+        if (king.isFirstMove() || isInCheck() || boardService.getColumn(king.getPosition()) != 4) {
+            return ImmutableList.copyOf(castles);
+        }
 
-            if (!board.getTile(kingPosition + 1).isOccupied()
-                    && !board.getTile(kingPosition + 2).isOccupied()) {
-                final var rookTile = board.getTile(kingPosition + 3);
+        final var kingPosition = king.getPosition();
 
-                if (rookTile.isOccupied() && rookTile.getPiece().isFirstMove()) {
-                    if (Player.calculateAttacksOnTile(kingPosition + 1, opponentLegalMoves).isEmpty()
-                            && Player.calculateAttacksOnTile(kingPosition + 2, opponentLegalMoves).isEmpty()
-                            && rookTile.getPiece().isRook()) {
-                        castles.add(new KingSideCastleMove(board, king, kingPosition + 2,
-                                (Rook) rookTile.getPiece(), kingPosition + 1));
-                    }
-                }
+        if (board.getTile(kingPosition + 1).getPiece().isEmpty()
+                && board.getTile(kingPosition + 2).getPiece().isEmpty()) {
+
+            final var rookTile = board.getTile(kingPosition + 3);
+
+            if (rookTile.getPiece().isPresent() && rookTile.getPiece().get().isFirstMove()
+                    && Player.calculateAttacksOnTile(kingPosition + 1, opponentLegalMoves).isEmpty()
+                    && Player.calculateAttacksOnTile(kingPosition + 2, opponentLegalMoves).isEmpty()
+                    && rookTile.getPiece().get().isRook()) {
+                castles.add(new KingSideCastleMove(board, king, kingPosition + 2,
+                        (Rook) rookTile.getPiece().get(), kingPosition + 1));
             }
+        }
 
-            if (!board.getTile(kingPosition - 1).isOccupied()
-                    && !board.getTile(kingPosition - 2).isOccupied()
-                    && !board.getTile(kingPosition - 3).isOccupied()) {
-                final var rookTile = board.getTile(kingPosition - 4);
+        if (board.getTile(kingPosition - 1).getPiece().isEmpty()
+                && board.getTile(kingPosition - 2).getPiece().isEmpty()
+                && board.getTile(kingPosition - 3).getPiece().isEmpty()) {
+            final var rookTile = board.getTile(kingPosition - 4);
 
-                if (rookTile.isOccupied() && rookTile.getPiece().isFirstMove()) {
-                    if (Player.calculateAttacksOnTile(kingPosition - 1, opponentLegalMoves).isEmpty()
-                            && Player.calculateAttacksOnTile(kingPosition - 2, opponentLegalMoves).isEmpty()
-                            && Player.calculateAttacksOnTile(kingPosition - 3, opponentLegalMoves).isEmpty()
-                            && rookTile.getPiece().isRook()) {
-                        castles.add(new QueenSideCastleMove(board, king, kingPosition - 2,
-                                (Rook) rookTile.getPiece(), kingPosition - 1));
-                    }
-                }
+            if (rookTile.getPiece().isPresent() && rookTile.getPiece().get().isFirstMove()
+                    && Player.calculateAttacksOnTile(kingPosition - 1, opponentLegalMoves).isEmpty()
+                    && Player.calculateAttacksOnTile(kingPosition - 2, opponentLegalMoves).isEmpty()
+                    && Player.calculateAttacksOnTile(kingPosition - 3, opponentLegalMoves).isEmpty()
+                    && rookTile.getPiece().get().isRook()) {
+                castles.add(new QueenSideCastleMove(board, king, kingPosition - 2,
+                        (Rook) rookTile.getPiece().get(), kingPosition - 1));
             }
         }
 

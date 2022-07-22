@@ -1,7 +1,6 @@
 package gui;
 
 import engine.board.Board;
-import engine.board.BoardUtils;
 import engine.move.Move;
 import engine.piece.Piece;
 import engine.player.Alliance;
@@ -45,33 +44,9 @@ final class TilePanel extends JPanel {
             public void mouseClicked(final MouseEvent e) {
                 if (isLeftMouseButton(e)) {
                     if (table.getSourceTile() == null) {
-                        log.debug("Selected the tile {}", tileId);
-
-                        table.setSourceTile(table.getChessboard().getTile(tileId));
-                        table.setSelectedPiece(table.getSourceTile().getPiece());
-                        log.debug("The tile contains {}", table.getSelectedPiece());
-
-                        if (table.getSelectedPiece() == null) {
-                            log.debug("The tile is unoccupied, unselecting");
-                            table.setSourceTile(null);
-                        } else {
-                            log.debug("Highlighting legal moves");
-                        }
+                        firstLeftClick();
                     } else {
-                        table.setDestinationTile(table.getChessboard().getTile(tileId));
-                        log.debug("Selected the destination {}", tileId);
-
-                        final var move = Move.MoveFactory.create(table.getChessboard(),
-                                table.getSourceTile().getCoordinate(),
-                                table.getDestinationTile().getCoordinate());
-                        final var moveTransition = table.getChessboard().getCurrentPlayer().makeMove(move);
-
-                        if (moveTransition.getMoveStatus().isDone()) {
-                            table.setChessboard(moveTransition.getBoard());
-                            // TODO: Add the move to the move log
-                        }
-
-                        table.resetSelection();
+                        secondLeftClick();
                     }
                 } else if (isRightMouseButton(e)) {
                     table.resetSelection();
@@ -103,6 +78,42 @@ final class TilePanel extends JPanel {
         });
     }
 
+    private void firstLeftClick() {
+        log.debug("Selected the tile {}", tileId);
+        table.setSourceTile(table.getChessboard().getTile(tileId));
+
+        final var selectedPiece = table.getSourceTile().getPiece();
+
+        if (selectedPiece.isPresent()) {
+            table.setSelectedPiece(selectedPiece.get());
+            log.debug("The tile contains {}", table.getSelectedPiece());
+            log.debug("Highlighting legal moves");
+        } else {
+            log.debug("The tile is unoccupied, unselecting");
+            table.resetSelection();
+        }
+    }
+
+    private void secondLeftClick() {
+        log.debug("Selected the destination {}", tileId);
+        table.setDestinationTile(table.getChessboard().getTile(tileId));
+
+        final var move = Move.MoveFactory.create(table.getChessboard(),
+                table.getSourceTile().getCoordinate(),
+                table.getDestinationTile().getCoordinate());
+
+        if (move.isPresent()) {
+            final var moveTransition = table.getChessboard().getCurrentPlayer().makeMove(move.get());
+
+            if (moveTransition.getMoveStatus().isDone()) {
+                table.setChessboard(moveTransition.getBoard());
+                // TODO: Add the move to the move log
+            }
+        }
+
+        table.resetSelection();
+    }
+
     void drawTile(final Board board) {
         assignTileColor();
         assignPieceIcon(board);
@@ -114,15 +125,13 @@ final class TilePanel extends JPanel {
     private void assignPieceIcon(final Board board) {
         removeAll();
 
-        if (board.getTile(tileId).isOccupied()) {
+        if (board.getTile(tileId).getPiece().isPresent()) {
             final var image = SVGImporter.importSVG(
-                    new File(getIconPath(board.getTile(tileId).getPiece())),
+                    new File(getIconPath(board.getTile(tileId).getPiece().get())),
                     TILE_PANEL_DIMENSION.width * 6,
                     TILE_PANEL_DIMENSION.height * 6);
 
-            if (image != null) {
-                add(new JLabel(new ImageIcon(image)));
-            }
+            image.ifPresent(bufferedImage -> add(new JLabel(new ImageIcon(bufferedImage))));
         }
     }
 
@@ -134,7 +143,7 @@ final class TilePanel extends JPanel {
     }
 
     private void assignTileColor() {
-        setBackground(BoardUtils.getTileColor(tileId) == Alliance.WHITE
+        setBackground(table.getBoardService().getTileColor(tileId) == Alliance.WHITE
                 ? LIGHT_TILE_COLOR : BLACK_TILE_COLOR);
     }
 
@@ -147,9 +156,7 @@ final class TilePanel extends JPanel {
                                 TILE_PANEL_DIMENSION.width * 4,
                                 TILE_PANEL_DIMENSION.height * 4);
 
-                        if (image != null) {
-                            add(new JLabel(new ImageIcon(image)));
-                        }
+                        image.ifPresent(bufferedImage -> add(new JLabel(new ImageIcon(bufferedImage))));
                     });
         }
     }

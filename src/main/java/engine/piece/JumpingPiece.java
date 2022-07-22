@@ -2,33 +2,42 @@ package engine.piece;
 
 import com.google.common.collect.ImmutableList;
 import engine.board.Board;
-import engine.board.BoardUtils;
+import engine.board.BoardService;
 import engine.move.Move;
+import engine.player.Alliance;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A piece that can move in a specific set of spaces.
  */
-public interface JumpingPiece extends Piece {
+@Getter
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+public abstract class JumpingPiece implements Piece {
 
-    int[] getMoveOffsets();
+    protected int position;
+    protected Alliance alliance;
+    protected BoardService boardService;
+
+    abstract int[] getMoveOffsets();
 
     @Override
-    default Collection<Move> calculateLegalMoves(final Board board) {
+    public Collection<Move> calculateLegalMoves(final Board board) {
 
-        // TODO: Remove these non-null filters, change how the methods work
         return Arrays.stream(getMoveOffsets())
                 .map(offset -> getPosition() + offset)
-                .filter(BoardUtils::isInsideBoard)
+                .filter(getBoardService()::isInside)
                 .filter(this::isInMoveRange)
                 .mapToObj(board::getTile)
-                .filter(Objects::nonNull)
-                .filter(tile -> PieceUtils.isAccessible(this, tile))
-                .map(tile -> PieceUtils.createMove(this, tile, board))
-                .filter(Objects::nonNull)
+                .filter(tile -> isAccessible(this, tile))
+                .map(tile -> createMove(this, tile, board))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(ImmutableList.toImmutableList());
     }
 }

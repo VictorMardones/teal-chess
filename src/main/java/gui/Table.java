@@ -2,6 +2,7 @@ package gui;
 
 import com.google.common.collect.Lists;
 import engine.board.Board;
+import engine.board.BoardService;
 import engine.board.Tile;
 import engine.piece.Piece;
 import lombok.Getter;
@@ -19,14 +20,20 @@ public class Table {
 
     private final JFrame gameFrame;
     private final BoardPanel boardPanel;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Board chessboard;
+    @Getter
+    private BoardService boardService;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private Tile sourceTile;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Tile destinationTile;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Piece selectedPiece;
 
     @Getter
@@ -124,6 +131,7 @@ public class Table {
 
 
         abstract List<TilePanel> traverse(final List<TilePanel> boardTiles);
+
         abstract BoardDirection opposite();
     }
 }

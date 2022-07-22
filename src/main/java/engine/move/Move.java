@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+import java.util.Optional;
+
 /**
  * The action of moving a piece.
  */
@@ -59,18 +61,15 @@ public abstract class Move {
 
     public static final class MoveFactory {
 
-        private static final Move NULL_MOVE = new NullMove();
-
         private MoveFactory() {
             throw new IllegalStateException("You cannot instantiate me!");
         }
 
-        public static Move create(final Board board, final int source, final int destination) {
+        public static Optional<Move> create(final Board board, final int source, final int destination) {
             return board.getCurrentPlayerLegalMoves()
                     .stream()
                     .filter(move -> move.piece.getPosition() == source && move.destination == destination)
-                    .findFirst()
-                    .orElse(NULL_MOVE);
+                    .findFirst();
         }
     }
 }
