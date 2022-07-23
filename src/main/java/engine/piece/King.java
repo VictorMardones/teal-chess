@@ -13,8 +13,12 @@ import lombok.Getter;
 @Getter
 public final class King extends JumpingPiece {
 
+  public King(int position, Alliance alliance, boolean firstMove, BoardService boardService) {
+    super(position, alliance, firstMove, boardService);
+  }
+
   public King(int position, Alliance alliance, BoardService boardService) {
-    super(position, alliance, boardService);
+    this(position, alliance, true, boardService);
   }
 
   @Override
@@ -34,6 +38,6 @@ public final class King extends JumpingPiece {
 
   @Override
   public King move(final Move move) {
-    return new King(move.getDestination(), alliance, boardService);
+    return new King(move.getDestination(), alliance, false, boardService);
   }
 }

@@ -9,8 +9,12 @@ public final class Rook extends SlidingPiece {
 
   private static final int[] MOVE_VECTORS = {-8, -1, 1, 8};
 
+  public Rook(int position, Alliance alliance, boolean firstMove, BoardService boardService) {
+    super(position, alliance, firstMove, boardService);
+  }
+
   public Rook(int position, Alliance alliance, BoardService boardService) {
-    super(position, alliance, boardService);
+    this(position, alliance, true, boardService);
   }
 
   @Override
@@ -31,6 +35,6 @@ public final class Rook extends SlidingPiece {
 
   @Override
   public Rook move(final Move move) {
-    return new Rook(move.getDestination(), alliance, boardService);
+    return new Rook(move.getDestination(), alliance, false, boardService);
   }
 }

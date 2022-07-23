@@ -44,6 +44,10 @@ class KingTest {
   void move() {
     when(move.getDestination()).thenReturn(9);
 
-    assertThat(king.move(move)).isInstanceOf(King.class).matches(king -> king.getPosition() == 9);
+    assertThat(king.move(move))
+        .isInstanceOf(King.class)
+        .matches(king -> king.getPosition() == 9)
+        .matches(king -> !king.isFirstMove());
+    ;
   }
 }

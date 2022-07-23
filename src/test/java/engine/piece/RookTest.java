@@ -47,6 +47,10 @@ class RookTest {
   void movePiece() {
     when(move.getDestination()).thenReturn(5);
 
-    assertThat(rook.move(move)).isInstanceOf(Rook.class).matches(rook -> rook.getPosition() == 5);
+    assertThat(rook.move(move))
+        .isInstanceOf(Rook.class)
+        .matches(rook -> rook.getPosition() == 5)
+        .matches(rook -> !rook.isFirstMove());
+    ;
   }
 }

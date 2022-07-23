@@ -20,10 +20,7 @@ public interface Piece {
 
   PieceType getPieceType();
 
-  // TODO: Actually use this method
-  default boolean isFirstMove() {
-    return true;
-  }
+  boolean isFirstMove();
 
   /**
    * Calculates all the moves that a piece can do.

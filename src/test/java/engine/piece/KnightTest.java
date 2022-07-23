@@ -42,6 +42,8 @@ class KnightTest {
 
     assertThat(knight.move(move))
         .isInstanceOf(Knight.class)
-        .matches(knight -> knight.getPosition() == 17);
+        .matches(knight -> knight.getPosition() == 17)
+        .matches(knight -> !knight.isFirstMove());
+    ;
   }
 }

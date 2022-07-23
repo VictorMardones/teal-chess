@@ -19,6 +19,7 @@ public abstract class JumpingPiece implements Piece {
 
   protected int position;
   protected Alliance alliance;
+  protected boolean firstMove;
   protected BoardService boardService;
 
   abstract int[] getMoveOffsets();

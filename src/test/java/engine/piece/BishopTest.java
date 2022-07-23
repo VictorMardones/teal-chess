@@ -42,6 +42,7 @@ class BishopTest {
 
     assertThat(bishop.move(move))
         .isInstanceOf(Bishop.class)
-        .matches(bishop -> bishop.getPosition() == 9);
+        .matches(bishop -> bishop.getPosition() == 9)
+        .matches(bishop -> !bishop.isFirstMove());
   }
 }

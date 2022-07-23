@@ -3,9 +3,7 @@ package engine.piece;
 import com.google.common.collect.ImmutableList;
 import engine.board.Board;
 import engine.board.BoardService;
-import engine.move.CaptureMove;
-import engine.move.MajorPieceMove;
-import engine.move.Move;
+import engine.move.*;
 import engine.player.Alliance;
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,7 +22,12 @@ public final class Pawn implements Piece {
 
   private int position;
   private Alliance alliance;
+  private boolean firstMove;
   private BoardService boardService;
+
+  public Pawn(int position, Alliance alliance, BoardService boardService) {
+    this(position, alliance, true, boardService);
+  }
 
   @Override
   public PieceType getPieceType() {
@@ -63,7 +66,7 @@ public final class Pawn implements Piece {
       return Optional.empty();
     }
 
-    return Optional.of(new MajorPieceMove(board, this, destination));
+    return Optional.of(new PawnJump(board, this, destination));
   }
 
   private Optional<Move> createForwardMove(Board board, int destination) {
@@ -72,14 +75,14 @@ public final class Pawn implements Piece {
     }
 
     // TODO: Deal with promotions
-    return Optional.of(new MajorPieceMove(board, this, destination));
+    return Optional.of(new PawnMove(board, this, destination));
   }
 
   private Optional<Move> createCaptureMove(Board board, int destination) {
     final var capturablePiece = board.getTile(destination).getPiece();
 
     if (capturablePiece.isPresent() && isEnemyOf(capturablePiece.get())) {
-      return Optional.of(new CaptureMove(board, this, destination, capturablePiece.get()));
+      return Optional.of(new PawnCaptureMove(board, this, destination, capturablePiece.get()));
     }
 
     return Optional.empty();
@@ -97,7 +100,7 @@ public final class Pawn implements Piece {
 
   @Override
   public Pawn move(final Move move) {
-    return new Pawn(move.getDestination(), alliance, boardService);
+    return new Pawn(move.getDestination(), alliance, false, boardService);
   }
 
   @AllArgsConstructor

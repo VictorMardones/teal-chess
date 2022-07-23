@@ -18,6 +18,7 @@ public abstract class SlidingPiece implements Piece {
 
   protected int position;
   protected Alliance alliance;
+  protected boolean firstMove;
   protected BoardService boardService;
 
   abstract int[] getMoveVectors();

@@ -9,8 +9,12 @@ public final class Bishop extends SlidingPiece {
 
   private static final int[] MOVE_VECTORS = {-9, -7, 7, 9};
 
+  public Bishop(int position, Alliance alliance, boolean firstMove, BoardService boardService) {
+    super(position, alliance, firstMove, boardService);
+  }
+
   public Bishop(int position, Alliance alliance, BoardService boardService) {
-    super(position, alliance, boardService);
+    this(position, alliance, true, boardService);
   }
 
   @Override
@@ -30,6 +34,6 @@ public final class Bishop extends SlidingPiece {
 
   @Override
   public Bishop move(final Move move) {
-    return new Bishop(move.getDestination(), alliance, boardService);
+    return new Bishop(move.getDestination(), alliance, false, boardService);
   }
 }

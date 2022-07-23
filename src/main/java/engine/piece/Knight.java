@@ -9,8 +9,12 @@ public final class Knight extends JumpingPiece {
 
   private static final int[] MOVE_OFFSETS = {-17, -15, -10, -6, 6, 10, 15, 17};
 
+  public Knight(int position, Alliance alliance, boolean firstMove, BoardService boardService) {
+    super(position, alliance, firstMove, boardService);
+  }
+
   public Knight(int position, Alliance alliance, BoardService boardService) {
-    super(position, alliance, boardService);
+    this(position, alliance, true, boardService);
   }
 
   @Override
@@ -30,6 +34,6 @@ public final class Knight extends JumpingPiece {
 
   @Override
   public Knight move(final Move move) {
-    return new Knight(move.getDestination(), alliance, boardService);
+    return new Knight(move.getDestination(), alliance, false, boardService);
   }
 }

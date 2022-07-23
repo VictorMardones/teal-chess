@@ -22,6 +22,10 @@ public abstract class Move {
   @Getter protected boolean castling = false;
   @Getter protected Piece capturedPiece;
 
+  public boolean isFirstMove() {
+    return piece.isFirstMove();
+  }
+
   public boolean isCapturing() {
     return capturedPiece != null;
   }

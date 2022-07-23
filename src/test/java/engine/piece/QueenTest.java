@@ -57,6 +57,8 @@ class QueenTest {
 
     assertThat(queen.move(move))
         .isInstanceOf(Queen.class)
-        .matches(queen -> queen.getPosition() == 32);
+        .matches(queen -> queen.getPosition() == 32)
+        .matches(queen -> !queen.isFirstMove());
+    ;
   }
 }

@@ -44,6 +44,10 @@ class PawnTest {
   void move() {
     when(move.getDestination()).thenReturn(16);
 
-    assertThat(pawn.move(move)).isInstanceOf(Pawn.class).matches(pawn -> pawn.getPosition() == 16);
+    assertThat(pawn.move(move))
+        .isInstanceOf(Pawn.class)
+        .matches(pawn -> pawn.getPosition() == 16)
+        .matches(pawn -> !pawn.isFirstMove());
+    ;
   }
 }

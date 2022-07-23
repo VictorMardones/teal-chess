@@ -8,4 +8,9 @@ public final class MajorPieceMove extends Move {
   public MajorPieceMove(Board board, Piece piece, int destination) {
     super(board, piece, destination);
   }
+
+  @Override
+  public String toString() {
+    return piece.getPieceType().toString() + getDestination();
+  }
 }

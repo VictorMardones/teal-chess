@@ -9,8 +9,12 @@ public final class Queen extends SlidingPiece {
 
   private static final int[] MOVE_VECTORS = {-9, -8, -7, -1, 1, 7, 8, 9};
 
+  public Queen(int position, Alliance alliance, boolean firstMove, BoardService boardService) {
+    super(position, alliance, firstMove, boardService);
+  }
+
   public Queen(int position, Alliance alliance, BoardService boardService) {
-    super(position, alliance, boardService);
+    this(position, alliance, true, boardService);
   }
 
   @Override
@@ -32,6 +36,6 @@ public final class Queen extends SlidingPiece {
 
   @Override
   public Queen move(final Move move) {
-    return new Queen(move.getDestination(), alliance, boardService);
+    return new Queen(move.getDestination(), alliance, false, boardService);
   }
 }
