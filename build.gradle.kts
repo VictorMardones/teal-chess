@@ -63,8 +63,6 @@ tasks.sonarqube {
 
 spotless {
     java {
-        importOrder()
-        removeUnusedImports()
         googleJavaFormat()
     }
 

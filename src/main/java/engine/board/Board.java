@@ -79,10 +79,14 @@ public final class Board {
         .withPiece(new Rook(7, Alliance.BLACK, boardService));
 
     IntStream.range(8, 16)
-        .forEach(i -> builder.withPiece(new Pawn(i, Alliance.BLACK, boardService)));
+        .boxed()
+        .map(i -> new Pawn(i, Alliance.BLACK, boardService))
+        .forEach(builder::withPiece);
 
     IntStream.range(48, 56)
-        .forEach(i -> builder.withPiece(new Pawn(i, Alliance.WHITE, boardService)));
+        .boxed()
+        .map(i -> new Pawn(i, Alliance.WHITE, boardService))
+        .forEach(builder::withPiece);
 
     builder
         .withPiece(new Rook(56, Alliance.WHITE, boardService))

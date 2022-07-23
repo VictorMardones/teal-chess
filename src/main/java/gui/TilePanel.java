@@ -7,13 +7,14 @@ import engine.board.Board;
 import engine.move.Move;
 import engine.piece.Piece;
 import engine.player.Alliance;
-import io.SVGImporter;
+import io.SvgImporter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 import javax.swing.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,8 +32,10 @@ final class TilePanel extends JPanel {
   TilePanel(Table table, final BoardPanel boardPanel, final int tileId) {
 
     super(new GridBagLayout());
+
     this.table = table;
     this.tileId = tileId;
+
     setPreferredSize(TILE_PANEL_DIMENSION);
     assignTileColor();
     assignPieceIcon(table.getChessboard());
@@ -82,16 +85,18 @@ final class TilePanel extends JPanel {
     log.debug("Selected the tile {}", tileId);
     table.setSourceTile(table.getChessboard().getTile(tileId));
 
-    final var selectedPiece = table.getSourceTile().getPiece();
-
-    if (selectedPiece.isPresent()) {
-      table.setSelectedPiece(selectedPiece.get());
+    if (getSelectedPiece().isPresent()) {
+      table.setSelectedPiece(getSelectedPiece().get());
       log.debug("The tile contains {}", table.getSelectedPiece());
       log.debug("Highlighting legal moves");
     } else {
       log.debug("The tile is unoccupied, unselecting");
       table.resetSelection();
     }
+  }
+
+  private Optional<Piece> getSelectedPiece() {
+    return table.getSourceTile().getPiece();
   }
 
   private void secondLeftClick() {
@@ -129,7 +134,7 @@ final class TilePanel extends JPanel {
 
     if (board.getTile(tileId).getPiece().isPresent()) {
       final var image =
-          SVGImporter.importSVG(
+          SvgImporter.importSvg(
               new File(getIconPath(board.getTile(tileId).getPiece().get())),
               TILE_PANEL_DIMENSION.width * 6,
               TILE_PANEL_DIMENSION.height * 6);
@@ -138,7 +143,7 @@ final class TilePanel extends JPanel {
     }
   }
 
-  private String getIconPath(Piece piece) {
+  private String getIconPath(final Piece piece) {
     return "%s/%s%s.svg"
         .formatted(
             PIECE_ICON_PATH,
@@ -155,12 +160,12 @@ final class TilePanel extends JPanel {
 
   private void highlightLegals(final Board board) {
     if (table.isHighlightLegalMoves()) {
-      pieceLegalMoves(board).stream()
+      selectedPieceLegals(board).stream()
           .filter(move -> move.getDestination() == tileId)
           .forEach(
               move -> {
                 final var image =
-                    SVGImporter.importSVG(
+                    SvgImporter.importSvg(
                         new File("art/misc/green_dot.svg"),
                         TILE_PANEL_DIMENSION.width * 4,
                         TILE_PANEL_DIMENSION.height * 4);
@@ -170,13 +175,16 @@ final class TilePanel extends JPanel {
     }
   }
 
-  private Collection<Move> pieceLegalMoves(final Board board) {
-    if (table.getSelectedPiece() != null
-        && table.getSelectedPiece().getAlliance() == board.getCurrentPlayer().getAlliance()) {
-      return table.getSelectedPiece().calculateLegalMoves(board);
+  private Collection<Move> selectedPieceLegals(final Board board) {
+    if (table.getSelectedPiece() == null || isOpponentPieceSelected(board)) {
+      log.debug("The piece has no legal moves");
+      return Collections.emptyList();
     }
 
-    log.debug("The piece has no legal moves");
-    return Collections.emptyList();
+    return table.getSelectedPiece().calculateLegalMoves(board);
+  }
+
+  private boolean isOpponentPieceSelected(Board board) {
+    return table.getSelectedPiece().getAlliance() != board.getCurrentPlayer().getAlliance();
   }
 }

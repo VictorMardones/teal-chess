@@ -12,13 +12,13 @@ import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 
 @Slf4j
-public final class SVGImporter {
+public final class SvgImporter {
 
-  private SVGImporter() {
+  private SvgImporter() {
     throw new IllegalStateException("You cannot instantiate me!");
   }
 
-  public static Optional<BufferedImage> importSVG(
+  public static Optional<BufferedImage> importSvg(
       final File file, final int width, final int height) {
 
     if (!file.exists()) {

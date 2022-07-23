@@ -5,10 +5,8 @@ import engine.board.Board;
 import engine.board.BoardService;
 import engine.move.Move;
 import engine.player.Alliance;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.function.IntConsumer;
+import java.util.*;
+import java.util.stream.IntStream;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,11 +25,12 @@ public abstract class SlidingPiece implements Piece {
   @Override
   public Collection<Move> calculateLegalMoves(final Board board) {
 
-    // TODO: Remove these non-null filters, change how the methods work
     return Arrays.stream(getMoveVectors())
-        .mapMulti(this::calculateOffsets)
+        .mapToObj(this::calculateOffsets)
+        .flatMap(Collection::stream)
+        .distinct()
         .filter(this::isInMoveRange)
-        .mapToObj(board::getTile)
+        .map(board::getTile)
         .filter(this::isAccessible)
         .map(tile -> createMove(this, tile, board))
         .filter(Optional::isPresent)
@@ -39,12 +38,12 @@ public abstract class SlidingPiece implements Piece {
         .collect(ImmutableList.toImmutableList());
   }
 
-  private void calculateOffsets(final int vector, final IntConsumer consumer) {
-    var multiplier = 1;
+  private Collection<Integer> calculateOffsets(final int vector) {
 
-    while (getBoardService().isInside(getPosition() + vector * multiplier)) {
-      consumer.accept(getPosition() + vector * multiplier);
-      multiplier++;
-    }
+    return IntStream.range(1, BoardService.NUMBER_OF_RANKS + 1)
+        .map(i -> getPosition() + vector * i)
+        .filter(destination -> getBoardService().isInside(destination))
+        .boxed()
+        .collect(ImmutableList.toImmutableList());
   }
 }

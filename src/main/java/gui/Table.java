@@ -29,7 +29,9 @@ public class Table {
   @Getter private BoardDirection boardDirection;
   @Getter private boolean highlightLegalMoves;
 
-  public Table() {
+  public Table(final BoardService boardService) {
+    this.boardService = boardService;
+
     gameFrame = new JFrame("Chess game, made in Java");
     gameFrame.setLayout(new BorderLayout());
 
