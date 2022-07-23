@@ -1,14 +1,16 @@
 package engine.move;
 
 import engine.board.Board;
+import engine.board.Coordinate;
 import engine.piece.Piece;
 import engine.piece.Rook;
 
 abstract class CastleMove extends Move {
   protected final Rook rook;
-  protected final int rookDestination;
+  protected final Coordinate rookDestination;
 
-  protected CastleMove(Board board, Piece piece, int destination, Rook rook, int rookDestination) {
+  protected CastleMove(
+      Board board, Piece piece, Coordinate destination, Rook rook, Coordinate rookDestination) {
     super(board, piece, destination);
     this.rook = rook;
     this.rookDestination = rookDestination;
@@ -28,7 +30,7 @@ abstract class CastleMove extends Move {
 
     builder
         .withPiece(piece.move(this))
-        .withPiece(new Rook(rookDestination, rook.getAlliance(), false, rook.getBoardService()))
+        .withPiece(new Rook(rookDestination, rook.getAlliance(), false))
         .withNextTurn(board.getCurrentPlayer().getOpponent().getAlliance());
 
     return builder.build();

@@ -3,7 +3,6 @@ package engine.piece;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import engine.board.BoardService;
 import engine.move.Move;
 import engine.player.Alliance;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,17 +15,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class BishopTest {
 
   Bishop bishop;
-  @Mock BoardService boardService;
   @Mock Move move;
 
   @BeforeEach
   void setUp() {
-    bishop = new Bishop(0, Alliance.BLACK, boardService);
+    bishop = new Bishop(0, Alliance.BLACK);
   }
 
   @Test
   void diagonalMove() {
-    when(boardService.sameColor(0, 9)).thenReturn(true);
+    when(boardComparator.sameColor(0, 9)).thenReturn(true);
 
     assertThat(bishop.isInMoveRange(9)).isTrue();
   }

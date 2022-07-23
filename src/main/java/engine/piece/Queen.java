@@ -1,6 +1,6 @@
 package engine.piece;
 
-import engine.board.BoardService;
+import engine.board.Coordinate;
 import engine.move.Move;
 import engine.player.Alliance;
 
@@ -9,12 +9,12 @@ public final class Queen extends SlidingPiece {
 
   private static final int[] MOVE_VECTORS = {-9, -8, -7, -1, 1, 7, 8, 9};
 
-  public Queen(int position, Alliance alliance, boolean firstMove, BoardService boardService) {
-    super(position, alliance, firstMove, boardService);
+  public Queen(Coordinate position, Alliance alliance, boolean firstMove) {
+    super(position, alliance, firstMove);
   }
 
-  public Queen(int position, Alliance alliance, BoardService boardService) {
-    this(position, alliance, true, boardService);
+  public Queen(Coordinate position, Alliance alliance) {
+    this(position, alliance, true);
   }
 
   @Override
@@ -28,14 +28,14 @@ public final class Queen extends SlidingPiece {
   }
 
   @Override
-  public boolean isInMoveRange(int destination) {
-    return boardService.sameRank(position, destination)
-        || boardService.sameColumn(position, destination)
-        || boardService.sameColor(position, destination);
+  public boolean isInMoveRange(Coordinate destination) {
+    return position.sameRankAs(destination)
+        || position.sameColumnAs(destination)
+        || position.sameColorAs(destination);
   }
 
   @Override
   public Queen move(final Move move) {
-    return new Queen(move.getDestination(), alliance, false, boardService);
+    return new Queen(move.getDestination(), alliance, false);
   }
 }

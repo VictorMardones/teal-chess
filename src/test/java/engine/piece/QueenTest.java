@@ -1,10 +1,8 @@
 package engine.piece;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
-import engine.board.BoardService;
 import engine.move.Move;
 import engine.player.Alliance;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,31 +15,30 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class QueenTest {
 
   Queen queen;
-  @Mock BoardService boardService;
   @Mock Move move;
 
   @BeforeEach
   void setUp() {
-    queen = new Queen(0, Alliance.BLACK, boardService);
+    queen = new Queen(0, Alliance.BLACK);
   }
 
   @Test
   void diagonalMove() {
-    when(boardService.sameColor(0, 63)).thenReturn(true);
+    when(boardComparator.sameColor(0, 63)).thenReturn(true);
 
     assertThat(queen.isInMoveRange(63)).isTrue();
   }
 
   @Test
   void horizontalMove() {
-    lenient().when(boardService.sameRank(0, 7)).thenReturn(true);
+    when(boardComparator.sameRank(0, 7)).thenReturn(true);
 
     assertThat(queen.isInMoveRange(7)).isTrue();
   }
 
   @Test
   void verticalMove() {
-    when(boardService.sameColumn(0, 56)).thenReturn(true);
+    when(boardComparator.sameColumn(0, 56)).thenReturn(true);
 
     assertThat(queen.isInMoveRange(56)).isTrue();
   }

@@ -1,6 +1,6 @@
 package engine.piece;
 
-import engine.board.BoardService;
+import engine.board.Coordinate;
 import engine.move.Move;
 import engine.player.Alliance;
 import lombok.Getter;
@@ -13,12 +13,12 @@ import lombok.Getter;
 @Getter
 public final class King extends JumpingPiece {
 
-  public King(int position, Alliance alliance, boolean firstMove, BoardService boardService) {
-    super(position, alliance, firstMove, boardService);
+  public King(Coordinate position, Alliance alliance, boolean firstMove) {
+    super(position, alliance, firstMove);
   }
 
-  public King(int position, Alliance alliance, BoardService boardService) {
-    this(position, alliance, true, boardService);
+  public King(Coordinate position, Alliance alliance) {
+    this(position, alliance, true);
   }
 
   @Override
@@ -32,12 +32,12 @@ public final class King extends JumpingPiece {
   }
 
   @Override
-  public boolean isInMoveRange(int destination) {
-    return Math.abs(boardService.getColumn(position) - boardService.getColumn(destination)) <= 2;
+  public boolean isInMoveRange(Coordinate destination) {
+    return Math.abs(position.getColumnIndex() - destination.getColumnIndex()) <= 2;
   }
 
   @Override
   public King move(final Move move) {
-    return new King(move.getDestination(), alliance, false, boardService);
+    return new King(move.getDestination(), alliance, false);
   }
 }

@@ -18,6 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 @ToString
 public final class Board {
 
+  public static final int MIN_TILES = 0;
+  public static final int MAX_TILES = 64;
+  public static final int NUMBER_OF_RANKS = 8;
+
   private final List<Tile> gameBoard;
   @Getter private final Collection<Piece> whitePieces;
   @Getter private final Collection<Piece> blackPieces;
@@ -40,13 +44,9 @@ public final class Board {
     final Collection<Move> blackLegalMoves = calculateLegalMoves(blackPieces);
     log.debug("Black legal moves: {}", blackLegalMoves);
 
-    whitePlayer =
-        new WhitePlayer(
-            this, builder.whiteKing, whiteLegalMoves, blackLegalMoves, new BoardService());
+    whitePlayer = new WhitePlayer(this, builder.whiteKing, whiteLegalMoves, blackLegalMoves);
     log.debug("White player: {}", whitePlayer);
-    blackPlayer =
-        new BlackPlayer(
-            this, builder.blackKing, blackLegalMoves, whiteLegalMoves, new BoardService());
+    blackPlayer = new BlackPlayer(this, builder.blackKing, blackLegalMoves, whiteLegalMoves);
     log.debug("Black player: {}", blackPlayer);
 
     currentPlayer = builder.nextTurn.choosePlayer(List.of(whitePlayer, blackPlayer));
@@ -54,55 +54,54 @@ public final class Board {
   }
 
   private List<Tile> createGameBoard(final Builder builder) {
-    return IntStream.range(BoardService.MIN_TILES, BoardService.MAX_TILES)
-        .mapToObj(i -> Tile.create(i, builder.boardConfig.get(i)))
+    return IntStream.range(MIN_TILES, MAX_TILES)
+        .mapToObj(Coordinate::new)
+        .map(coordinate -> Tile.create(coordinate, builder.boardConfig.get(coordinate)))
         .collect(ImmutableList.toImmutableList());
   }
 
   // TODO: Parse a text file to create the board
   public static Board createStandardBoard() {
-    final var boardService = new BoardService();
-
-    final var whiteKing = new King(60, Alliance.WHITE, boardService);
-    final var blackKing = new King(4, Alliance.BLACK, boardService);
+    final var whiteKing = new King(Coordinate.of("e1"), Alliance.WHITE);
+    final var blackKing = new King(Coordinate.of("e8"), Alliance.BLACK);
 
     final var builder = new Builder(whiteKing, blackKing);
 
     builder
-        .withPiece(new Rook(0, Alliance.BLACK, boardService))
-        .withPiece(new Knight(1, Alliance.BLACK, boardService))
-        .withPiece(new Bishop(2, Alliance.BLACK, boardService))
-        .withPiece(new Queen(3, Alliance.BLACK, boardService))
+        .withPiece(new Rook(Coordinate.of("a8"), Alliance.BLACK))
+        .withPiece(new Knight(Coordinate.of("b8"), Alliance.BLACK))
+        .withPiece(new Bishop(Coordinate.of("c8"), Alliance.BLACK))
+        .withPiece(new Queen(Coordinate.of("d8"), Alliance.BLACK))
         .withPiece(blackKing)
-        .withPiece(new Bishop(5, Alliance.BLACK, boardService))
-        .withPiece(new Knight(6, Alliance.BLACK, boardService))
-        .withPiece(new Rook(7, Alliance.BLACK, boardService));
+        .withPiece(new Bishop(Coordinate.of("f8"), Alliance.BLACK))
+        .withPiece(new Knight(Coordinate.of("g8"), Alliance.BLACK))
+        .withPiece(new Rook(Coordinate.of("h8"), Alliance.BLACK));
 
     IntStream.range(8, 16)
-        .boxed()
-        .map(i -> new Pawn(i, Alliance.BLACK, boardService))
+        .mapToObj(Coordinate::new)
+        .map(coordinate -> new Pawn(coordinate, Alliance.BLACK))
         .forEach(builder::withPiece);
 
     IntStream.range(48, 56)
-        .boxed()
-        .map(i -> new Pawn(i, Alliance.WHITE, boardService))
+        .mapToObj(Coordinate::new)
+        .map(coordinate -> new Pawn(coordinate, Alliance.WHITE))
         .forEach(builder::withPiece);
 
     builder
-        .withPiece(new Rook(56, Alliance.WHITE, boardService))
-        .withPiece(new Knight(57, Alliance.WHITE, boardService))
-        .withPiece(new Bishop(58, Alliance.WHITE, boardService))
-        .withPiece(new Queen(59, Alliance.WHITE, boardService))
+        .withPiece(new Rook(Coordinate.of("a1"), Alliance.WHITE))
+        .withPiece(new Knight(Coordinate.of("b1"), Alliance.WHITE))
+        .withPiece(new Bishop(Coordinate.of("c1"), Alliance.WHITE))
+        .withPiece(new Queen(Coordinate.of("d1"), Alliance.WHITE))
         .withPiece(whiteKing)
-        .withPiece(new Bishop(61, Alliance.WHITE, boardService))
-        .withPiece(new Knight(62, Alliance.WHITE, boardService))
-        .withPiece(new Rook(63, Alliance.WHITE, boardService));
+        .withPiece(new Bishop(Coordinate.of("f1"), Alliance.WHITE))
+        .withPiece(new Knight(Coordinate.of("g1"), Alliance.WHITE))
+        .withPiece(new Rook(Coordinate.of("h1"), Alliance.WHITE));
 
     return builder.withNextTurn(Alliance.WHITE).build();
   }
 
-  public Tile getTile(final int coordinate) {
-    return gameBoard.get(coordinate);
+  public Tile getTile(Coordinate coordinate) {
+    return gameBoard.get(coordinate.index());
   }
 
   private Collection<Piece> calculateActivePieces(
@@ -129,20 +128,21 @@ public final class Board {
   public String toText() {
     final var builder = new StringBuilder();
 
-    IntStream.range(BoardService.MIN_TILES, BoardService.MAX_TILES)
-        .mapToObj(i -> String.format(getFormat(i), gameBoard.get(i)))
+    IntStream.range(MIN_TILES, MAX_TILES)
+        .mapToObj(Coordinate::new)
+        .map(coordinate -> String.format(getFormat(coordinate), gameBoard.get(coordinate.index())))
         .forEach(builder::append);
 
     return builder.toString();
   }
 
-  private String getFormat(final int coordinate) {
-    return (coordinate + 1) % BoardService.NUMBER_OF_RANKS == 0 ? "%s  \n" : "%s  ";
+  private String getFormat(final Coordinate coordinate) {
+    return (coordinate.index() + 1) % NUMBER_OF_RANKS == 0 ? "%s  \n" : "%s  ";
   }
 
   public static class Builder {
 
-    private final Map<Integer, Piece> boardConfig;
+    private final Map<Coordinate, Piece> boardConfig;
     private Alliance nextTurn;
     private King whiteKing;
     private King blackKing;

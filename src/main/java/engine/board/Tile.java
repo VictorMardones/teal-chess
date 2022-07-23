@@ -14,13 +14,14 @@ import lombok.Getter;
 @Getter
 public abstract class Tile {
 
-  private final int coordinate;
+  private final Coordinate coordinate;
 
   private static final List<EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
 
   private static List<EmptyTile> createAllPossibleEmptyTiles() {
-    return IntStream.range(BoardService.MIN_TILES, BoardService.MAX_TILES)
-        .mapToObj(EmptyTile::new)
+    return IntStream.range(Board.MIN_TILES, Board.MAX_TILES)
+        .mapToObj(Coordinate::new)
+        .map(EmptyTile::new)
         .collect(ImmutableList.toImmutableList());
   }
 
@@ -31,8 +32,10 @@ public abstract class Tile {
    * @param piece The piece on the tile.
    * @return A new tile.
    */
-  public static Tile create(final int coordinate, final Piece piece) {
-    return piece != null ? new OccupiedTile(coordinate, piece) : EMPTY_TILES_CACHE.get(coordinate);
+  public static Tile create(final Coordinate coordinate, final Piece piece) {
+    return piece != null
+        ? new OccupiedTile(coordinate, piece)
+        : EMPTY_TILES_CACHE.get(coordinate.index());
   }
 
   /**
@@ -44,7 +47,7 @@ public abstract class Tile {
 
   static final class EmptyTile extends Tile {
 
-    private EmptyTile(final int coordinate) {
+    private EmptyTile(final Coordinate coordinate) {
       super(coordinate);
     }
 
@@ -63,7 +66,7 @@ public abstract class Tile {
 
     private final Piece piece;
 
-    private OccupiedTile(final int coordinate, final Piece piece) {
+    private OccupiedTile(final Coordinate coordinate, final Piece piece) {
       super(coordinate);
       this.piece = piece;
     }

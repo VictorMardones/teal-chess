@@ -1,6 +1,8 @@
 package engine.piece;
 
+import com.google.common.collect.ImmutableList;
 import engine.board.Board;
+import engine.board.Coordinate;
 import engine.board.Tile;
 import engine.move.CaptureMove;
 import engine.move.MajorPieceMove;
@@ -14,7 +16,7 @@ import lombok.Getter;
 /** A chess piece. */
 public interface Piece {
 
-  int getPosition();
+  Coordinate getPosition();
 
   Alliance getAlliance();
 
@@ -28,16 +30,18 @@ public interface Piece {
    * @param board Current state of the game board.
    * @return List of possible moves.
    */
-  Collection<Move> calculateLegalMoves(final Board board);
+  default Collection<Move> calculateLegalMoves(final Board board) {
+    return calculatePossibleDestinations()
+            .stream()
+            .map(board::getTile)
+            .filter(this::isAccessible)
+            .map(tile -> createMove(this, tile, board))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(ImmutableList.toImmutableList());
+  }
 
-  /**
-   * Checks for edge cases to decide if the next move could be valid. This doesn't account for
-   * pieces that may block the movement.
-   *
-   * @param destination Destination coordinate.
-   * @return True if the next move is valid.
-   */
-  boolean isInMoveRange(final int destination);
+  abstract Collection<Coordinate> calculatePossibleDestinations();
 
   default boolean isWhite() {
     return getAlliance() == Alliance.WHITE;
@@ -85,16 +89,16 @@ public interface Piece {
    * @param board The current game board.
    * @return A move, selected depending on the source and destination.
    */
-  default Optional<Move> createMove(final Piece piece, final Tile destination, final Board board) {
+  default Optional<Move> createMove(final Tile destination, final Board board) {
     if (destination.getPiece().isEmpty()) {
-      return Optional.of(new MajorPieceMove(board, piece, destination.getCoordinate()));
+      return Optional.of(new MajorPieceMove(board, this, destination.getCoordinate()));
     }
 
     final var capturablePiece = destination.getPiece();
 
-    if (capturablePiece.isPresent() && piece.isEnemyOf(capturablePiece.get())) {
+    if (capturablePiece.isPresent() && isEnemyOf(capturablePiece.get())) {
       return Optional.of(
-          new CaptureMove(board, piece, destination.getCoordinate(), capturablePiece.get()));
+          new CaptureMove(board, this, destination.getCoordinate(), capturablePiece.get()));
     }
 
     return Optional.empty();

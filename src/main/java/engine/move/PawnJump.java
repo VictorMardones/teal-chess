@@ -1,10 +1,11 @@
 package engine.move;
 
 import engine.board.Board;
+import engine.board.Coordinate;
 import engine.piece.Pawn;
 
 public final class PawnJump extends Move {
-  public PawnJump(Board board, Pawn pawn, int destination) {
+  public PawnJump(Board board, Pawn pawn, Coordinate destination) {
     super(board, pawn, destination);
   }
 

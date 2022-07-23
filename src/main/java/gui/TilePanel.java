@@ -4,6 +4,7 @@ import static javax.swing.SwingUtilities.isLeftMouseButton;
 import static javax.swing.SwingUtilities.isRightMouseButton;
 
 import engine.board.Board;
+import engine.board.Coordinate;
 import engine.move.Move;
 import engine.piece.Piece;
 import engine.player.Alliance;
@@ -27,14 +28,14 @@ final class TilePanel extends JPanel {
   private static final String PIECE_ICON_PATH = "art/pieces";
 
   private final transient Table table;
-  private final int tileId;
+  private final Coordinate coordinate;
 
-  TilePanel(Table table, final BoardPanel boardPanel, final int tileId) {
+  TilePanel(Table table, final BoardPanel boardPanel, final Coordinate coordinate) {
 
     super(new GridBagLayout());
 
     this.table = table;
-    this.tileId = tileId;
+    this.coordinate = coordinate;
 
     setPreferredSize(TILE_PANEL_DIMENSION);
     assignTileColor();
@@ -82,8 +83,8 @@ final class TilePanel extends JPanel {
   }
 
   private void firstLeftClick() {
-    log.debug("Selected the tile {}", tileId);
-    table.setSourceTile(table.getChessboard().getTile(tileId));
+    log.debug("Selected the tile {}", coordinate);
+    table.setSourceTile(table.getChessboard().getTile(coordinate));
 
     if (getSelectedPiece().isPresent()) {
       table.setSelectedPiece(getSelectedPiece().get());
@@ -100,11 +101,11 @@ final class TilePanel extends JPanel {
   }
 
   private void secondLeftClick() {
-    log.debug("Selected the destination {}", tileId);
-    table.setDestinationTile(table.getChessboard().getTile(tileId));
+    log.debug("Selected the destination {}", coordinate);
+    table.setDestinationTile(table.getChessboard().getTile(coordinate));
 
     final var move =
-        Move.MoveFactory.create(
+        Move.Factory.create(
             table.getChessboard(),
             table.getSourceTile().getCoordinate(),
             table.getDestinationTile().getCoordinate());
@@ -132,10 +133,10 @@ final class TilePanel extends JPanel {
   private void assignPieceIcon(final Board board) {
     removeAll();
 
-    if (board.getTile(tileId).getPiece().isPresent()) {
+    if (board.getTile(coordinate).getPiece().isPresent()) {
       final var image =
           SvgImporter.importSvg(
-              new File(getIconPath(board.getTile(tileId).getPiece().get())),
+              new File(getIconPath(board.getTile(coordinate).getPiece().get())),
               TILE_PANEL_DIMENSION.width * 6,
               TILE_PANEL_DIMENSION.height * 6);
 
@@ -152,16 +153,13 @@ final class TilePanel extends JPanel {
   }
 
   private void assignTileColor() {
-    setBackground(
-        table.getBoardService().getTileColor(tileId) == Alliance.WHITE
-            ? LIGHT_TILE_COLOR
-            : BLACK_TILE_COLOR);
+    setBackground(coordinate.getColor() == Alliance.WHITE ? LIGHT_TILE_COLOR : BLACK_TILE_COLOR);
   }
 
   private void highlightLegals(final Board board) {
     if (table.isHighlightLegalMoves()) {
       selectedPieceLegals(board).stream()
-          .filter(move -> move.getDestination() == tileId)
+          .filter(move -> move.getDestination() == coordinate)
           .forEach(
               move -> {
                 final var image =

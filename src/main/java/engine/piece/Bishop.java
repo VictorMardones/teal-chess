@@ -1,6 +1,6 @@
 package engine.piece;
 
-import engine.board.BoardService;
+import engine.board.Coordinate;
 import engine.move.Move;
 import engine.player.Alliance;
 
@@ -9,12 +9,12 @@ public final class Bishop extends SlidingPiece {
 
   private static final int[] MOVE_VECTORS = {-9, -7, 7, 9};
 
-  public Bishop(int position, Alliance alliance, boolean firstMove, BoardService boardService) {
-    super(position, alliance, firstMove, boardService);
+  public Bishop(Coordinate position, Alliance alliance, boolean firstMove) {
+    super(position, alliance, firstMove);
   }
 
-  public Bishop(int position, Alliance alliance, BoardService boardService) {
-    this(position, alliance, true, boardService);
+  public Bishop(Coordinate position, Alliance alliance) {
+    this(position, alliance, true);
   }
 
   @Override
@@ -28,12 +28,12 @@ public final class Bishop extends SlidingPiece {
   }
 
   @Override
-  public boolean isInMoveRange(int destination) {
-    return boardService.sameColor(position, destination);
+  public boolean isInMoveRange(Coordinate destination) {
+    return position.sameColorAs(destination);
   }
 
   @Override
   public Bishop move(final Move move) {
-    return new Bishop(move.getDestination(), alliance, false, boardService);
+    return new Bishop(move.getDestination(), alliance, false);
   }
 }

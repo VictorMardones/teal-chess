@@ -2,8 +2,10 @@ package engine.move;
 
 import engine.board.Board;
 import engine.board.Board.Builder;
+import engine.board.Coordinate;
 import engine.piece.Piece;
 import java.util.Optional;
+import java.util.function.Predicate;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +19,7 @@ public abstract class Move {
 
   @ToString.Exclude protected final Board board;
   @Getter protected final Piece piece;
-  @Getter private final int destination;
+  @Getter private final Coordinate destination;
 
   @Getter protected boolean castling = false;
   @Getter protected Piece capturedPiece;
@@ -51,21 +53,33 @@ public abstract class Move {
     return builder.build();
   }
 
-  public int getCurrentCoordinate() {
+  public Coordinate getSource() {
     return piece.getPosition();
   }
 
-  public static final class MoveFactory {
+  public static final class Factory {
 
-    private MoveFactory() {
+    private Factory() {
       throw new IllegalStateException("You cannot instantiate me!");
     }
 
+    /**
+     * Creates a move in the specified direction.
+     *
+     * @param board The chessboard.
+     * @param source Source coordinate.
+     * @param destination Destination coordinate.
+     * @return Move that goes from the source to the destination, if possible.
+     */
     public static Optional<Move> create(
-        final Board board, final int source, final int destination) {
+        final Board board, final Coordinate source, final Coordinate destination) {
       return board.getCurrentPlayerLegalMoves().stream()
-          .filter(move -> move.piece.getPosition() == source && move.destination == destination)
+          .filter(isMovePossible(source, destination))
           .findFirst();
+    }
+
+    private static Predicate<Move> isMovePossible(Coordinate source, Coordinate destination) {
+      return move -> move.getSource() == source && move.getDestination() == destination;
     }
   }
 }

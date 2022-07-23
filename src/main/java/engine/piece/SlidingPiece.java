@@ -2,7 +2,7 @@ package engine.piece;
 
 import com.google.common.collect.ImmutableList;
 import engine.board.Board;
-import engine.board.BoardService;
+import engine.board.Coordinate;
 import engine.move.Move;
 import engine.player.Alliance;
 import java.util.*;
@@ -16,10 +16,9 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class SlidingPiece implements Piece {
 
-  protected int position;
+  protected Coordinate position;
   protected Alliance alliance;
   protected boolean firstMove;
-  protected BoardService boardService;
 
   abstract int[] getMoveVectors();
 
@@ -41,9 +40,9 @@ public abstract class SlidingPiece implements Piece {
 
   private Collection<Integer> calculateOffsets(final int vector) {
 
-    return IntStream.range(1, BoardService.NUMBER_OF_RANKS + 1)
+    return IntStream.range(1, Board.NUMBER_OF_RANKS + 1)
         .map(i -> getPosition() + vector * i)
-        .filter(destination -> getBoardService().isInside(destination))
+        .filter(destination -> getBoardComparator().isInsideBoard(destination))
         .boxed()
         .collect(ImmutableList.toImmutableList());
   }

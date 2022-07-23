@@ -3,7 +3,6 @@ package engine.piece;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import engine.board.BoardService;
 import engine.move.Move;
 import engine.player.Alliance;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,24 +15,23 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class RookTest {
 
   Rook rook;
-  @Mock BoardService boardService;
   @Mock Move move;
 
   @BeforeEach
   void setUp() {
-    rook = new Rook(0, Alliance.BLACK, boardService);
+    rook = new Rook(0, Alliance.BLACK);
   }
 
   @Test
   void horizontalMove() {
-    when(boardService.sameRank(0, 7)).thenReturn(true);
+    when(boardComparator.sameRank(0, 7)).thenReturn(true);
 
     assertThat(rook.isInMoveRange(7)).isTrue();
   }
 
   @Test
   void verticalMove() {
-    when(boardService.sameColumn(0, 56)).thenReturn(true);
+    when(boardComparator.sameColumn(0, 56)).thenReturn(true);
 
     assertThat(rook.isInMoveRange(56)).isTrue();
   }

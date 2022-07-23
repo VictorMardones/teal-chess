@@ -2,7 +2,6 @@ package gui;
 
 import com.google.common.collect.Lists;
 import engine.board.Board;
-import engine.board.BoardService;
 import engine.board.Tile;
 import engine.piece.Piece;
 import java.awt.*;
@@ -20,7 +19,6 @@ public class Table {
   private final JFrame gameFrame;
   private final BoardPanel boardPanel;
   @Getter @Setter private Board chessboard;
-  @Getter private BoardService boardService;
 
   @Getter @Setter private Tile sourceTile;
   @Getter @Setter private Tile destinationTile;
@@ -29,9 +27,7 @@ public class Table {
   @Getter private BoardDirection boardDirection;
   @Getter private boolean highlightLegalMoves;
 
-  public Table(final BoardService boardService) {
-    this.boardService = boardService;
-
+  public Table() {
     gameFrame = new JFrame("Chess game, made in Java");
     gameFrame.setLayout(new BorderLayout());
 

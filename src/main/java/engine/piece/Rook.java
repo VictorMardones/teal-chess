@@ -1,6 +1,6 @@
 package engine.piece;
 
-import engine.board.BoardService;
+import engine.board.Coordinate;
 import engine.move.Move;
 import engine.player.Alliance;
 
@@ -9,12 +9,12 @@ public final class Rook extends SlidingPiece {
 
   private static final int[] MOVE_VECTORS = {-8, -1, 1, 8};
 
-  public Rook(int position, Alliance alliance, boolean firstMove, BoardService boardService) {
-    super(position, alliance, firstMove, boardService);
+  public Rook(Coordinate position, Alliance alliance, boolean firstMove) {
+    super(position, alliance, firstMove);
   }
 
-  public Rook(int position, Alliance alliance, BoardService boardService) {
-    this(position, alliance, true, boardService);
+  public Rook(Coordinate position, Alliance alliance) {
+    this(position, alliance, true);
   }
 
   @Override
@@ -28,13 +28,12 @@ public final class Rook extends SlidingPiece {
   }
 
   @Override
-  public boolean isInMoveRange(int destination) {
-    return getBoardService().sameRank(position, destination)
-        || getBoardService().sameColumn(position, destination);
+  public boolean isInMoveRange(Coordinate destination) {
+    return position.sameRankAs(destination) || position.sameColumnAs(destination);
   }
 
   @Override
   public Rook move(final Move move) {
-    return new Rook(move.getDestination(), alliance, false, boardService);
+    return new Rook(move.getDestination(), alliance, false);
   }
 }

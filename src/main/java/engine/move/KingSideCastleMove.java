@@ -1,13 +1,14 @@
 package engine.move;
 
 import engine.board.Board;
+import engine.board.Coordinate;
 import engine.piece.Piece;
 import engine.piece.Rook;
 
 public final class KingSideCastleMove extends CastleMove {
 
   public KingSideCastleMove(
-      Board board, Piece piece, int destination, Rook rook, int rookDestination) {
+      Board board, Piece piece, Coordinate destination, Rook rook, Coordinate rookDestination) {
     super(board, piece, destination, rook, rookDestination);
   }
 

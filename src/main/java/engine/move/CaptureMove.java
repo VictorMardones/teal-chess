@@ -1,6 +1,7 @@
 package engine.move;
 
 import engine.board.Board;
+import engine.board.Coordinate;
 import engine.piece.Piece;
 import lombok.EqualsAndHashCode;
 
@@ -8,7 +9,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class CaptureMove extends Move {
 
-  public CaptureMove(Board board, Piece piece, int destination, Piece capturedPiece) {
+  public CaptureMove(Board board, Piece piece, Coordinate destination, Piece capturedPiece) {
     super(board, piece, destination);
 
     this.capturedPiece = capturedPiece;

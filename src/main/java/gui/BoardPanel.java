@@ -1,7 +1,7 @@
 package gui;
 
 import engine.board.Board;
-import engine.board.BoardService;
+import engine.board.Coordinate;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +21,9 @@ class BoardPanel extends JPanel {
 
     boardTiles = new ArrayList<>();
 
-    IntStream.range(BoardService.MIN_TILES, BoardService.MAX_TILES)
-        .mapToObj(i -> new TilePanel(table, this, i))
+    IntStream.range(Board.MIN_TILES, Board.MAX_TILES)
+        .mapToObj(Coordinate::new)
+        .map(coordinate -> new TilePanel(table, this, coordinate))
         .forEach(
             tilePanel -> {
               boardTiles.add(tilePanel);
