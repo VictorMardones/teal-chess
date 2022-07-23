@@ -1,25 +1,30 @@
 package engine.piece;
 
+import com.google.common.collect.ImmutableList;
+import engine.board.Board;
 import engine.board.Coordinate;
 import engine.move.Move;
 import engine.player.Alliance;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.IntStream;
 
 /** The bishop piece. It can move diagonally. */
-public final class Bishop extends SlidingPiece {
+@Getter
+@AllArgsConstructor
+public final class Bishop implements Piece {
 
   private static final int[] MOVE_VECTORS = {-9, -7, 7, 9};
 
-  public Bishop(Coordinate position, Alliance alliance, boolean firstMove) {
-    super(position, alliance, firstMove);
-  }
+  private Coordinate position;
+  private Alliance alliance;
+  private boolean firstMove;
 
   public Bishop(Coordinate position, Alliance alliance) {
     this(position, alliance, true);
-  }
-
-  @Override
-  public int[] getMoveVectors() {
-    return MOVE_VECTORS;
   }
 
   @Override
@@ -28,8 +33,19 @@ public final class Bishop extends SlidingPiece {
   }
 
   @Override
-  public boolean isInMoveRange(Coordinate destination) {
-    return position.sameColorAs(destination);
+  public Collection<Coordinate> calculatePossibleDestinations() {
+    return Arrays.stream(MOVE_VECTORS)
+            .mapToObj(this::calculateOffsets)
+            .flatMap(Collection::stream)
+            .collect(ImmutableList.toImmutableList());
+  }
+
+  private Collection<Coordinate> calculateOffsets(int vector) {
+    return IntStream.range(1, Board.NUMBER_OF_RANKS + 1)
+            .map(i -> getPosition().index() + vector * i)
+            .mapToObj(Coordinate::new)
+            .filter(destination -> position.sameColorAs(destination))
+            .collect(ImmutableList.toImmutableList());
   }
 
   @Override

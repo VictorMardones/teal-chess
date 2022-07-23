@@ -5,18 +5,22 @@ import engine.board.Board;
 import engine.board.Coordinate;
 import engine.move.Move;
 import engine.player.Alliance;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.Collection;
 
 /** The knight piece. It moves in an L shape. */
-public final class Knight extends JumpingPiece {
+@AllArgsConstructor
+@Getter
+public final class Knight implements Piece {
 
   private static final int[] MOVE_OFFSETS = {-17, -15, -10, -6, 6, 10, 15, 17};
 
-  public Knight(Coordinate position, Alliance alliance, boolean firstMove) {
-    super(position, alliance, firstMove);
-  }
+  private Coordinate position;
+  private Alliance alliance;
+  private boolean firstMove;
 
   public Knight(Coordinate position, Alliance alliance) {
     this(position, alliance, true);

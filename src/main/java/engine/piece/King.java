@@ -1,9 +1,14 @@
 package engine.piece;
 
+import com.google.common.collect.ImmutableList;
 import engine.board.Coordinate;
 import engine.move.Move;
 import engine.player.Alliance;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * The king piece. The most important piece in the game, must be defended at all costs. It moves
@@ -11,19 +16,17 @@ import lombok.Getter;
  * be captured.
  */
 @Getter
-public final class King extends JumpingPiece {
+@AllArgsConstructor
+public final class King implements Piece {
 
-  public King(Coordinate position, Alliance alliance, boolean firstMove) {
-    super(position, alliance, firstMove);
-  }
+  private static final int[] MOVE_OFFSETS = {-9, -8, -7, -1, 1, 7, 8, 9};
+
+  private Coordinate position;
+  private Alliance alliance;
+  private boolean firstMove;
 
   public King(Coordinate position, Alliance alliance) {
     this(position, alliance, true);
-  }
-
-  @Override
-  public int[] getMoveOffsets() {
-    return new int[] {-9, -8, -7, -1, 1, 7, 8, 9};
   }
 
   @Override
@@ -32,8 +35,12 @@ public final class King extends JumpingPiece {
   }
 
   @Override
-  public boolean isInMoveRange(Coordinate destination) {
-    return Math.abs(position.getColumnIndex() - destination.getColumnIndex()) <= 2;
+  public Collection<Coordinate> calculatePossibleDestinations() {
+    return Arrays.stream(MOVE_OFFSETS)
+            .map(offset -> getPosition().index() + offset)
+            .mapToObj(Coordinate::new)
+            .filter(destination -> Math.abs(position.getColumnIndex() - destination.getColumnIndex()) <= 2)
+            .collect(ImmutableList.toImmutableList());
   }
 
   @Override

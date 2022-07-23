@@ -35,13 +35,13 @@ public interface Piece {
             .stream()
             .map(board::getTile)
             .filter(this::isAccessible)
-            .map(tile -> createMove(this, tile, board))
+            .map(tile -> createMove(tile, board))
             .filter(Optional::isPresent)
             .map(Optional::get)
             .collect(ImmutableList.toImmutableList());
   }
 
-  abstract Collection<Coordinate> calculatePossibleDestinations();
+  Collection<Coordinate> calculatePossibleDestinations();
 
   default boolean isWhite() {
     return getAlliance() == Alliance.WHITE;
@@ -84,7 +84,6 @@ public interface Piece {
   /**
    * Creates a move, based on the piece and the destination.
    *
-   * @param piece The piece we're moving.
    * @param destination The destination tile.
    * @param board The current game board.
    * @return A move, selected depending on the source and destination.
