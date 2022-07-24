@@ -2,6 +2,7 @@
  * Copyright (C) 2022  Víctor Mardones
  * The full notice can be found at COPYRIGHT in the root directory.
  */
+
 package engine.piece;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,26 +45,22 @@ class QueenTest {
 
     @Test
     void diagonalMove() {
-        assertThat(queen.getMoveVectors().contains(Vector.Diagonal.DOWN_RIGHT.getVector()))
-                .isTrue();
+        assertThat(queen.getMoveVectors()).contains(Vector.Diagonal.DOWN_RIGHT.getVector());
     }
 
     @Test
     void horizontalMove() {
-        assertThat(queen.getMoveVectors().contains(Vector.Horizontal.LEFT.getVector()))
-                .isTrue();
+        assertThat(queen.getMoveVectors()).contains(Vector.Horizontal.LEFT.getVector());
     }
 
     @Test
     void verticalMove() {
-        assertThat(queen.getMoveVectors().contains(Vector.Vertical.UP.getVector()))
-                .isTrue();
+        assertThat(queen.getMoveVectors()).contains(Vector.Vertical.UP.getVector());
     }
 
     @Test
     void illegalMove() {
-        assertThat(queen.getMoveVectors().contains(Vector.LShaped.UP_UP_LEFT.getVector()))
-                .isFalse();
+        assertThat(queen.getMoveVectors()).doesNotContain(Vector.LShaped.UP_UP_LEFT.getVector());
     }
 
     @Test

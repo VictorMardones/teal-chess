@@ -2,6 +2,7 @@
  * Copyright (C) 2022  Víctor Mardones
  * The full notice can be found at COPYRIGHT in the root directory.
  */
+
 package gui;
 
 import static javax.swing.SwingUtilities.isLeftMouseButton;
@@ -32,7 +33,7 @@ class TilePanel extends JPanel {
     private static final String PIECE_ICON_PATH = "art/pieces";
 
     private final transient Table table;
-    private final Coordinate coordinate;
+    private final transient Coordinate coordinate;
 
     TilePanel(Table table, final BoardPanel boardPanel, final Coordinate coordinate) {
 

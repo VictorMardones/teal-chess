@@ -2,6 +2,7 @@
  * Copyright (C) 2022  Víctor Mardones
  * The full notice can be found at COPYRIGHT in the root directory.
  */
+
 package engine.board;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -10,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import engine.player.Alliance;
 import org.junit.jupiter.api.Test;
 
-public class CoordinateTest {
+class CoordinateTest {
 
     @Test
     void invalidIndex() {
@@ -78,56 +79,56 @@ public class CoordinateTest {
 
     @Test
     void to() {
-        assertThat(Coordinate.of("b2").to(1, 1).isPresent()).isTrue();
-        assertThat(Coordinate.of("b2").to(1, 1).get()).isEqualTo(Coordinate.of("c3"));
+        assertThat(Coordinate.of("b2").to(1, 1)).isPresent();
+        assertThat(Coordinate.of("b2").to(1, 1)).contains(Coordinate.of("c3"));
     }
 
     @Test
     void toOutside() {
-        assertThat(Coordinate.of("b1").to(-2, 1).isPresent()).isFalse();
+        assertThat(Coordinate.of("b1").to(-2, 1)).isEmpty();
     }
 
     @Test
     void up() {
-        assertThat(Coordinate.of("a1").up(2).isPresent()).isTrue();
-        assertThat(Coordinate.of("a1").up(2).get()).isEqualTo(Coordinate.of("a3"));
+        assertThat(Coordinate.of("a1").up(2)).isPresent();
+        assertThat(Coordinate.of("a1").up(2)).contains(Coordinate.of("a3"));
     }
 
     @Test
     void upOutside() {
-        assertThat(Coordinate.of("c8").up(1).isEmpty()).isTrue();
+        assertThat(Coordinate.of("c8").up(1)).isEmpty();
     }
 
     @Test
     void down() {
-        assertThat(Coordinate.of("e4").down(2).isPresent()).isTrue();
-        assertThat(Coordinate.of("e4").down(2).get()).isEqualTo(Coordinate.of("e2"));
+        assertThat(Coordinate.of("e4").down(2)).isPresent();
+        assertThat(Coordinate.of("e4").down(2)).contains(Coordinate.of("e2"));
     }
 
     @Test
     void downOutside() {
-        assertThat(Coordinate.of("g1").down(1).isEmpty()).isTrue();
+        assertThat(Coordinate.of("g1").down(1)).isEmpty();
     }
 
     @Test
     void left() {
-        assertThat(Coordinate.of("e5").left(2).isPresent()).isTrue();
-        assertThat(Coordinate.of("e5").left(2).get()).isEqualTo(Coordinate.of("c5"));
+        assertThat(Coordinate.of("e5").left(2)).isPresent();
+        assertThat(Coordinate.of("e5").left(2)).contains(Coordinate.of("c5"));
     }
 
     @Test
     void leftOutside() {
-        assertThat(Coordinate.of("a6").left(1).isEmpty()).isTrue();
+        assertThat(Coordinate.of("a6").left(1)).isEmpty();
     }
 
     @Test
     void right() {
-        assertThat(Coordinate.of("b5").up(2).isPresent()).isTrue();
-        assertThat(Coordinate.of("b5").up(2).get()).isEqualTo(Coordinate.of("b7"));
+        assertThat(Coordinate.of("b5").up(2)).isPresent();
+        assertThat(Coordinate.of("b5").up(2)).contains(Coordinate.of("b7"));
     }
 
     @Test
     void rightOutside() {
-        assertThat(Coordinate.of("h3").right(1).isEmpty()).isTrue();
+        assertThat(Coordinate.of("h3").right(1)).isEmpty();
     }
 }

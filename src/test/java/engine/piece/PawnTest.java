@@ -2,6 +2,7 @@
  * Copyright (C) 2022  Víctor Mardones
  * The full notice can be found at COPYRIGHT in the root directory.
  */
+
 package engine.piece;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,29 +45,23 @@ class PawnTest {
 
     @Test
     void whiteMoves() {
-        assertThat(pawn.getMoveOffsets().contains(Vector.Vertical.UP.getVector()))
-                .isTrue();
-        assertThat(pawn.getMoveOffsets().contains(Vector.Jump.UP.getVector())).isTrue();
-        assertThat(pawn.getMoveOffsets().contains(Vector.Diagonal.UP_RIGHT.getVector()))
-                .isTrue();
+        assertThat(pawn.getMoveOffsets()).contains(Vector.Vertical.UP.getVector());
+        assertThat(pawn.getMoveOffsets()).contains(Vector.Jump.UP.getVector());
+        assertThat(pawn.getMoveOffsets()).contains(Vector.Diagonal.UP_RIGHT.getVector());
     }
 
     @Test
     void blackMoves() {
         final var blackPawn = new Pawn(coordinate, Alliance.BLACK);
 
-        assertThat(blackPawn.getMoveOffsets().contains(Vector.Vertical.DOWN.getVector()))
-                .isTrue();
-        assertThat(blackPawn.getMoveOffsets().contains(Vector.Jump.DOWN.getVector()))
-                .isTrue();
-        assertThat(blackPawn.getMoveOffsets().contains(Vector.Diagonal.DOWN_RIGHT.getVector()))
-                .isTrue();
+        assertThat(blackPawn.getMoveOffsets()).contains(Vector.Vertical.DOWN.getVector());
+        assertThat(blackPawn.getMoveOffsets()).contains(Vector.Jump.DOWN.getVector());
+        assertThat(blackPawn.getMoveOffsets()).contains(Vector.Diagonal.DOWN_RIGHT.getVector());
     }
 
     @Test
     void illegalMove() {
-        assertThat(pawn.getMoveOffsets().contains(Vector.Horizontal.RIGHT.getVector()))
-                .isFalse();
+        assertThat(pawn.getMoveOffsets()).doesNotContain(Vector.Horizontal.RIGHT.getVector());
     }
 
     @Test

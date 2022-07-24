@@ -2,6 +2,7 @@
  * Copyright (C) 2022  Víctor Mardones
  * The full notice can be found at COPYRIGHT in the root directory.
  */
+
 package engine.piece;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,14 +45,12 @@ class BishopTest {
 
     @Test
     void diagonalMove() {
-        assertThat(bishop.getMoveVectors().contains(Vector.Diagonal.UP_RIGHT.getVector()))
-                .isTrue();
+        assertThat(bishop.getMoveVectors()).contains(Vector.Diagonal.UP_RIGHT.getVector());
     }
 
     @Test
     void illegalMove() {
-        assertThat(bishop.getMoveVectors().contains(Vector.Vertical.UP.getVector()))
-                .isFalse();
+        assertThat(bishop.getMoveVectors()).doesNotContain(Vector.Vertical.UP.getVector());
     }
 
     @Test

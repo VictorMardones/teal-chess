@@ -2,6 +2,7 @@
  * Copyright (C) 2022  Víctor Mardones
  * The full notice can be found at COPYRIGHT in the root directory.
  */
+
 package engine.piece;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,14 +45,12 @@ class KnightTest {
 
     @Test
     void lShapedMove() {
-        assertThat(knight.getMoveOffsets().contains(Vector.LShaped.UP_UP_LEFT.getVector()))
-                .isTrue();
+        assertThat(knight.getMoveOffsets()).contains(Vector.LShaped.UP_UP_LEFT.getVector());
     }
 
     @Test
     void illegalMove() {
-        assertThat(knight.getMoveOffsets().contains(Vector.Vertical.UP.getVector()))
-                .isFalse();
+        assertThat(knight.getMoveOffsets()).doesNotContain(Vector.Vertical.UP.getVector());
     }
 
     @Test

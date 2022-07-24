@@ -2,6 +2,7 @@
  * Copyright (C) 2022  Víctor Mardones
  * The full notice can be found at COPYRIGHT in the root directory.
  */
+
 package engine.piece;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,20 +45,17 @@ class RookTest {
 
     @Test
     void horizontalMove() {
-        assertThat(rook.getMoveVectors().contains(Vector.Horizontal.RIGHT.getVector()))
-                .isTrue();
+        assertThat(rook.getMoveVectors()).contains(Vector.Horizontal.RIGHT.getVector());
     }
 
     @Test
     void verticalMove() {
-        assertThat(rook.getMoveVectors().contains(Vector.Vertical.UP.getVector()))
-                .isTrue();
+        assertThat(rook.getMoveVectors()).contains(Vector.Vertical.UP.getVector());
     }
 
     @Test
     void illegalMove() {
-        assertThat(rook.getMoveVectors().contains(Vector.Diagonal.DOWN_RIGHT.getVector()))
-                .isFalse();
+        assertThat(rook.getMoveVectors()).doesNotContain(Vector.Diagonal.DOWN_RIGHT.getVector());
     }
 
     @Test
