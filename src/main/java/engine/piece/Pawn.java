@@ -43,7 +43,7 @@ public final class Pawn implements Piece {
   public Collection<Coordinate> calculatePossibleDestinations() {
     return Arrays.stream(MOVE_OFFSETS)
         .mapToObj(this::getDestination)
-        .map(Coordinate::new)
+        .map(Coordinate::of)
         .filter(
             destination -> Math.abs(position.getColumnIndex() - destination.getColumnIndex()) <= 1)
         .collect(ImmutableList.toImmutableList());

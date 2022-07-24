@@ -22,7 +22,7 @@ class BoardPanel extends JPanel {
     boardTiles = new ArrayList<>();
 
     IntStream.range(Board.MIN_TILES, Board.MAX_TILES)
-        .mapToObj(Coordinate::new)
+        .mapToObj(Coordinate::of)
         .map(coordinate -> new TilePanel(table, this, coordinate))
         .forEach(
             tilePanel -> {

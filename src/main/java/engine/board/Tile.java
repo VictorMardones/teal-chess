@@ -20,7 +20,7 @@ public abstract class Tile {
 
   private static List<EmptyTile> createAllPossibleEmptyTiles() {
     return IntStream.range(Board.MIN_TILES, Board.MAX_TILES)
-        .mapToObj(Coordinate::new)
+        .mapToObj(Coordinate::of)
         .map(EmptyTile::new)
         .collect(ImmutableList.toImmutableList());
   }

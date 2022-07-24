@@ -40,6 +40,5 @@ class KingTest {
         .isInstanceOf(King.class)
         .matches(king -> king.getPosition() == 9)
         .matches(king -> !king.isFirstMove());
-    ;
   }
 }

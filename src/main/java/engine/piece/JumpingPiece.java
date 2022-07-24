@@ -6,6 +6,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 
+/**
+ * A piece that can move to a specific set of positions. It doesn't matter if there are another
+ * pieces in the way.
+ */
 public interface JumpingPiece extends Piece {
 
   int[][] getMoveOffsets();

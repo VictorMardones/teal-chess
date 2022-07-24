@@ -1,19 +1,30 @@
 package engine.board;
 
+import com.google.common.collect.ImmutableList;
 import engine.player.Alliance;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
 public final class Coordinate {
 
   private static final String COLUMN_NAMES = "abcdefgh";
-  private static final Pattern PATTERN = Pattern.compile("^[a-f][1-8]$");
+  private static final Pattern ALGEBRAIC_PATTERN = Pattern.compile("^[a-h][1-8]$");
+
+  private static final List<Coordinate> COORDINATES_CACHE = createAllPossibleCoordinates();
+
+  private static List<Coordinate> createAllPossibleCoordinates() {
+    return IntStream.range(Board.MIN_TILES, Board.MAX_TILES)
+        .mapToObj(Coordinate::new)
+        .collect(ImmutableList.toImmutableList());
+  }
 
   private final int index;
 
-  public Coordinate(int index) {
+  private Coordinate(int index) {
     if (isOutsideBoard(index)) {
       throw new InvalidCoordinateException("Index is outside chessboard: " + index);
     }
@@ -21,30 +32,35 @@ public final class Coordinate {
     this.index = index;
   }
 
-  private Coordinate(final String algebraic) {
-    index = calculateIndex(algebraic);
-  }
-
-  private boolean isOutsideBoard(final int index) {
-    return index >= Board.MIN_TILES && index < Board.MAX_TILES;
+  private static boolean isOutsideBoard(final int index) {
+    return index < Board.MIN_TILES || index >= Board.MAX_TILES;
   }
 
   public static Coordinate of(final String algebraic) {
-    if (!PATTERN.matcher(algebraic).matches()) {
+    if (!ALGEBRAIC_PATTERN.matcher(algebraic).matches()) {
       throw new InvalidCoordinateException("Invalid algebraic notation: " + algebraic);
     }
 
-    return new Coordinate(algebraic);
+    return COORDINATES_CACHE.get(calculateIndex(algebraic));
+  }
+
+  public static Coordinate of(final int index) {
+    if (isOutsideBoard(index)) {
+      throw new InvalidCoordinateException("Index is outside chessboard: " + index);
+    }
+
+    return COORDINATES_CACHE.get(index);
   }
 
   public int index() {
     return index;
   }
 
-  private int calculateIndex(final String algebraicCoordinate) {
+  private static int calculateIndex(final String algebraicCoordinate) {
     final var column = COLUMN_NAMES.indexOf(algebraicCoordinate.charAt(0));
     final var rank =
-        Board.NUMBER_OF_RANKS * (Board.NUMBER_OF_RANKS - algebraicCoordinate.charAt(1));
+        Board.NUMBER_OF_RANKS
+            * (Board.NUMBER_OF_RANKS - Integer.parseInt("" + algebraicCoordinate.charAt(1)));
 
     return column + rank;
   }
@@ -94,14 +110,14 @@ public final class Coordinate {
    */
   public Optional<Coordinate> to(final int x, final int y) {
     try {
-      final var destination = new Coordinate(index + x + Board.NUMBER_OF_RANKS * y);
+      final var destination = COORDINATES_CACHE.get(index + x + Board.NUMBER_OF_RANKS * y);
 
       if (y == 0 && !sameRankAs(destination)) {
         return Optional.empty();
       }
 
       return Optional.of(destination);
-    } catch (InvalidCoordinateException e) {
+    } catch (IndexOutOfBoundsException e) {
       return Optional.empty();
     }
   }

@@ -40,6 +40,5 @@ class PawnTest {
         .isInstanceOf(Pawn.class)
         .matches(pawn -> pawn.getPosition() == 16)
         .matches(pawn -> !pawn.isFirstMove());
-    ;
   }
 }

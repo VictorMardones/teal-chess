@@ -10,7 +10,7 @@ public class CoordinateTest {
 
   @Test
   void invalidIndex() {
-    assertThatThrownBy(() -> new Coordinate(-1))
+    assertThatThrownBy(() -> Coordinate.of(-1))
         .isInstanceOf(InvalidCoordinateException.class)
         .hasMessageContaining("-1");
   }
@@ -74,45 +74,45 @@ public class CoordinateTest {
 
   @Test
   void up() {
-    assertThat(Coordinate.of("a1").up(2)).isEqualTo(Coordinate.of("c1"));
+    assertThat(Coordinate.of("a1").up(2).isPresent()).isTrue();
+    assertThat(Coordinate.of("a1").up(2).get()).isEqualTo(Coordinate.of("a3"));
   }
 
   @Test
   void upOutside() {
-    assertThatThrownBy(() -> Coordinate.of("a8").up(1))
-        .isInstanceOf(InvalidCoordinateException.class);
+    assertThat(Coordinate.of("c8").up(1).isEmpty()).isTrue();
   }
 
   @Test
   void down() {
-    assertThat(Coordinate.of("e1").down(2)).isEqualTo(Coordinate.of("c1"));
+    assertThat(Coordinate.of("e4").down(2).isPresent()).isTrue();
+    assertThat(Coordinate.of("e4").down(2).get()).isEqualTo(Coordinate.of("e2"));
   }
 
   @Test
   void downOutside() {
-    assertThatThrownBy(() -> Coordinate.of("a1").down(1))
-        .isInstanceOf(InvalidCoordinateException.class);
+    assertThat(Coordinate.of("g1").down(1).isEmpty()).isTrue();
   }
 
   @Test
   void left() {
-    assertThat(Coordinate.of("e5").up(2)).isEqualTo(Coordinate.of("e3"));
+    assertThat(Coordinate.of("e5").left(2).isPresent()).isTrue();
+    assertThat(Coordinate.of("e5").left(2).get()).isEqualTo(Coordinate.of("c5"));
   }
 
   @Test
   void leftOutside() {
-    assertThatThrownBy(() -> Coordinate.of("a1").left(1))
-        .isInstanceOf(InvalidCoordinateException.class);
+    assertThat(Coordinate.of("a6").left(1).isEmpty()).isTrue();
   }
 
   @Test
   void right() {
-    assertThat(Coordinate.of("e5").up(2)).isEqualTo(Coordinate.of("e7"));
+    assertThat(Coordinate.of("b5").up(2).isPresent()).isTrue();
+    assertThat(Coordinate.of("b5").up(2).get()).isEqualTo(Coordinate.of("b7"));
   }
 
   @Test
   void rightOutside() {
-    assertThatThrownBy(() -> Coordinate.of("a8").right(1))
-        .isInstanceOf(InvalidCoordinateException.class);
+    assertThat(Coordinate.of("h3").right(1).isEmpty()).isTrue();
   }
 }

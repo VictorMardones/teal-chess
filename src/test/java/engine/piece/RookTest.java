@@ -3,6 +3,7 @@ package engine.piece;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import engine.board.Coordinate;
 import engine.move.Move;
 import engine.player.Alliance;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +20,7 @@ class RookTest {
 
   @BeforeEach
   void setUp() {
-    rook = new Rook(0, Alliance.BLACK);
+    rook = new Rook(Coordinate.of("a1"), Alliance.BLACK);
   }
 
   @Test
@@ -45,6 +46,5 @@ class RookTest {
         .isInstanceOf(Rook.class)
         .matches(rook -> rook.getPosition() == 5)
         .matches(rook -> !rook.isFirstMove());
-    ;
   }
 }

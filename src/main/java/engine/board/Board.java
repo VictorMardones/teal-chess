@@ -55,7 +55,7 @@ public final class Board {
 
   private List<Tile> createGameBoard(final Builder builder) {
     return IntStream.range(MIN_TILES, MAX_TILES)
-        .mapToObj(Coordinate::new)
+        .mapToObj(Coordinate::of)
         .map(coordinate -> Tile.create(coordinate, builder.boardConfig.get(coordinate)))
         .collect(ImmutableList.toImmutableList());
   }
@@ -78,12 +78,12 @@ public final class Board {
         .withPiece(new Rook(Coordinate.of("h8"), Alliance.BLACK));
 
     IntStream.range(8, 16)
-        .mapToObj(Coordinate::new)
+        .mapToObj(Coordinate::of)
         .map(coordinate -> new Pawn(coordinate, Alliance.BLACK))
         .forEach(builder::withPiece);
 
     IntStream.range(48, 56)
-        .mapToObj(Coordinate::new)
+        .mapToObj(Coordinate::of)
         .map(coordinate -> new Pawn(coordinate, Alliance.WHITE))
         .forEach(builder::withPiece);
 
@@ -139,7 +139,7 @@ public final class Board {
     final var builder = new StringBuilder();
 
     IntStream.range(MIN_TILES, MAX_TILES)
-        .mapToObj(Coordinate::new)
+        .mapToObj(Coordinate::of)
         .map(coordinate -> String.format(getFormat(coordinate), gameBoard.get(coordinate.index())))
         .forEach(builder::append);
 
