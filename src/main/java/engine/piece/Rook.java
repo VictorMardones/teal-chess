@@ -13,28 +13,28 @@ import lombok.ToString;
 @ToString(includeFieldNames = false)
 public class Rook implements SlidingPiece {
 
-  private static final int[][] MOVE_VECTORS = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+    private static final int[][] MOVE_VECTORS = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 
-  private Coordinate position;
-  private Alliance alliance;
-  private boolean firstMove;
+    private Coordinate position;
+    private Alliance alliance;
+    private boolean firstMove;
 
-  public Rook(Coordinate position, Alliance alliance) {
-    this(position, alliance, true);
-  }
+    public Rook(Coordinate position, Alliance alliance) {
+        this(position, alliance, true);
+    }
 
-  @Override
-  public PieceType getPieceType() {
-    return PieceType.ROOK;
-  }
+    @Override
+    public PieceType getPieceType() {
+        return PieceType.ROOK;
+    }
 
-  @Override
-  public int[][] getMoveVectors() {
-    return MOVE_VECTORS;
-  }
+    @Override
+    public int[][] getMoveVectors() {
+        return MOVE_VECTORS;
+    }
 
-  @Override
-  public Rook move(final Move move) {
-    return new Rook(move.getDestination(), alliance, false);
-  }
+    @Override
+    public Rook move(final Move move) {
+        return new Rook(move.getDestination(), alliance, false);
+    }
 }

@@ -6,7 +6,7 @@ import engine.piece.Pawn;
 import engine.piece.Piece;
 
 public class PawnEnPassantMove extends PawnCaptureMove {
-  public PawnEnPassantMove(Board board, Pawn pawn, Coordinate destination, Piece capturedPiece) {
-    super(board, pawn, destination, capturedPiece);
-  }
+    public PawnEnPassantMove(Board board, Pawn pawn, Coordinate destination, Piece capturedPiece) {
+        super(board, pawn, destination, capturedPiece);
+    }
 }

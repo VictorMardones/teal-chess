@@ -8,7 +8,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public class MoveTransition {
 
-  @Getter private final Board board;
-  private final Move move;
-  @Getter private final MoveStatus moveStatus;
+    @Getter
+    private final Board board;
+
+    private final Move move;
+
+    @Getter
+    private final MoveStatus moveStatus;
 }

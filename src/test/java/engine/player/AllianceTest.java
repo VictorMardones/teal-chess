@@ -12,37 +12,41 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class AllianceTest {
 
-  List<Player> players;
-  @Mock Player whitePlayer;
-  @Mock Player blackPlayer;
+    List<Player> players;
 
-  @Test
-  void getWhiteDirection() {
-    assertThat(Alliance.WHITE.getDirection()).isNegative().isEqualTo(-1);
-  }
+    @Mock
+    Player whitePlayer;
 
-  @Test
-  void getBlackDirection() {
-    assertThat(Alliance.BLACK.getDirection()).isPositive().isEqualTo(1);
-  }
+    @Mock
+    Player blackPlayer;
 
-  @Test
-  void chooseWhitePlayer() {
-    when(whitePlayer.getAlliance()).thenReturn(Alliance.WHITE);
-    when(blackPlayer.getAlliance()).thenReturn(Alliance.BLACK);
+    @Test
+    void getWhiteDirection() {
+        assertThat(Alliance.WHITE.getDirection()).isNegative().isEqualTo(-1);
+    }
 
-    players = List.of(blackPlayer, whitePlayer);
+    @Test
+    void getBlackDirection() {
+        assertThat(Alliance.BLACK.getDirection()).isPositive().isEqualTo(1);
+    }
 
-    assertThat(Alliance.WHITE.choosePlayer(players)).isEqualTo(whitePlayer);
-  }
+    @Test
+    void chooseWhitePlayer() {
+        when(whitePlayer.getAlliance()).thenReturn(Alliance.WHITE);
+        when(blackPlayer.getAlliance()).thenReturn(Alliance.BLACK);
 
-  @Test
-  void chooseBlackPlayer() {
-    when(whitePlayer.getAlliance()).thenReturn(Alliance.WHITE);
-    when(blackPlayer.getAlliance()).thenReturn(Alliance.BLACK);
+        players = List.of(blackPlayer, whitePlayer);
 
-    players = List.of(whitePlayer, blackPlayer);
+        assertThat(Alliance.WHITE.choosePlayer(players)).isEqualTo(whitePlayer);
+    }
 
-    assertThat(Alliance.BLACK.choosePlayer(players)).isEqualTo(blackPlayer);
-  }
+    @Test
+    void chooseBlackPlayer() {
+        when(whitePlayer.getAlliance()).thenReturn(Alliance.WHITE);
+        when(blackPlayer.getAlliance()).thenReturn(Alliance.BLACK);
+
+        players = List.of(whitePlayer, blackPlayer);
+
+        assertThat(Alliance.BLACK.choosePlayer(players)).isEqualTo(blackPlayer);
+    }
 }

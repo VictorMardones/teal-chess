@@ -12,14 +12,14 @@ import java.util.Optional;
  */
 public interface JumpingPiece extends Piece {
 
-  int[][] getMoveOffsets();
+    int[][] getMoveOffsets();
 
-  @Override
-  default Collection<Coordinate> calculatePossibleDestinations() {
-    return Arrays.stream(getMoveOffsets())
-        .map(offset -> getPosition().to(offset[0], offset[1]))
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .collect(ImmutableList.toImmutableList());
-  }
+    @Override
+    default Collection<Coordinate> calculatePossibleDestinations() {
+        return Arrays.stream(getMoveOffsets())
+                .map(offset -> getPosition().to(offset[0], offset[1]))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(ImmutableList.toImmutableList());
+    }
 }

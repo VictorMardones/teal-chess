@@ -16,48 +16,57 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class RookTest {
 
-  Rook rook;
-  @Mock Coordinate coordinate;
-  @Mock Move move;
-  @Mock Coordinate destination;
+    Rook rook;
 
-  @BeforeEach
-  void setUp() {
-    rook = new Rook(coordinate, Alliance.BLACK);
-  }
+    @Mock
+    Coordinate coordinate;
 
-  @Test
-  void constructor() {
-    assertThat(new Rook(coordinate, Alliance.BLACK)).matches(Rook::isFirstMove);
-  }
+    @Mock
+    Move move;
 
-  @Test
-  void getPieceType() {
-    assertThat(rook.getPieceType()).isEqualTo(Piece.PieceType.ROOK);
-  }
+    @Mock
+    Coordinate destination;
 
-  @Test
-  void horizontalMove() {
-    assertThat(Arrays.asList(rook.getMoveVectors()).contains(new int[] {0, 1})).isTrue();
-  }
+    @BeforeEach
+    void setUp() {
+        rook = new Rook(coordinate, Alliance.BLACK);
+    }
 
-  @Test
-  void verticalMove() {
-    assertThat(Arrays.asList(rook.getMoveVectors()).contains(new int[] {1, 0})).isTrue();
-  }
+    @Test
+    void constructor() {
+        assertThat(new Rook(coordinate, Alliance.BLACK)).matches(Rook::isFirstMove);
+    }
 
-  @Test
-  void illegalMove() {
-    assertThat(Arrays.asList(rook.getMoveVectors()).contains(new int[] {1, 1})).isFalse();
-  }
+    @Test
+    void getPieceType() {
+        assertThat(rook.getPieceType()).isEqualTo(Piece.PieceType.ROOK);
+    }
 
-  @Test
-  void move() {
-    when(move.getDestination()).thenReturn(destination);
+    @Test
+    void horizontalMove() {
+        assertThat(Arrays.asList(rook.getMoveVectors()).contains(new int[] {0, 1}))
+                .isTrue();
+    }
 
-    assertThat(rook.move(move))
-        .isInstanceOf(Rook.class)
-        .matches(rook -> rook.getPosition().equals(destination))
-        .matches(rook -> !rook.isFirstMove());
-  }
+    @Test
+    void verticalMove() {
+        assertThat(Arrays.asList(rook.getMoveVectors()).contains(new int[] {1, 0}))
+                .isTrue();
+    }
+
+    @Test
+    void illegalMove() {
+        assertThat(Arrays.asList(rook.getMoveVectors()).contains(new int[] {1, 1}))
+                .isFalse();
+    }
+
+    @Test
+    void move() {
+        when(move.getDestination()).thenReturn(destination);
+
+        assertThat(rook.move(move))
+                .isInstanceOf(Rook.class)
+                .matches(rook -> rook.getPosition().equals(destination))
+                .matches(rook -> !rook.isFirstMove());
+    }
 }

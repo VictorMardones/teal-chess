@@ -8,23 +8,22 @@ import java.util.Collection;
 
 /** The player that uses the black pieces. */
 public class BlackPlayer extends Player {
-  public BlackPlayer(
-      Board board, King king, Collection<Move> blackLegalMoves, Collection<Move> whiteLegalMoves) {
-    super(board, king, blackLegalMoves, whiteLegalMoves);
-  }
+    public BlackPlayer(Board board, King king, Collection<Move> blackLegalMoves, Collection<Move> whiteLegalMoves) {
+        super(board, king, blackLegalMoves, whiteLegalMoves);
+    }
 
-  @Override
-  public Collection<Piece> getActivePieces() {
-    return board.getBlackPieces();
-  }
+    @Override
+    public Collection<Piece> getActivePieces() {
+        return board.getBlackPieces();
+    }
 
-  @Override
-  public Alliance getAlliance() {
-    return Alliance.BLACK;
-  }
+    @Override
+    public Alliance getAlliance() {
+        return Alliance.BLACK;
+    }
 
-  @Override
-  public Player getOpponent() {
-    return board.getWhitePlayer();
-  }
+    @Override
+    public Player getOpponent() {
+        return board.getWhitePlayer();
+    }
 }

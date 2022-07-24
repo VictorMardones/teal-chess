@@ -13,28 +13,28 @@ import lombok.ToString;
 @ToString(includeFieldNames = false)
 public class Bishop implements SlidingPiece {
 
-  private static final int[][] MOVE_VECTORS = {{-1, -1}, {-1, 1}, {1, 1}, {1, -1}};
+    private static final int[][] MOVE_VECTORS = {{-1, -1}, {-1, 1}, {1, 1}, {1, -1}};
 
-  private Coordinate position;
-  private Alliance alliance;
-  private boolean firstMove;
+    private Coordinate position;
+    private Alliance alliance;
+    private boolean firstMove;
 
-  public Bishop(Coordinate position, Alliance alliance) {
-    this(position, alliance, true);
-  }
+    public Bishop(Coordinate position, Alliance alliance) {
+        this(position, alliance, true);
+    }
 
-  @Override
-  public PieceType getPieceType() {
-    return PieceType.BISHOP;
-  }
+    @Override
+    public PieceType getPieceType() {
+        return PieceType.BISHOP;
+    }
 
-  @Override
-  public int[][] getMoveVectors() {
-    return MOVE_VECTORS;
-  }
+    @Override
+    public int[][] getMoveVectors() {
+        return MOVE_VECTORS;
+    }
 
-  @Override
-  public Bishop move(final Move move) {
-    return new Bishop(move.getDestination(), alliance, false);
-  }
+    @Override
+    public Bishop move(final Move move) {
+        return new Bishop(move.getDestination(), alliance, false);
+    }
 }

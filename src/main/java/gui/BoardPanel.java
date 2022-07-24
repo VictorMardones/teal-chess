@@ -10,43 +10,38 @@ import javax.swing.*;
 
 class BoardPanel extends JPanel {
 
-  private static final Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
+    private static final Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
 
-  private final transient Table table;
-  private final List<TilePanel> boardTiles;
+    private final transient Table table;
+    private final List<TilePanel> boardTiles;
 
-  BoardPanel(Table table) {
-    super(new GridLayout(8, 8));
-    this.table = table;
+    BoardPanel(Table table) {
+        super(new GridLayout(8, 8));
+        this.table = table;
 
-    boardTiles = new ArrayList<>();
+        boardTiles = new ArrayList<>();
 
-    IntStream.range(Board.MIN_TILES, Board.MAX_TILES)
-        .mapToObj(Coordinate::of)
-        .map(coordinate -> new TilePanel(table, this, coordinate))
-        .forEach(
-            tilePanel -> {
-              boardTiles.add(tilePanel);
-              add(tilePanel);
-            });
+        IntStream.range(Board.MIN_TILES, Board.MAX_TILES)
+                .mapToObj(Coordinate::of)
+                .map(coordinate -> new TilePanel(table, this, coordinate))
+                .forEach(tilePanel -> {
+                    boardTiles.add(tilePanel);
+                    add(tilePanel);
+                });
 
-    setPreferredSize(BOARD_PANEL_DIMENSION);
-    validate();
-  }
+        setPreferredSize(BOARD_PANEL_DIMENSION);
+        validate();
+    }
 
-  public void drawBoard(final Board board) {
-    removeAll();
+    public void drawBoard(final Board board) {
+        removeAll();
 
-    table
-        .getBoardDirection()
-        .traverse(boardTiles)
-        .forEach(
-            tilePanel -> {
-              tilePanel.drawTile(board);
-              add(tilePanel);
-            });
+        table.getBoardDirection().traverse(boardTiles).forEach(tilePanel -> {
+            tilePanel.drawTile(board);
+            add(tilePanel);
+        });
 
-    validate();
-    repaint();
-  }
+        validate();
+        repaint();
+    }
 }

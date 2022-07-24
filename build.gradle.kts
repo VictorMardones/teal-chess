@@ -63,7 +63,7 @@ tasks.sonarqube {
 
 spotless {
     java {
-        googleJavaFormat()
+        palantirJavaFormat()
     }
 
     format("misc") {

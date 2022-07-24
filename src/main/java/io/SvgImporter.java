@@ -14,42 +14,41 @@ import org.apache.batik.transcoder.image.PNGTranscoder;
 @Slf4j
 public final class SvgImporter {
 
-  private SvgImporter() {
-    throw new IllegalStateException("You cannot instantiate me!");
-  }
-
-  public static Optional<BufferedImage> importSvg(
-      final File file, final int width, final int height) {
-
-    if (!file.exists()) {
-      log.error("The file does not exist!");
-      return Optional.empty();
+    private SvgImporter() {
+        throw new IllegalStateException("You cannot instantiate me!");
     }
 
-    var transcoder = new PNGTranscoder();
+    public static Optional<BufferedImage> importSvg(final File file, final int width, final int height) {
 
-    transcoder.addTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH, (float) width);
-    transcoder.addTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT, (float) height);
+        if (!file.exists()) {
+            log.error("The file does not exist!");
+            return Optional.empty();
+        }
 
-    try (var inputStream = new FileInputStream(file)) {
+        var transcoder = new PNGTranscoder();
 
-      var input = new TranscoderInput(inputStream);
+        transcoder.addTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH, (float) width);
+        transcoder.addTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT, (float) height);
 
-      var outputStream = new ByteArrayOutputStream();
-      var output = new TranscoderOutput(outputStream);
+        try (var inputStream = new FileInputStream(file)) {
 
-      transcoder.transcode(input, output);
+            var input = new TranscoderInput(inputStream);
 
-      outputStream.flush();
-      outputStream.close();
+            var outputStream = new ByteArrayOutputStream();
+            var output = new TranscoderOutput(outputStream);
 
-      var imageData = outputStream.toByteArray();
-      return Optional.ofNullable(ImageIO.read(new ByteArrayInputStream(imageData)));
+            transcoder.transcode(input, output);
 
-    } catch (IOException | TranscoderException e) {
-      log.error("Failed to load images!", e);
+            outputStream.flush();
+            outputStream.close();
+
+            var imageData = outputStream.toByteArray();
+            return Optional.ofNullable(ImageIO.read(new ByteArrayInputStream(imageData)));
+
+        } catch (IOException | TranscoderException e) {
+            log.error("Failed to load images!", e);
+        }
+
+        return Optional.empty();
     }
-
-    return Optional.empty();
-  }
 }

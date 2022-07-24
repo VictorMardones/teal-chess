@@ -16,53 +16,63 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class QueenTest {
 
-  Queen queen;
-  @Mock Coordinate coordinate;
-  @Mock Move move;
-  @Mock Coordinate destination;
+    Queen queen;
 
-  @BeforeEach
-  void setUp() {
-    queen = new Queen(coordinate, Alliance.BLACK);
-  }
+    @Mock
+    Coordinate coordinate;
 
-  @Test
-  void constructor() {
-    assertThat(new Queen(coordinate, Alliance.BLACK)).matches(Queen::isFirstMove);
-  }
+    @Mock
+    Move move;
 
-  @Test
-  void getPieceType() {
-    assertThat(queen.getPieceType()).isEqualTo(Piece.PieceType.QUEEN);
-  }
+    @Mock
+    Coordinate destination;
 
-  @Test
-  void diagonalMove() {
-    assertThat(Arrays.asList(queen.getMoveVectors()).contains(new int[] {1, 1})).isTrue();
-  }
+    @BeforeEach
+    void setUp() {
+        queen = new Queen(coordinate, Alliance.BLACK);
+    }
 
-  @Test
-  void horizontalMove() {
-    assertThat(Arrays.asList(queen.getMoveVectors()).contains(new int[] {0, 1})).isTrue();
-  }
+    @Test
+    void constructor() {
+        assertThat(new Queen(coordinate, Alliance.BLACK)).matches(Queen::isFirstMove);
+    }
 
-  @Test
-  void verticalMove() {
-    assertThat(Arrays.asList(queen.getMoveVectors()).contains(new int[] {1, 0})).isTrue();
-  }
+    @Test
+    void getPieceType() {
+        assertThat(queen.getPieceType()).isEqualTo(Piece.PieceType.QUEEN);
+    }
 
-  @Test
-  void illegalMove() {
-    assertThat(Arrays.asList(queen.getMoveVectors()).contains(new int[] {1, 2})).isFalse();
-  }
+    @Test
+    void diagonalMove() {
+        assertThat(Arrays.asList(queen.getMoveVectors()).contains(new int[] {1, 1}))
+                .isTrue();
+    }
 
-  @Test
-  void move() {
-    when(move.getDestination()).thenReturn(destination);
+    @Test
+    void horizontalMove() {
+        assertThat(Arrays.asList(queen.getMoveVectors()).contains(new int[] {0, 1}))
+                .isTrue();
+    }
 
-    assertThat(queen.move(move))
-        .isInstanceOf(Queen.class)
-        .matches(queen -> queen.getPosition().equals(destination))
-        .matches(queen -> !queen.isFirstMove());
-  }
+    @Test
+    void verticalMove() {
+        assertThat(Arrays.asList(queen.getMoveVectors()).contains(new int[] {1, 0}))
+                .isTrue();
+    }
+
+    @Test
+    void illegalMove() {
+        assertThat(Arrays.asList(queen.getMoveVectors()).contains(new int[] {1, 2}))
+                .isFalse();
+    }
+
+    @Test
+    void move() {
+        when(move.getDestination()).thenReturn(destination);
+
+        assertThat(queen.move(move))
+                .isInstanceOf(Queen.class)
+                .matches(queen -> queen.getPosition().equals(destination))
+                .matches(queen -> !queen.isFirstMove());
+    }
 }

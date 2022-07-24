@@ -15,33 +15,39 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class PawnTest {
 
-  Pawn pawn;
-  @Mock Coordinate coordinate;
-  @Mock Move move;
-  @Mock Coordinate destination;
+    Pawn pawn;
 
-  @BeforeEach
-  void setUp() {
-    pawn = new Pawn(coordinate, Alliance.WHITE);
-  }
+    @Mock
+    Coordinate coordinate;
 
-  @Test
-  void constructor() {
-    assertThat(new Pawn(coordinate, Alliance.BLACK)).matches(Pawn::isFirstMove);
-  }
+    @Mock
+    Move move;
 
-  @Test
-  void getPieceType() {
-    assertThat(pawn.getPieceType()).isEqualTo(Piece.PieceType.PAWN);
-  }
+    @Mock
+    Coordinate destination;
 
-  @Test
-  void move() {
-    when(move.getDestination()).thenReturn(destination);
+    @BeforeEach
+    void setUp() {
+        pawn = new Pawn(coordinate, Alliance.WHITE);
+    }
 
-    assertThat(pawn.move(move))
-        .isInstanceOf(Pawn.class)
-        .matches(pawn -> pawn.getPosition().equals(destination))
-        .matches(pawn -> !pawn.isFirstMove());
-  }
+    @Test
+    void constructor() {
+        assertThat(new Pawn(coordinate, Alliance.BLACK)).matches(Pawn::isFirstMove);
+    }
+
+    @Test
+    void getPieceType() {
+        assertThat(pawn.getPieceType()).isEqualTo(Piece.PieceType.PAWN);
+    }
+
+    @Test
+    void move() {
+        when(move.getDestination()).thenReturn(destination);
+
+        assertThat(pawn.move(move))
+                .isInstanceOf(Pawn.class)
+                .matches(pawn -> pawn.getPosition().equals(destination))
+                .matches(pawn -> !pawn.isFirstMove());
+    }
 }

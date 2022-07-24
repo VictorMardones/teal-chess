@@ -17,30 +17,28 @@ import lombok.ToString;
 @ToString(includeFieldNames = false)
 public class King implements JumpingPiece {
 
-  private static final int[][] MOVE_OFFSETS = {
-    {-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}
-  };
+    private static final int[][] MOVE_OFFSETS = {{-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}};
 
-  private Coordinate position;
-  private Alliance alliance;
-  private boolean firstMove;
+    private Coordinate position;
+    private Alliance alliance;
+    private boolean firstMove;
 
-  public King(Coordinate position, Alliance alliance) {
-    this(position, alliance, true);
-  }
+    public King(Coordinate position, Alliance alliance) {
+        this(position, alliance, true);
+    }
 
-  @Override
-  public PieceType getPieceType() {
-    return PieceType.KING;
-  }
+    @Override
+    public PieceType getPieceType() {
+        return PieceType.KING;
+    }
 
-  @Override
-  public int[][] getMoveOffsets() {
-    return MOVE_OFFSETS;
-  }
+    @Override
+    public int[][] getMoveOffsets() {
+        return MOVE_OFFSETS;
+    }
 
-  @Override
-  public King move(final Move move) {
-    return new King(move.getDestination(), alliance, false);
-  }
+    @Override
+    public King move(final Move move) {
+        return new King(move.getDestination(), alliance, false);
+    }
 }

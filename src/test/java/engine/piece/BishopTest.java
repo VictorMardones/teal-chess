@@ -16,43 +16,51 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class BishopTest {
 
-  Bishop bishop;
-  @Mock Coordinate coordinate;
-  @Mock Move move;
-  @Mock Coordinate destination;
+    Bishop bishop;
 
-  @BeforeEach
-  void setUp() {
-    bishop = new Bishop(coordinate, Alliance.BLACK);
-  }
+    @Mock
+    Coordinate coordinate;
 
-  @Test
-  void constructor() {
-    assertThat(new Bishop(coordinate, Alliance.BLACK)).matches(Bishop::isFirstMove);
-  }
+    @Mock
+    Move move;
 
-  @Test
-  void getPieceType() {
-    assertThat(bishop.getPieceType()).isEqualTo(Piece.PieceType.BISHOP);
-  }
+    @Mock
+    Coordinate destination;
 
-  @Test
-  void diagonalMove() {
-    assertThat(Arrays.asList(bishop.getMoveVectors()).contains(new int[] {1, 1})).isTrue();
-  }
+    @BeforeEach
+    void setUp() {
+        bishop = new Bishop(coordinate, Alliance.BLACK);
+    }
 
-  @Test
-  void illegalMove() {
-    assertThat(Arrays.asList(bishop.getMoveVectors()).contains(new int[] {1, 0})).isFalse();
-  }
+    @Test
+    void constructor() {
+        assertThat(new Bishop(coordinate, Alliance.BLACK)).matches(Bishop::isFirstMove);
+    }
 
-  @Test
-  void move() {
-    when(move.getDestination()).thenReturn(destination);
+    @Test
+    void getPieceType() {
+        assertThat(bishop.getPieceType()).isEqualTo(Piece.PieceType.BISHOP);
+    }
 
-    assertThat(bishop.move(move))
-        .isInstanceOf(Bishop.class)
-        .matches(bishop -> bishop.getPosition().equals(destination))
-        .matches(bishop -> !bishop.isFirstMove());
-  }
+    @Test
+    void diagonalMove() {
+        assertThat(Arrays.asList(bishop.getMoveVectors()).contains(new int[] {1, 1}))
+                .isTrue();
+    }
+
+    @Test
+    void illegalMove() {
+        assertThat(Arrays.asList(bishop.getMoveVectors()).contains(new int[] {1, 0}))
+                .isFalse();
+    }
+
+    @Test
+    void move() {
+        when(move.getDestination()).thenReturn(destination);
+
+        assertThat(bishop.move(move))
+                .isInstanceOf(Bishop.class)
+                .matches(bishop -> bishop.getPosition().equals(destination))
+                .matches(bishop -> !bishop.isFirstMove());
+    }
 }

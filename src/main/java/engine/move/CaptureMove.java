@@ -9,9 +9,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class CaptureMove extends Move {
 
-  public CaptureMove(Board board, Piece piece, Coordinate destination, Piece capturedPiece) {
-    super(board, piece, destination);
+    public CaptureMove(Board board, Piece piece, Coordinate destination, Piece capturedPiece) {
+        super(board, piece, destination);
 
-    this.capturedPiece = capturedPiece;
-  }
+        this.capturedPiece = capturedPiece;
+    }
 }

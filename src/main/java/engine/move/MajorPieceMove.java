@@ -6,12 +6,12 @@ import engine.piece.Piece;
 
 /** A move where a non-pawn piece gets to another tile. */
 public class MajorPieceMove extends Move {
-  public MajorPieceMove(Board board, Piece piece, Coordinate destination) {
-    super(board, piece, destination);
-  }
+    public MajorPieceMove(Board board, Piece piece, Coordinate destination) {
+        super(board, piece, destination);
+    }
 
-  @Override
-  public String toString() {
-    return piece.getPieceType().toString() + getDestination();
-  }
+    @Override
+    public String toString() {
+        return piece.getPieceType().toString() + getDestination();
+    }
 }
