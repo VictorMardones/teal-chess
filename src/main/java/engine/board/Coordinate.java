@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
-public class Coordinate {
+public final class Coordinate {
 
     private static final String COLUMN_NAMES = "abcdefgh";
     private static final Pattern ALGEBRAIC_PATTERN = Pattern.compile("^[a-h][1-8]$");
@@ -99,15 +99,15 @@ public class Coordinate {
     /**
      * Gets the coordinate at a relative position.
      *
-     * @param x X movement, positive goes down
-     * @param y Y movement, positive goes right
+     * @param x X axis movement, positive goes right
+     * @param y Y axis movement, positive goes up
      * @return Coordinate at the relative position, if it is inside the board
      */
     public Optional<Coordinate> to(final int x, final int y) {
         try {
-            final var destination = COORDINATES_CACHE.get(index + x + Board.NUMBER_OF_RANKS * y);
+            final var destination = COORDINATES_CACHE.get(index + x - y * Board.NUMBER_OF_RANKS);
 
-            if (y == 0 && !sameRankAs(destination)) {
+            if (Math.abs(getRank() - destination.getRank()) > Math.abs(y)) {
                 return Optional.empty();
             }
 
@@ -118,11 +118,11 @@ public class Coordinate {
     }
 
     public Optional<Coordinate> up(final int spaces) {
-        return down(-spaces);
+        return to(0, spaces);
     }
 
     public Optional<Coordinate> down(final int spaces) {
-        return to(0, spaces);
+        return up(-spaces);
     }
 
     public Optional<Coordinate> left(final int spaces) {

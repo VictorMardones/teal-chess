@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString(includeFieldNames = false)
 public class Knight implements JumpingPiece {
 
-    private static final int[][] MOVE_OFFSETS = {{-1, -2}, {-2, -1}, {-2, 1}, {-1, 2}, {1, 2}, {2, 1}, {2, -1}, {1, -2}
+    private static final int[][] MOVE_OFFSETS = {{-1, 2}, {1, 2}, {-2, 1}, {2, 1}, {-2, -1}, {2, -1}, {-1, -2}, {1, -2}
     };
 
     private Coordinate position;

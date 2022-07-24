@@ -73,6 +73,17 @@ public class CoordinateTest {
     }
 
     @Test
+    void to() {
+        assertThat(Coordinate.of("b2").to(1, 1).isPresent()).isTrue();
+        assertThat(Coordinate.of("b2").to(1, 1).get()).isEqualTo(Coordinate.of("c3"));
+    }
+
+    @Test
+    void toOutside() {
+        assertThat(Coordinate.of("b1").to(-2, 1).isPresent()).isFalse();
+    }
+
+    @Test
     void up() {
         assertThat(Coordinate.of("a1").up(2).isPresent()).isTrue();
         assertThat(Coordinate.of("a1").up(2).get()).isEqualTo(Coordinate.of("a3"));

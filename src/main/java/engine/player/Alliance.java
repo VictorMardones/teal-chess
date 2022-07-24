@@ -9,9 +9,9 @@ import lombok.Getter;
 @Getter
 public enum Alliance {
     /** The white side, on the bottom of the board. */
-    WHITE(-1),
+    WHITE(1),
     /** The black side, on the top of the board. */
-    BLACK(1);
+    BLACK(-1);
 
     private final int direction;
 

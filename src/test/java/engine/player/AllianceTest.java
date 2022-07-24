@@ -22,12 +22,12 @@ class AllianceTest {
 
     @Test
     void getWhiteDirection() {
-        assertThat(Alliance.WHITE.getDirection()).isNegative().isEqualTo(-1);
+        assertThat(Alliance.WHITE.getDirection()).isNegative().isEqualTo(1);
     }
 
     @Test
     void getBlackDirection() {
-        assertThat(Alliance.BLACK.getDirection()).isPositive().isEqualTo(1);
+        assertThat(Alliance.BLACK.getDirection()).isPositive().isEqualTo(-1);
     }
 
     @Test

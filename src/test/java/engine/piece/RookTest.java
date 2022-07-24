@@ -18,14 +18,11 @@ class RookTest {
 
     Rook rook;
 
-    @Mock
-    Coordinate coordinate;
+    Coordinate coordinate = Coordinate.of("c1");
+    Coordinate destination = Coordinate.of("d1");
 
     @Mock
     Move move;
-
-    @Mock
-    Coordinate destination;
 
     @BeforeEach
     void setUp() {

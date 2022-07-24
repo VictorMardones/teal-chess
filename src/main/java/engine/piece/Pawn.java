@@ -1,6 +1,5 @@
 package engine.piece;
 
-import com.google.common.collect.ImmutableList;
 import engine.board.Board;
 import engine.board.Coordinate;
 import engine.board.Tile;
@@ -10,11 +9,11 @@ import engine.move.PawnJump;
 import engine.move.PawnMove;
 import engine.player.Alliance;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The pawn piece. It only moves forward (depending on the side) and can eat other pieces
@@ -24,9 +23,17 @@ import lombok.ToString;
 @Getter
 @AllArgsConstructor
 @ToString(includeFieldNames = false)
-public class Pawn implements Piece {
+@Slf4j
+public class Pawn implements JumpingPiece {
 
-    private static final int[] MOVE_OFFSETS = {7, 8, 9, 16};
+    private static final int[][] WHITE_OFFSETS = {{-1, 1}, {0, 1}, {1, 1}, {0, 2}};
+    private static final int[][] BLACK_OFFSETS = calculateBlackOffsets();
+
+    private static int[][] calculateBlackOffsets() {
+        return Arrays.stream(WHITE_OFFSETS)
+                .map(offset -> new int[] {offset[0], Alliance.BLACK.getDirection() * offset[1]})
+                .toArray(int[][]::new);
+    }
 
     private Coordinate position;
     private Alliance alliance;
@@ -34,6 +41,8 @@ public class Pawn implements Piece {
 
     public Pawn(Coordinate position, Alliance alliance) {
         this(position, alliance, true);
+
+        log.debug("Black offsets: " + Arrays.deepToString(BLACK_OFFSETS));
     }
 
     @Override
@@ -42,16 +51,11 @@ public class Pawn implements Piece {
     }
 
     @Override
-    public Collection<Coordinate> calculatePossibleDestinations() {
-        return Arrays.stream(MOVE_OFFSETS)
-                .mapToObj(this::getDestination)
-                .map(Coordinate::of)
-                .filter(destination -> Math.abs(position.getColumnIndex() - destination.getColumnIndex()) <= 1)
-                .collect(ImmutableList.toImmutableList());
-    }
-
-    private int getDestination(int offset) {
-        return position.index() + getAlliance().getDirection() * offset;
+    public int[][] getMoveOffsets() {
+        return switch (getAlliance()) {
+            case BLACK -> WHITE_OFFSETS;
+            case WHITE -> BLACK_OFFSETS;
+        };
     }
 
     @Override
@@ -61,7 +65,7 @@ public class Pawn implements Piece {
         }
 
         if (isFirstMovePossible(board)) {
-            return createFirstMove(board, destination.getCoordinate());
+            return createJumpMove(board, destination.getCoordinate());
         }
 
         return createForwardMove(board, destination.getCoordinate());
@@ -81,7 +85,7 @@ public class Pawn implements Piece {
         return Optional.empty();
     }
 
-    private Optional<Move> createFirstMove(Board board, Coordinate destination) {
+    private Optional<Move> createJumpMove(Board board, Coordinate destination) {
         return Optional.of(new PawnJump(board, this, destination));
     }
 

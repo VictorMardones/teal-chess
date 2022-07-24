@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString(includeFieldNames = false)
 public class Queen implements SlidingPiece {
 
-    private static final int[][] MOVE_VECTORS = {{-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}};
+    private static final int[][] MOVE_VECTORS = {{-1, 1}, {0, 1}, {1, 1}, {-1, 0}, {1, 0}, {-1, -1}, {0, -1}, {1, -1}};
 
     private Coordinate position;
     private Alliance alliance;

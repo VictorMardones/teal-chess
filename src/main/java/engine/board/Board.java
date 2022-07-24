@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 /** The game board, made of 8x8 tiles. */
 @Slf4j
 @ToString
-public class Board {
+public final class Board {
 
     public static final int MIN_TILES = 0;
     public static final int MAX_TILES = 64;

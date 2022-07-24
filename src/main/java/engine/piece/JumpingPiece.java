@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 /**
- * A piece that can move to a specific set of positions. It doesn't matter if there are another
+ * A piece that can move to a specific set of positions. It usually doesn't matter if there are other
  * pieces in the way.
  */
 public interface JumpingPiece extends Piece {

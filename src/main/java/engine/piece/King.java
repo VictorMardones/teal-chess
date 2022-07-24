@@ -17,7 +17,7 @@ import lombok.ToString;
 @ToString(includeFieldNames = false)
 public class King implements JumpingPiece {
 
-    private static final int[][] MOVE_OFFSETS = {{-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}};
+    private static final int[][] MOVE_OFFSETS = {{-1, 1}, {0, 1}, {1, 1}, {-1, 0}, {1, 0}, {-1, -1}, {0, -1}, {1, -1}};
 
     private Coordinate position;
     private Alliance alliance;
