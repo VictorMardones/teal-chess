@@ -24,17 +24,11 @@ class KingTest {
 
   @Test
   void isInMoveRange() {
-    when(boardComparator.getColumn(0)).thenReturn(0);
-    when(boardComparator.getColumn(1)).thenReturn(1);
-
     assertThat(king.isInMoveRange(1)).isTrue();
   }
 
   @Test
   void isNotInMoveRange() {
-    when(boardComparator.getColumn(0)).thenReturn(0);
-    when(boardComparator.getColumn(4)).thenReturn(4);
-
     assertThat(king.isInMoveRange(4)).isFalse();
   }
 

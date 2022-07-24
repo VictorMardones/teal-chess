@@ -1,22 +1,19 @@
 package engine.piece;
 
-import com.google.common.collect.ImmutableList;
-import engine.board.Board;
 import engine.board.Coordinate;
 import engine.move.Move;
 import engine.player.Alliance;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 /** The knight piece. It moves in an L shape. */
 @AllArgsConstructor
 @Getter
-public final class Knight implements Piece {
+public final class Knight implements JumpingPiece {
 
-  private static final int[] MOVE_OFFSETS = {-17, -15, -10, -6, 6, 10, 15, 17};
+  private static final int[][] MOVE_OFFSETS = {
+    {-1, -2}, {-2, -1}, {-2, 1}, {-1, 2}, {1, 2}, {2, 1}, {2, -1}, {1, -2}
+  };
 
   private Coordinate position;
   private Alliance alliance;
@@ -27,15 +24,6 @@ public final class Knight implements Piece {
   }
 
   @Override
-  public Collection<Coordinate> calculatePossibleDestinations() {
-    return Arrays.stream(MOVE_OFFSETS)
-        .map(offset -> getPosition().index() + offset)
-        .mapToObj(Coordinate::new)
-        .filter(destination -> !position.sameColorAs(destination))
-        .collect(ImmutableList.toImmutableList());
-  }
-
-  @Override
   public PieceType getPieceType() {
     return PieceType.KNIGHT;
   }
@@ -43,5 +31,10 @@ public final class Knight implements Piece {
   @Override
   public Knight move(final Move move) {
     return new Knight(move.getDestination(), alliance, false);
+  }
+
+  @Override
+  public int[][] getMoveOffsets() {
+    return MOVE_OFFSETS;
   }
 }

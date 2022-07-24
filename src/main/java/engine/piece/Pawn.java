@@ -4,7 +4,10 @@ import com.google.common.collect.ImmutableList;
 import engine.board.Board;
 import engine.board.Coordinate;
 import engine.board.Tile;
-import engine.move.*;
+import engine.move.Move;
+import engine.move.PawnCaptureMove;
+import engine.move.PawnJump;
+import engine.move.PawnMove;
 import engine.player.Alliance;
 import java.util.Arrays;
 import java.util.Collection;
@@ -39,10 +42,11 @@ public final class Pawn implements Piece {
   @Override
   public Collection<Coordinate> calculatePossibleDestinations() {
     return Arrays.stream(MOVE_OFFSETS)
-            .mapToObj(this::getDestination)
-            .map(Coordinate::new)
-            .filter(destination ->  Math.abs(position.getColumnIndex() - destination.getColumnIndex()) <= 1)
-            .collect(ImmutableList.toImmutableList());
+        .mapToObj(this::getDestination)
+        .map(Coordinate::new)
+        .filter(
+            destination -> Math.abs(position.getColumnIndex() - destination.getColumnIndex()) <= 1)
+        .collect(ImmutableList.toImmutableList());
   }
 
   private int getDestination(int offset) {
@@ -51,11 +55,11 @@ public final class Pawn implements Piece {
 
   @Override
   public Optional<Move> createMove(Tile destination, Board board) {
-    if(isCaptureMove(destination)) {
+    if (isCaptureMove(destination)) {
       return createCaptureMove(board, destination.getCoordinate());
     }
 
-    if(isFirstMovePossible(board)) {
+    if (isFirstMovePossible(board)) {
       return createFirstMove(board, destination.getCoordinate());
     }
 
@@ -90,14 +94,8 @@ public final class Pawn implements Piece {
     }
 
     return isFirstMove()
-            && board
-            .getTile(forward.get())
-            .getPiece()
-            .isEmpty()
-            && board
-            .getTile(destination.get())
-            .getPiece()
-            .isEmpty();
+        && board.getTile(forward.get()).getPiece().isEmpty()
+        && board.getTile(destination.get()).getPiece().isEmpty();
   }
 
   private Optional<Move> createForwardMove(Board board, Coordinate destination) {

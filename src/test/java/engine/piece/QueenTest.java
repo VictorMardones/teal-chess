@@ -24,22 +24,16 @@ class QueenTest {
 
   @Test
   void diagonalMove() {
-    when(boardComparator.sameColor(0, 63)).thenReturn(true);
-
     assertThat(queen.isInMoveRange(63)).isTrue();
   }
 
   @Test
   void horizontalMove() {
-    when(boardComparator.sameRank(0, 7)).thenReturn(true);
-
     assertThat(queen.isInMoveRange(7)).isTrue();
   }
 
   @Test
   void verticalMove() {
-    when(boardComparator.sameColumn(0, 56)).thenReturn(true);
-
     assertThat(queen.isInMoveRange(56)).isTrue();
   }
 

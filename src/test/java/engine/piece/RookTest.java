@@ -24,15 +24,11 @@ class RookTest {
 
   @Test
   void horizontalMove() {
-    when(boardComparator.sameRank(0, 7)).thenReturn(true);
-
     assertThat(rook.isInMoveRange(7)).isTrue();
   }
 
   @Test
   void verticalMove() {
-    when(boardComparator.sameColumn(0, 56)).thenReturn(true);
-
     assertThat(rook.isInMoveRange(56)).isTrue();
   }
 

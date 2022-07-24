@@ -73,7 +73,7 @@ public abstract class Tile {
 
     @Override
     public Optional<Piece> getPiece() {
-      return Optional.ofNullable(piece);
+      return Optional.of(piece);
     }
 
     @Override

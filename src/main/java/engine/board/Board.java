@@ -104,6 +104,16 @@ public final class Board {
     return gameBoard.get(coordinate.index());
   }
 
+  public boolean contains(Coordinate coordinate, Piece.PieceType pieceType) {
+    var piece = getTile(coordinate).getPiece();
+
+    return piece.isPresent() && piece.get().getPieceType() == pieceType;
+  }
+
+  public boolean containsNothing(Coordinate coordinate) {
+    return getTile(coordinate).getPiece().isEmpty();
+  }
+
   private Collection<Piece> calculateActivePieces(
       final List<Tile> gameBoard, final Alliance alliance) {
     return gameBoard.stream()

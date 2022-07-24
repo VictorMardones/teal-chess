@@ -31,17 +31,22 @@ public interface Piece {
    * @return List of possible moves.
    */
   default Collection<Move> calculateLegalMoves(final Board board) {
-    return calculatePossibleDestinations()
-            .stream()
-            .map(board::getTile)
-            .filter(this::isAccessible)
-            .map(tile -> createMove(tile, board))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .collect(ImmutableList.toImmutableList());
+    return calculatePossibleDestinations().stream()
+        .map(board::getTile)
+        .filter(this::isAccessible)
+        .map(tile -> createMove(tile, board))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .collect(ImmutableList.toImmutableList());
   }
 
   Collection<Coordinate> calculatePossibleDestinations();
+
+  default boolean isInMoveRange(final Board board, Coordinate coordinate) {
+    return calculateLegalMoves(board).stream()
+        .map(Move::getDestination)
+        .anyMatch(destination -> destination == coordinate);
+  }
 
   default boolean isWhite() {
     return getAlliance() == Alliance.WHITE;

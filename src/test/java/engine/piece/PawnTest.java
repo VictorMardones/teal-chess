@@ -24,17 +24,11 @@ class PawnTest {
 
   @Test
   void isInMoveRange() {
-    when(boardComparator.getColumn(0)).thenReturn(0);
-    when(boardComparator.getColumn(8)).thenReturn(0);
-
     assertThat(pawn.isInMoveRange(8)).isTrue();
   }
 
   @Test
   void isNotInMoveRange() {
-    when(boardComparator.getColumn(0)).thenReturn(0);
-    when(boardComparator.getColumn(10)).thenReturn(2);
-
     assertThat(pawn.isInMoveRange(10)).isFalse();
   }
 

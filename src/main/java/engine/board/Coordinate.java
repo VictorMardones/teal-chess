@@ -1,7 +1,6 @@
 package engine.board;
 
 import engine.player.Alliance;
-
 import java.util.Optional;
 import java.util.regex.Pattern;
 import lombok.EqualsAndHashCode;
@@ -86,16 +85,33 @@ public final class Coordinate {
     return getColor() == other.getColor();
   }
 
+  /**
+   * Gets the coordinate at a relative position.
+   *
+   * @param x X movement, positive goes down
+   * @param y Y movement, positive goes right
+   * @return Coordinate at the relative position, if it is inside the board
+   */
+  public Optional<Coordinate> to(final int x, final int y) {
+    try {
+      final var destination = new Coordinate(index + x + Board.NUMBER_OF_RANKS * y);
+
+      if (y == 0 && !sameRankAs(destination)) {
+        return Optional.empty();
+      }
+
+      return Optional.of(destination);
+    } catch (InvalidCoordinateException e) {
+      return Optional.empty();
+    }
+  }
+
   public Optional<Coordinate> up(final int spaces) {
     return down(-spaces);
   }
 
   public Optional<Coordinate> down(final int spaces) {
-    try {
-      return Optional.of(new Coordinate(index + Board.NUMBER_OF_RANKS * spaces));
-    } catch (InvalidCoordinateException e) {
-      return Optional.empty();
-    }
+    return to(0, spaces);
   }
 
   public Optional<Coordinate> left(final int spaces) {
@@ -103,12 +119,6 @@ public final class Coordinate {
   }
 
   public Optional<Coordinate> right(final int spaces) {
-    final var destination = new Coordinate(index + spaces);
-
-    if (!sameRankAs(destination)) {
-      return Optional.empty();
-    }
-
-    return Optional.of(destination);
+    return to(spaces, 0);
   }
 }

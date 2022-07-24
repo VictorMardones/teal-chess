@@ -29,8 +29,6 @@ class KnightTest {
 
   @Test
   void isNotInMoveRange() {
-    when(boardComparator.sameColor(0, 8)).thenReturn(true);
-
     assertThat(knight.isInMoveRange(8)).isFalse();
   }
 
