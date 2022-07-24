@@ -105,9 +105,10 @@ public final class Coordinate {
      */
     public Optional<Coordinate> to(final int x, final int y) {
         try {
-            final var destination = COORDINATES_CACHE.get(index + x - y * Board.NUMBER_OF_RANKS);
+            final var destination = COORDINATES_CACHE.get(index + clampHorizontal(x) - y * Board.NUMBER_OF_RANKS);
 
-            if (Math.abs(getRank() - destination.getRank()) > Math.abs(y)) {
+            if (x < 0 && destination.getColumnIndex() > getColumnIndex()
+                    || x > 0 && destination.getColumnIndex() < getColumnIndex()) {
                 return Optional.empty();
             }
 
@@ -115,6 +116,10 @@ public final class Coordinate {
         } catch (IndexOutOfBoundsException e) {
             return Optional.empty();
         }
+    }
+
+    private int clampHorizontal(final int x) {
+        return x % Board.NUMBER_OF_RANKS;
     }
 
     public Optional<Coordinate> up(final int spaces) {

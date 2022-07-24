@@ -1,5 +1,6 @@
 package engine.piece;
 
+import com.google.common.collect.ImmutableList;
 import engine.board.Board;
 import engine.board.Coordinate;
 import engine.board.Tile;
@@ -8,8 +9,9 @@ import engine.move.PawnCaptureMove;
 import engine.move.PawnJump;
 import engine.move.PawnMove;
 import engine.player.Alliance;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -26,14 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Pawn implements JumpingPiece {
 
-    private static final int[][] WHITE_OFFSETS = {{-1, 1}, {0, 1}, {1, 1}, {0, 2}};
-    private static final int[][] BLACK_OFFSETS = calculateBlackOffsets();
-
-    private static int[][] calculateBlackOffsets() {
-        return Arrays.stream(WHITE_OFFSETS)
-                .map(offset -> new int[] {offset[0], Alliance.BLACK.getDirection() * offset[1]})
-                .toArray(int[][]::new);
-    }
+    private static final Collection<int[]> WHITE_OFFSETS = calculateWhiteOffsets();
+    private static final Collection<int[]> BLACK_OFFSETS = calculateBlackOffsets();
 
     private Coordinate position;
     private Alliance alliance;
@@ -41,21 +37,11 @@ public class Pawn implements JumpingPiece {
 
     public Pawn(Coordinate position, Alliance alliance) {
         this(position, alliance, true);
-
-        log.debug("Black offsets: " + Arrays.deepToString(BLACK_OFFSETS));
     }
 
     @Override
     public PieceType getPieceType() {
         return PieceType.PAWN;
-    }
-
-    @Override
-    public int[][] getMoveOffsets() {
-        return switch (getAlliance()) {
-            case BLACK -> WHITE_OFFSETS;
-            case WHITE -> BLACK_OFFSETS;
-        };
     }
 
     @Override
@@ -115,5 +101,25 @@ public class Pawn implements JumpingPiece {
     @Override
     public Pawn move(final Move move) {
         return new Pawn(move.getDestination(), alliance, false);
+    }
+
+    @Override
+    public Collection<int[]> getMoveOffsets() {
+        return switch (getAlliance()) {
+            case BLACK -> BLACK_OFFSETS;
+            case WHITE -> WHITE_OFFSETS;
+        };
+    }
+
+    private static Collection<int[]> calculateWhiteOffsets() {
+        return Stream.of(Vector.Jump.UP, Vector.Vertical.UP, Vector.Diagonal.UP_LEFT, Vector.Diagonal.UP_RIGHT)
+                .map(Vector::getVector)
+                .collect(ImmutableList.toImmutableList());
+    }
+
+    private static Collection<int[]> calculateBlackOffsets() {
+        return Stream.of(Vector.Jump.DOWN, Vector.Vertical.DOWN, Vector.Diagonal.DOWN_LEFT, Vector.Diagonal.DOWN_RIGHT)
+                .map(Vector::getVector)
+                .collect(ImmutableList.toImmutableList());
     }
 }

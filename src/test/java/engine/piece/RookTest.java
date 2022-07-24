@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 import engine.board.Coordinate;
 import engine.move.Move;
 import engine.player.Alliance;
-import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,19 +40,19 @@ class RookTest {
 
     @Test
     void horizontalMove() {
-        assertThat(Arrays.asList(rook.getMoveVectors()).contains(new int[] {0, 1}))
+        assertThat(rook.getMoveVectors().contains(Vector.Horizontal.RIGHT.getVector()))
                 .isTrue();
     }
 
     @Test
     void verticalMove() {
-        assertThat(Arrays.asList(rook.getMoveVectors()).contains(new int[] {1, 0}))
+        assertThat(rook.getMoveVectors().contains(Vector.Vertical.UP.getVector()))
                 .isTrue();
     }
 
     @Test
     void illegalMove() {
-        assertThat(Arrays.asList(rook.getMoveVectors()).contains(new int[] {1, 1}))
+        assertThat(rook.getMoveVectors().contains(Vector.Diagonal.DOWN_RIGHT.getVector()))
                 .isFalse();
     }
 

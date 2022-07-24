@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 import engine.board.Coordinate;
 import engine.move.Move;
 import engine.player.Alliance;
-import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,13 +40,13 @@ class KnightTest {
 
     @Test
     void lShapedMove() {
-        assertThat(Arrays.asList(knight.getMoveOffsets()).contains(new int[] {1, 2}))
+        assertThat(knight.getMoveOffsets().contains(Vector.LShaped.UP_UP_LEFT.getVector()))
                 .isTrue();
     }
 
     @Test
     void illegalMove() {
-        assertThat(Arrays.asList(knight.getMoveOffsets()).contains(new int[] {0, 1}))
+        assertThat(knight.getMoveOffsets().contains(Vector.Vertical.UP.getVector()))
                 .isFalse();
     }
 

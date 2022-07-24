@@ -1,8 +1,12 @@
 package engine.piece;
 
+import com.google.common.collect.ImmutableList;
 import engine.board.Coordinate;
 import engine.move.Move;
 import engine.player.Alliance;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -17,7 +21,7 @@ import lombok.ToString;
 @ToString(includeFieldNames = false)
 public class King implements JumpingPiece {
 
-    private static final int[][] MOVE_OFFSETS = {{-1, 1}, {0, 1}, {1, 1}, {-1, 0}, {1, 0}, {-1, -1}, {0, -1}, {1, -1}};
+    private static final Collection<int[]> MOVE_OFFSETS = calculateMoveOffsets();
 
     private Coordinate position;
     private Alliance alliance;
@@ -33,12 +37,21 @@ public class King implements JumpingPiece {
     }
 
     @Override
-    public int[][] getMoveOffsets() {
-        return MOVE_OFFSETS;
+    public King move(final Move move) {
+        return new King(move.getDestination(), alliance, false);
     }
 
     @Override
-    public King move(final Move move) {
-        return new King(move.getDestination(), alliance, false);
+    public Collection<int[]> getMoveOffsets() {
+        return MOVE_OFFSETS;
+    }
+
+    private static Collection<int[]> calculateMoveOffsets() {
+        return Stream.concat(
+                        Arrays.stream(Vector.Diagonal.values()),
+                        Stream.concat(
+                                Arrays.stream(Vector.Horizontal.values()), Arrays.stream(Vector.Vertical.values())))
+                .map(Vector::getVector)
+                .collect(ImmutableList.toImmutableList());
     }
 }

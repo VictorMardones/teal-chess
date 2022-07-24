@@ -1,8 +1,12 @@
 package engine.piece;
 
+import com.google.common.collect.ImmutableList;
 import engine.board.Coordinate;
 import engine.move.Move;
 import engine.player.Alliance;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -13,7 +17,7 @@ import lombok.ToString;
 @ToString(includeFieldNames = false)
 public class Queen implements SlidingPiece {
 
-    private static final int[][] MOVE_VECTORS = {{-1, 1}, {0, 1}, {1, 1}, {-1, 0}, {1, 0}, {-1, -1}, {0, -1}, {1, -1}};
+    private static final Collection<int[]> MOVE_VECTORS = calculateMoveVectors();
 
     private Coordinate position;
     private Alliance alliance;
@@ -29,12 +33,21 @@ public class Queen implements SlidingPiece {
     }
 
     @Override
-    public int[][] getMoveVectors() {
-        return new int[0][];
+    public Queen move(final Move move) {
+        return new Queen(move.getDestination(), alliance, false);
     }
 
     @Override
-    public Queen move(final Move move) {
-        return new Queen(move.getDestination(), alliance, false);
+    public Collection<int[]> getMoveVectors() {
+        return MOVE_VECTORS;
+    }
+
+    private static Collection<int[]> calculateMoveVectors() {
+        return Stream.concat(
+                        Arrays.stream(Vector.Diagonal.values()),
+                        Stream.concat(
+                                Arrays.stream(Vector.Horizontal.values()), Arrays.stream(Vector.Vertical.values())))
+                .map(Vector::getVector)
+                .collect(ImmutableList.toImmutableList());
     }
 }

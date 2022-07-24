@@ -3,18 +3,17 @@ package engine.piece;
 import com.google.common.collect.ImmutableList;
 import engine.board.Board;
 import engine.board.Coordinate;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
 public interface SlidingPiece extends Piece {
 
-    int[][] getMoveVectors();
+    Collection<int[]> getMoveVectors();
 
     @Override
     default Collection<Coordinate> calculatePossibleDestinations() {
-        return Arrays.stream(getMoveVectors())
+        return getMoveVectors().stream()
                 .map(this::calculateOffsets)
                 .flatMap(Collection::stream)
                 .collect(ImmutableList.toImmutableList());

@@ -1,8 +1,11 @@
 package engine.piece;
 
+import com.google.common.collect.ImmutableList;
 import engine.board.Coordinate;
 import engine.move.Move;
 import engine.player.Alliance;
+import java.util.Arrays;
+import java.util.Collection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -13,8 +16,7 @@ import lombok.ToString;
 @ToString(includeFieldNames = false)
 public class Knight implements JumpingPiece {
 
-    private static final int[][] MOVE_OFFSETS = {{-1, 2}, {1, 2}, {-2, 1}, {2, 1}, {-2, -1}, {2, -1}, {-1, -2}, {1, -2}
-    };
+    private static final Collection<int[]> MOVE_OFFSETS = calculateMoveOffsets();
 
     private Coordinate position;
     private Alliance alliance;
@@ -35,7 +37,11 @@ public class Knight implements JumpingPiece {
     }
 
     @Override
-    public int[][] getMoveOffsets() {
+    public Collection<int[]> getMoveOffsets() {
         return MOVE_OFFSETS;
+    }
+
+    private static Collection<int[]> calculateMoveOffsets() {
+        return Arrays.stream(Vector.LShaped.values()).map(Vector::getVector).collect(ImmutableList.toImmutableList());
     }
 }

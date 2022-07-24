@@ -1,8 +1,11 @@
 package engine.piece;
 
+import com.google.common.collect.ImmutableList;
 import engine.board.Coordinate;
 import engine.move.Move;
 import engine.player.Alliance;
+import java.util.Arrays;
+import java.util.Collection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -13,7 +16,7 @@ import lombok.ToString;
 @ToString(includeFieldNames = false)
 public class Bishop implements SlidingPiece {
 
-    private static final int[][] MOVE_VECTORS = {{-1, 1}, {1, 1}, {1, -1}, {-1, -1}};
+    private static final Collection<int[]> MOVE_VECTORS = calculateMoveVectors();
 
     private Coordinate position;
     private Alliance alliance;
@@ -29,12 +32,16 @@ public class Bishop implements SlidingPiece {
     }
 
     @Override
-    public int[][] getMoveVectors() {
-        return MOVE_VECTORS;
+    public Bishop move(final Move move) {
+        return new Bishop(move.getDestination(), alliance, false);
     }
 
     @Override
-    public Bishop move(final Move move) {
-        return new Bishop(move.getDestination(), alliance, false);
+    public Collection<int[]> getMoveVectors() {
+        return MOVE_VECTORS;
+    }
+
+    private static Collection<int[]> calculateMoveVectors() {
+        return Arrays.stream(Vector.Diagonal.values()).map(Vector::getVector).collect(ImmutableList.toImmutableList());
     }
 }
