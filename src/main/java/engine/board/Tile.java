@@ -45,7 +45,7 @@ public abstract class Tile {
    */
   public abstract Optional<Piece> getPiece();
 
-  static final class EmptyTile extends Tile {
+  static class EmptyTile extends Tile {
 
     private EmptyTile(final Coordinate coordinate) {
       super(coordinate);

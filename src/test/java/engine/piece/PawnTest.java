@@ -3,6 +3,7 @@ package engine.piece;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import engine.board.Coordinate;
 import engine.move.Move;
 import engine.player.Alliance;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,30 +16,32 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class PawnTest {
 
   Pawn pawn;
+  @Mock Coordinate coordinate;
   @Mock Move move;
+  @Mock Coordinate destination;
 
   @BeforeEach
   void setUp() {
-    pawn = new Pawn(0, Alliance.WHITE);
+    pawn = new Pawn(coordinate, Alliance.WHITE);
   }
 
   @Test
-  void isInMoveRange() {
-    assertThat(pawn.isInMoveRange(8)).isTrue();
+  void constructor() {
+    assertThat(new Pawn(coordinate, Alliance.BLACK)).matches(Pawn::isFirstMove);
   }
 
   @Test
-  void isNotInMoveRange() {
-    assertThat(pawn.isInMoveRange(10)).isFalse();
+  void getPieceType() {
+    assertThat(pawn.getPieceType()).isEqualTo(Piece.PieceType.PAWN);
   }
 
   @Test
   void move() {
-    when(move.getDestination()).thenReturn(16);
+    when(move.getDestination()).thenReturn(destination);
 
     assertThat(pawn.move(move))
         .isInstanceOf(Pawn.class)
-        .matches(pawn -> pawn.getPosition() == 16)
+        .matches(pawn -> pawn.getPosition().equals(destination))
         .matches(pawn -> !pawn.isFirstMove());
   }
 }

@@ -3,8 +3,10 @@ package engine.piece;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import engine.board.Coordinate;
 import engine.move.Move;
 import engine.player.Alliance;
+import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,40 +17,52 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class QueenTest {
 
   Queen queen;
+  @Mock Coordinate coordinate;
   @Mock Move move;
+  @Mock Coordinate destination;
 
   @BeforeEach
   void setUp() {
-    queen = new Queen(0, Alliance.BLACK);
+    queen = new Queen(coordinate, Alliance.BLACK);
+  }
+
+  @Test
+  void constructor() {
+    assertThat(new Queen(coordinate, Alliance.BLACK)).matches(Queen::isFirstMove);
+  }
+
+  @Test
+  void getPieceType() {
+    assertThat(queen.getPieceType()).isEqualTo(Piece.PieceType.QUEEN);
   }
 
   @Test
   void diagonalMove() {
-    assertThat(queen.isInMoveRange(63)).isTrue();
+    assertThat(Arrays.asList(queen.getMoveVectors()).contains(new int[] {1, 1})).isTrue();
   }
 
   @Test
   void horizontalMove() {
-    assertThat(queen.isInMoveRange(7)).isTrue();
+    assertThat(Arrays.asList(queen.getMoveVectors()).contains(new int[] {0, 1})).isTrue();
   }
 
   @Test
   void verticalMove() {
-    assertThat(queen.isInMoveRange(56)).isTrue();
+    assertThat(Arrays.asList(queen.getMoveVectors()).contains(new int[] {1, 0})).isTrue();
   }
 
   @Test
-  void notInMoveRange() {
-    assertThat(queen.isInMoveRange(12)).isFalse();
+  void illegalMove() {
+    assertThat(Arrays.asList(queen.getMoveVectors()).contains(new int[] {1, 2})).isFalse();
   }
 
   @Test
   void move() {
-    when(move.getDestination()).thenReturn(32);
+    when(move.getDestination()).thenReturn(destination);
 
     assertThat(queen.move(move))
         .isInstanceOf(Queen.class)
-        .matches(queen -> queen.getPosition() == 32)
+        .matches(queen -> queen.getPosition().equals(destination))
         .matches(queen -> !queen.isFirstMove());
   }
 }

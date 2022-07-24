@@ -5,7 +5,7 @@ import engine.board.Coordinate;
 import engine.piece.Piece;
 import engine.piece.Rook;
 
-public final class QueenSideCastleMove extends CastleMove {
+public class QueenSideCastleMove extends CastleMove {
 
   public QueenSideCastleMove(
       Board board, Piece piece, Coordinate destination, Rook rook, Coordinate rookDestination) {

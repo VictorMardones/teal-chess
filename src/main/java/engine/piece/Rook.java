@@ -5,11 +5,13 @@ import engine.move.Move;
 import engine.player.Alliance;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 /** The rook piece. It can move horizontally and vertically. */
 @Getter
 @AllArgsConstructor
-public final class Rook implements SlidingPiece {
+@ToString(includeFieldNames = false)
+public class Rook implements SlidingPiece {
 
   private static final int[][] MOVE_VECTORS = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 

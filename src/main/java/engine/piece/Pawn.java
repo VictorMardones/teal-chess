@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * The pawn piece. It only moves forward (depending on the side) and can eat other pieces
@@ -22,7 +23,8 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public final class Pawn implements Piece {
+@ToString(includeFieldNames = false)
+public class Pawn implements Piece {
 
   private static final int[] MOVE_OFFSETS = {7, 8, 9, 16};
 

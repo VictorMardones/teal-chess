@@ -20,7 +20,7 @@ import javax.swing.*;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-final class TilePanel extends JPanel {
+class TilePanel extends JPanel {
 
   private static final Dimension TILE_PANEL_DIMENSION = new Dimension(10, 10);
   private static final Color LIGHT_TILE_COLOR = Color.decode("#FFCE9E");

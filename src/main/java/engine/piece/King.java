@@ -5,6 +5,7 @@ import engine.move.Move;
 import engine.player.Alliance;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * The king piece. The most important piece in the game, must be defended at all costs. It moves
@@ -13,7 +14,8 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public final class King implements JumpingPiece {
+@ToString(includeFieldNames = false)
+public class King implements JumpingPiece {
 
   private static final int[][] MOVE_OFFSETS = {
     {-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}

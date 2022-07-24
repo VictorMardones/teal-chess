@@ -5,11 +5,13 @@ import engine.move.Move;
 import engine.player.Alliance;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 /** The bishop piece. It can move diagonally. */
 @Getter
 @AllArgsConstructor
-public final class Bishop implements SlidingPiece {
+@ToString(includeFieldNames = false)
+public class Bishop implements SlidingPiece {
 
   private static final int[][] MOVE_VECTORS = {{-1, -1}, {-1, 1}, {1, 1}, {1, -1}};
 

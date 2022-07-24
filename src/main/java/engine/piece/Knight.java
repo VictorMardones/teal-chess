@@ -5,11 +5,13 @@ import engine.move.Move;
 import engine.player.Alliance;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 /** The knight piece. It moves in an L shape. */
 @AllArgsConstructor
 @Getter
-public final class Knight implements JumpingPiece {
+@ToString(includeFieldNames = false)
+public class Knight implements JumpingPiece {
 
   private static final int[][] MOVE_OFFSETS = {
     {-1, -2}, {-2, -1}, {-2, 1}, {-1, 2}, {1, 2}, {2, 1}, {2, -1}, {1, -2}

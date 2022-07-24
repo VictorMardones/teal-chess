@@ -5,11 +5,13 @@ import engine.move.Move;
 import engine.player.Alliance;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 /** The queen, strongest piece in the game. It can move horizontally, vertically and diagonally. */
 @Getter
 @AllArgsConstructor
-public final class Queen implements SlidingPiece {
+@ToString(includeFieldNames = false)
+public class Queen implements SlidingPiece {
 
   private static final int[][] MOVE_VECTORS = {
     {-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}

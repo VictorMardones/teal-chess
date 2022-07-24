@@ -5,7 +5,7 @@ import engine.board.Coordinate;
 import engine.piece.Pawn;
 import engine.piece.Piece;
 
-public final class PawnEnPassantMove extends PawnCaptureMove {
+public class PawnEnPassantMove extends PawnCaptureMove {
   public PawnEnPassantMove(Board board, Pawn pawn, Coordinate destination, Piece capturedPiece) {
     super(board, pawn, destination, capturedPiece);
   }

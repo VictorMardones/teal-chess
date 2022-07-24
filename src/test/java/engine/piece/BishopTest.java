@@ -3,11 +3,10 @@ package engine.piece;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import engine.board.Board;
 import engine.board.Coordinate;
 import engine.move.Move;
 import engine.player.Alliance;
-import java.util.Objects;
+import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,31 +17,42 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class BishopTest {
 
   Bishop bishop;
-  @Mock Board board;
+  @Mock Coordinate coordinate;
   @Mock Move move;
+  @Mock Coordinate destination;
 
   @BeforeEach
   void setUp() {
-    bishop = new Bishop(Coordinate.of("a1"), Alliance.BLACK);
+    bishop = new Bishop(coordinate, Alliance.BLACK);
+  }
+
+  @Test
+  void constructor() {
+    assertThat(new Bishop(coordinate, Alliance.BLACK)).matches(Bishop::isFirstMove);
+  }
+
+  @Test
+  void getPieceType() {
+    assertThat(bishop.getPieceType()).isEqualTo(Piece.PieceType.BISHOP);
   }
 
   @Test
   void diagonalMove() {
-    assertThat(bishop.isInMoveRange(board, Coordinate.of("a1"))).isTrue();
+    assertThat(Arrays.asList(bishop.getMoveVectors()).contains(new int[] {1, 1})).isTrue();
   }
 
   @Test
-  void notInMoveRange() {
-    assertThat(bishop.isInMoveRange(1)).isFalse();
+  void illegalMove() {
+    assertThat(Arrays.asList(bishop.getMoveVectors()).contains(new int[] {1, 0})).isFalse();
   }
 
   @Test
   void move() {
-    when(move.getDestination()).thenReturn(Coordinate.of("b2"));
+    when(move.getDestination()).thenReturn(destination);
 
     assertThat(bishop.move(move))
         .isInstanceOf(Bishop.class)
-        .matches(bishop -> Objects.equals(bishop.getPosition(), Coordinate.of("b2")))
+        .matches(bishop -> bishop.getPosition().equals(destination))
         .matches(bishop -> !bishop.isFirstMove());
   }
 }

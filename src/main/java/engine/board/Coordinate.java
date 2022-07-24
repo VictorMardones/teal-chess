@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
-public final class Coordinate {
+public class Coordinate {
 
   private static final String COLUMN_NAMES = "abcdefgh";
   private static final Pattern ALGEBRAIC_PATTERN = Pattern.compile("^[a-h][1-8]$");
@@ -63,10 +63,6 @@ public final class Coordinate {
             * (Board.NUMBER_OF_RANKS - Integer.parseInt("" + algebraicCoordinate.charAt(1)));
 
     return column + rank;
-  }
-
-  public String asAlgebraic() {
-    return "" + getColumn() + getRank();
   }
 
   public int getRank() {
@@ -136,5 +132,10 @@ public final class Coordinate {
 
   public Optional<Coordinate> right(final int spaces) {
     return to(spaces, 0);
+  }
+
+  @Override
+  public String toString() {
+    return "" + getColumn() + getRank();
   }
 }
