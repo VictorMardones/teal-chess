@@ -32,4 +32,9 @@ public enum Alliance {
                 .findFirst()
                 .orElse(null);
     }
+
+    @Override
+    public String toString() {
+        return "" + super.toString().toLowerCase().charAt(0);
+    }
 }

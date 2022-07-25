@@ -9,7 +9,9 @@ import engine.board.Board;
 import engine.board.Coordinate;
 import engine.piece.Piece;
 import engine.piece.Rook;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 public class QueenSideCastleMove extends CastleMove {
 
     public QueenSideCastleMove(

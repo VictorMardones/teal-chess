@@ -13,6 +13,7 @@ import engine.board.Coordinate;
 import engine.move.Move;
 import engine.piece.Piece;
 import engine.player.Alliance;
+import io.PieceIconLoader;
 import io.SvgImporter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -30,7 +31,6 @@ class TilePanel extends JPanel {
     private static final Dimension TILE_PANEL_DIMENSION = new Dimension(10, 10);
     private static final Color LIGHT_TILE_COLOR = Color.decode("#FFCE9E");
     private static final Color BLACK_TILE_COLOR = Color.decode("#D18B47");
-    private static final String PIECE_ICON_PATH = "art/pieces";
 
     private final transient Table table;
     private final transient Coordinate coordinate;
@@ -137,21 +137,11 @@ class TilePanel extends JPanel {
         removeAll();
 
         if (board.getTile(coordinate).getPiece().isPresent()) {
-            final var image = SvgImporter.importSvg(
-                    new File(getIconPath(board.getTile(coordinate).getPiece().get())),
+            PieceIconLoader.loadIcon(board.getTile(coordinate).getPiece().get(),
                     TILE_PANEL_DIMENSION.width * 6,
-                    TILE_PANEL_DIMENSION.height * 6);
-
-            image.ifPresent(bufferedImage -> add(new JLabel(new ImageIcon(bufferedImage))));
+                    TILE_PANEL_DIMENSION.height * 6)
+                    .ifPresent(image -> add(new JLabel(new ImageIcon(image))));
         }
-    }
-
-    private String getIconPath(final Piece piece) {
-        return "%s/%s%s.svg"
-                .formatted(
-                        PIECE_ICON_PATH,
-                        piece.getAlliance().toString().toLowerCase().charAt(0),
-                        piece.toChar().toLowerCase());
     }
 
     private void assignTileColor() {
@@ -175,7 +165,6 @@ class TilePanel extends JPanel {
 
     private Collection<Move> selectedPieceLegals(final Board board) {
         if (table.getSelectedPiece() == null || isOpponentPieceSelected(board)) {
-            log.debug("The piece has no legal moves");
             return Collections.emptyList();
         }
 

@@ -63,7 +63,7 @@ public final class Board {
         blackPlayer = new BlackPlayer(this, builder.blackKing, blackLegalMoves, whiteLegalMoves);
         log.debug("Black player: {}", blackPlayer);
 
-        currentPlayer = builder.nextTurn.choosePlayer(List.of(whitePlayer, blackPlayer));
+        currentPlayer = builder.moveMaker.choosePlayer(List.of(whitePlayer, blackPlayer));
         log.debug("Current player: {}", currentPlayer.getAlliance());
     }
 
@@ -109,7 +109,7 @@ public final class Board {
                 .withPiece(new Knight(Coordinate.of("g1"), Alliance.WHITE))
                 .withPiece(new Rook(Coordinate.of("h1"), Alliance.WHITE));
 
-        return builder.withNextTurn(Alliance.WHITE).build();
+        return builder.withMoveMaker(Alliance.WHITE).build();
     }
 
     public Tile getTile(Coordinate coordinate) {
@@ -164,7 +164,7 @@ public final class Board {
     public static class Builder {
 
         private final Map<Coordinate, Piece> boardConfig;
-        private Alliance nextTurn;
+        private Alliance moveMaker;
         private King whiteKing;
         private King blackKing;
 
@@ -179,8 +179,8 @@ public final class Board {
             return this;
         }
 
-        public Builder withNextTurn(final Alliance nextTurn) {
-            this.nextTurn = nextTurn;
+        public Builder withMoveMaker(final Alliance moveMaker) {
+            this.moveMaker = moveMaker;
             return this;
         }
 

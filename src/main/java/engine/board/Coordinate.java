@@ -16,6 +16,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 public final class Coordinate {
 
+    // TODO: This could be a private enum
     private static final String COLUMN_NAMES = "abcdefgh";
     private static final Pattern ALGEBRAIC_PATTERN = Pattern.compile("^[a-h][1-8]$");
 

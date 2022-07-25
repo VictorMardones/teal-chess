@@ -10,7 +10,7 @@ import engine.board.Board;
 import engine.board.Coordinate;
 import engine.board.Tile;
 import engine.move.CaptureMove;
-import engine.move.MajorPieceMove;
+import engine.move.MajorMove;
 import engine.move.Move;
 import engine.player.Alliance;
 import java.util.Collection;
@@ -100,7 +100,7 @@ public interface Piece {
      */
     default Optional<Move> createMove(final Tile destination, final Board board) {
         if (destination.getPiece().isEmpty()) {
-            return Optional.of(new MajorPieceMove(board, this, destination.getCoordinate()));
+            return Optional.of(new MajorMove(board, this, destination.getCoordinate()));
         }
 
         final var capturablePiece = destination.getPiece();
@@ -111,6 +111,9 @@ public interface Piece {
 
         return Optional.empty();
     }
+
+    // TODO: Implement this method
+    int getValue();
 
     @AllArgsConstructor
     @Getter

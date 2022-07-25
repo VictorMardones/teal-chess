@@ -35,25 +35,22 @@ public final class SvgImporter {
         transcoder.addTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH, (float) width);
         transcoder.addTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT, (float) height);
 
-        try (var inputStream = new FileInputStream(file)) {
+        try (var inputStream = new FileInputStream(file);
+                var outputStream = new ByteArrayOutputStream()) {
 
             var input = new TranscoderInput(inputStream);
-
-            var outputStream = new ByteArrayOutputStream();
             var output = new TranscoderOutput(outputStream);
 
             transcoder.transcode(input, output);
 
             outputStream.flush();
-            outputStream.close();
 
             var imageData = outputStream.toByteArray();
             return Optional.ofNullable(ImageIO.read(new ByteArrayInputStream(imageData)));
 
         } catch (IOException | TranscoderException e) {
             log.error("Failed to load images!", e);
+            return Optional.empty();
         }
-
-        return Optional.empty();
     }
 }

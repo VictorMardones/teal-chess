@@ -13,11 +13,11 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 /** The action of moving a piece. */
-@RequiredArgsConstructor
+@Slf4j
 @EqualsAndHashCode
 @ToString(includeFieldNames = false)
 public abstract class Move {
@@ -29,7 +29,9 @@ public abstract class Move {
     protected final Piece piece;
 
     @Getter
-    private final Coordinate destination;
+    protected final Coordinate destination;
+
+    protected final boolean firstMove;
 
     @Getter
     protected boolean castling = false;
@@ -37,8 +39,22 @@ public abstract class Move {
     @Getter
     protected Piece capturedPiece;
 
+    public Move(final Board board, final Piece piece, final Coordinate destination) {
+        this.board = board;
+        this.piece = piece;
+        this.destination = destination;
+        firstMove = piece.isFirstMove();
+    }
+
+    private Move(final Board board, final Coordinate destination) {
+        this.board = board;
+        this.destination = destination;
+        piece = null;
+        firstMove = false;
+    }
+
     public boolean isFirstMove() {
-        return piece.isFirstMove();
+        return firstMove;
     }
 
     public boolean isCapturing() {
@@ -61,8 +77,11 @@ public abstract class Move {
 
         board.getCurrentPlayer().getOpponent().getActivePieces().forEach(builder::withPiece);
 
+        log.info("Moving the selected piece to {}", piece.move(this));
+
         builder.withPiece(piece.move(this));
-        builder.withNextTurn(board.getCurrentPlayer().getOpponent().getAlliance());
+
+        builder.withMoveMaker(board.getCurrentPlayer().getOpponent().getAlliance());
         return builder.build();
     }
 

@@ -34,7 +34,7 @@ abstract class CastleMove extends Move {
 
         builder.withPiece(piece.move(this))
                 .withPiece(new Rook(rookDestination, rook.getAlliance(), false))
-                .withNextTurn(board.getCurrentPlayer().getOpponent().getAlliance());
+                .withMoveMaker(board.getCurrentPlayer().getOpponent().getAlliance());
 
         return builder.build();
     }
