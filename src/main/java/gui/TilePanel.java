@@ -137,9 +137,10 @@ class TilePanel extends JPanel {
         removeAll();
 
         if (board.getTile(coordinate).getPiece().isPresent()) {
-            PieceIconLoader.loadIcon(board.getTile(coordinate).getPiece().get(),
-                    TILE_PANEL_DIMENSION.width * 6,
-                    TILE_PANEL_DIMENSION.height * 6)
+            PieceIconLoader.loadIcon(
+                            board.getTile(coordinate).getPiece().get(),
+                            TILE_PANEL_DIMENSION.width * 6,
+                            TILE_PANEL_DIMENSION.height * 6)
                     .ifPresent(image -> add(new JLabel(new ImageIcon(image))));
         }
     }

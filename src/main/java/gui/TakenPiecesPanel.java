@@ -6,14 +6,12 @@
 package gui;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.primitives.Ints;
 import engine.move.Move;
 import engine.piece.Piece;
 import engine.player.Alliance;
 import io.PieceIconLoader;
-
-import java.util.List;
 import java.awt.*;
+import java.util.List;
 import java.util.Optional;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -49,18 +47,17 @@ public class TakenPiecesPanel extends JPanel {
         northPanel.removeAll();
         southPanel.removeAll();
 
-        getTakenPieces(moveLog, Alliance.WHITE)
-                .stream()
-                .map(piece -> PieceIconLoader.loadIcon(piece,
-                TAKEN_PIECES_DIMENSION.width / 2, TAKEN_PIECES_DIMENSION.width / 2))
-                        .filter(Optional::isPresent)
+        // TODO: Do this process on a single loop
+        getTakenPieces(moveLog, Alliance.WHITE).stream()
+                .map(piece -> PieceIconLoader.loadIcon(
+                        piece, TAKEN_PIECES_DIMENSION.width / 2, TAKEN_PIECES_DIMENSION.width / 2))
+                .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(image -> southPanel.add(new JLabel(new ImageIcon(image))));
 
-        getTakenPieces(moveLog, Alliance.BLACK)
-                .stream()
-                .map(piece -> PieceIconLoader.loadIcon(piece,
-                        TAKEN_PIECES_DIMENSION.width / 2, TAKEN_PIECES_DIMENSION.width / 2))
+        getTakenPieces(moveLog, Alliance.BLACK).stream()
+                .map(piece -> PieceIconLoader.loadIcon(
+                        piece, TAKEN_PIECES_DIMENSION.width / 2, TAKEN_PIECES_DIMENSION.width / 2))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(image -> northPanel.add(new JLabel(new ImageIcon(image))));
@@ -69,12 +66,10 @@ public class TakenPiecesPanel extends JPanel {
     }
 
     private List<Piece> getTakenPieces(final MoveLog moveLog, final Alliance alliance) {
-        return moveLog.getMoves()
-                .stream()
+        return moveLog.getMoves().stream()
                 .filter(Move::isCapturing)
                 .map(Move::getCapturedPiece)
                 .filter(capturedPiece -> capturedPiece.getAlliance() == alliance)
-                .sorted((p1, p2) -> Ints.compare(p1.getValue(), p2.getValue()))
                 .collect(ImmutableList.toImmutableList());
     }
 }

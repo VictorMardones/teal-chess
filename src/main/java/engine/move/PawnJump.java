@@ -31,7 +31,7 @@ public class PawnJump extends Move {
         final var movedPawn = piece.move(this);
 
         builder.withPiece(movedPawn);
-        builder.withEnPassantPawn((Pawn) movedPawn);
+        builder.withEnPassantPawn(movedPawn);
         builder.withMoveMaker(board.getCurrentPlayer().getOpponent().getAlliance());
         return builder.build();
     }

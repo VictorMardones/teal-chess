@@ -73,8 +73,6 @@ public interface Piece {
         return getPieceType().pieceName;
     }
 
-    Piece move(final Move move);
-
     default boolean isRook() {
         return getPieceType() == PieceType.ROOK;
     }
@@ -90,6 +88,8 @@ public interface Piece {
         final var pieceAtDestination = destination.getPiece();
         return pieceAtDestination.isEmpty() || isEnemyOf(pieceAtDestination.get());
     }
+
+    Piece move(final Move move);
 
     /**
      * Creates a move, based on the piece and the destination.
@@ -111,9 +111,6 @@ public interface Piece {
 
         return Optional.empty();
     }
-
-    // TODO: Implement this method
-    int getValue();
 
     @AllArgsConstructor
     @Getter
