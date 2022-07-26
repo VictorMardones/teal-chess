@@ -18,9 +18,4 @@ public class MajorMove extends Move {
     public MajorMove(Board board, Piece piece, Coordinate destination) {
         super(board, piece, destination);
     }
-
-    @Override
-    public String toString() {
-        return piece.getPieceType().toString() + getDestination();
-    }
 }

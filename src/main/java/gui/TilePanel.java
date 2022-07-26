@@ -61,7 +61,7 @@ class TilePanel extends JPanel {
                     log.debug("Pressed right click, unselecting");
                 }
 
-                SwingUtilities.invokeLater(() -> boardPanel.drawBoard(table.getChessboard()));
+                SwingUtilities.invokeLater(table::update);
             }
 
             @Override
@@ -118,7 +118,7 @@ class TilePanel extends JPanel {
 
             if (moveTransition.getMoveStatus().isDone()) {
                 table.setChessboard(moveTransition.getBoard());
-                // TODO: Add the move to the move log
+                table.addMoveToLog(move.get());
             }
         }
 

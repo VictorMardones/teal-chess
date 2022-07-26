@@ -38,7 +38,7 @@ public class GameHistoryPanel extends JPanel {
         setVisible(true);
     }
 
-    private void redo(final Board board, final MoveLog moveLog) {
+    public void redo(final Board board, final MoveLog moveLog) {
         var currentRow = 0;
         model.clear();
 
@@ -59,6 +59,8 @@ public class GameHistoryPanel extends JPanel {
             final var moveText = lastMove.toString();
 
             if (lastMove.getPiece().isWhite()) {
+                model.setValueAt(moveText + calculateCheckAndCheckMateHash(board), currentRow, 0);
+            } else {
                 model.setValueAt(moveText + calculateCheckAndCheckMateHash(board), currentRow - 1, 1);
             }
         }
@@ -129,6 +131,7 @@ public class GameHistoryPanel extends JPanel {
 
             if (column == 0) {
                 currentRow.setWhiteMove((String) aValue);
+                fireTableRowsInserted(row, row);
             } else if (column == 1) {
                 currentRow.setBlackMove((String) aValue);
                 fireTableCellUpdated(row, column);

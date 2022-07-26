@@ -8,6 +8,7 @@ package gui;
 import com.google.common.collect.Lists;
 import engine.board.Board;
 import engine.board.Tile;
+import engine.move.Move;
 import engine.piece.Piece;
 import java.awt.*;
 import java.util.List;
@@ -19,14 +20,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Table {
 
-    private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
+    private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(700, 600);
 
     private final JFrame gameFrame;
     private final BoardPanel boardPanel;
 
+    private final TakenPiecesPanel takenPiecesPanel;
+
+    private final GameHistoryPanel gameHistoryPanel;
+
     @Getter
     @Setter
     private Board chessboard;
+
+    private final MoveLog moveLog;
 
     @Getter
     @Setter
@@ -47,19 +54,26 @@ public class Table {
     private boolean highlightLegalMoves;
 
     public Table() {
-        gameFrame = new JFrame("Chess game, made in Java");
-        gameFrame.setLayout(new BorderLayout());
-
+        chessboard = Board.createStandardBoard();
         boardDirection = BoardDirection.NORMAL;
         highlightLegalMoves = true;
 
-        gameFrame.setJMenuBar(createMenuBar());
+        gameFrame = new JFrame("Chess game, made in Java");
+        gameFrame.setLayout(new BorderLayout());
         gameFrame.setSize(OUTER_FRAME_DIMENSION);
 
-        chessboard = Board.createStandardBoard();
+        gameFrame.setJMenuBar(createMenuBar());
 
         boardPanel = new BoardPanel(this);
+        takenPiecesPanel = new TakenPiecesPanel();
+        gameHistoryPanel = new GameHistoryPanel();
+
+        moveLog = new MoveLog();
+
         gameFrame.add(boardPanel, BorderLayout.CENTER);
+
+        gameFrame.add(takenPiecesPanel, BorderLayout.WEST);
+        gameFrame.add(gameHistoryPanel, BorderLayout.EAST);
 
         gameFrame.setLocationRelativeTo(null);
         gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -108,6 +122,16 @@ public class Table {
         sourceTile = null;
         destinationTile = null;
         selectedPiece = null;
+    }
+
+    public void update() {
+        gameHistoryPanel.redo(getChessboard(), moveLog);
+        takenPiecesPanel.redo(moveLog);
+        boardPanel.drawBoard(getChessboard());
+    }
+
+    public void addMoveToLog(Move move) {
+        moveLog.add(move);
     }
 
     public enum BoardDirection {

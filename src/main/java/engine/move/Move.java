@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -21,10 +20,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @EqualsAndHashCode
-@ToString(includeFieldNames = false)
 public abstract class Move {
 
-    @ToString.Exclude
     protected final Board board;
 
     @Getter
@@ -46,13 +43,6 @@ public abstract class Move {
         this.piece = piece;
         this.destination = destination;
         firstMove = piece.isFirstMove();
-    }
-
-    private Move(final Board board, final Coordinate destination) {
-        this.board = board;
-        this.destination = destination;
-        piece = null;
-        firstMove = false;
     }
 
     public boolean isFirstMove() {
@@ -114,5 +104,10 @@ public abstract class Move {
         private static Predicate<Move> isMovePossible(Coordinate source, Coordinate destination) {
             return move -> move.getSource() == source && move.getDestination() == destination;
         }
+    }
+
+    @Override
+    public String toString() {
+        return getDestination().toString();
     }
 }
