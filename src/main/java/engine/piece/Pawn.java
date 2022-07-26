@@ -14,9 +14,10 @@ import engine.move.PawnCaptureMove;
 import engine.move.PawnJump;
 import engine.move.PawnMove;
 import engine.player.Alliance;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -33,9 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Pawn implements JumpingPiece {
 
-    private static final Collection<int[]> WHITE_OFFSETS = calculateWhiteOffsets();
-    private static final Collection<int[]> BLACK_OFFSETS = calculateBlackOffsets();
-
     private Coordinate position;
     private Alliance alliance;
     private boolean firstMove;
@@ -51,56 +49,57 @@ public class Pawn implements JumpingPiece {
 
     @Override
     public Optional<Move> createMove(Tile destination, Board board) {
+
         if (isCaptureMove(destination)) {
-            return createCaptureMove(board, destination.getCoordinate());
+            return createCaptureMove(board, destination);
         }
 
-        if (isFirstMovePossible(board)) {
-            return createJumpMove(board, destination.getCoordinate());
+        if (isJumpPossible(board)) {
+            return createJumpMove(board, destination);
         }
 
-        return createForwardMove(board, destination.getCoordinate());
+        return createForwardMove(board, destination);
     }
 
     private boolean isCaptureMove(Tile destination) {
         return !getPosition().sameColumnAs(destination.getCoordinate());
     }
 
-    private Optional<Move> createCaptureMove(Board board, Coordinate destination) {
-        final var capturablePiece = board.getTile(destination).getPiece();
+    private Optional<Move> createCaptureMove(Board board, Tile destination) {
+        final var capturablePiece = destination.getPiece();
 
         if (capturablePiece.isPresent() && isEnemyOf(capturablePiece.get())) {
-            return Optional.of(new PawnCaptureMove(board, this, destination, capturablePiece.get()));
+            return Optional.of(new PawnCaptureMove(board, this, destination.getCoordinate(), capturablePiece.get()));
         }
 
         return Optional.empty();
     }
 
-    private Optional<Move> createJumpMove(Board board, Coordinate destination) {
-        return Optional.of(new PawnJump(board, this, destination));
+    private Optional<Move> createJumpMove(Board board, Tile destination) {
+        return Optional.of(new PawnJump(board, this, destination.getCoordinate()));
     }
 
-    private boolean isFirstMovePossible(final Board board) {
+    private boolean isJumpPossible(final Board board) {
 
-        var forward = position.down(alliance.getDirection());
-        var destination = position.down(2 * alliance.getDirection());
+        var forward = position.up(alliance.getDirection());
+        var destination = position.up(2 * alliance.getDirection());
 
         if (forward.isEmpty() || destination.isEmpty()) {
             return false;
         }
 
         return isFirstMove()
-                && board.getTile(forward.get()).getPiece().isEmpty()
-                && board.getTile(destination.get()).getPiece().isEmpty();
+                && isAccessible(board.getTile(forward.get()))
+                && isAccessible(board.getTile(destination.get()));
     }
 
-    private Optional<Move> createForwardMove(Board board, Coordinate destination) {
-        if (board.getTile(destination).getPiece().isPresent()) {
+    private Optional<Move> createForwardMove(Board board, Tile destination) {
+        if (destination.getPiece().isPresent()) {
             return Optional.empty();
         }
 
         // TODO: Deal with promotions
-        return Optional.of(new PawnMove(board, this, destination));
+        return Optional.of(new PawnMove(board, this, destination.getCoordinate()));
     }
 
     @Override
@@ -111,20 +110,30 @@ public class Pawn implements JumpingPiece {
     @Override
     public Collection<int[]> getMoveOffsets() {
         return switch (getAlliance()) {
-            case BLACK -> BLACK_OFFSETS;
-            case WHITE -> WHITE_OFFSETS;
+            case BLACK -> calculateBlackOffsets();
+            case WHITE -> calculateWhiteOffsets();
         };
     }
 
-    private static Collection<int[]> calculateWhiteOffsets() {
-        return Stream.of(Vector.Jump.UP, Vector.Vertical.UP, Vector.Diagonal.UP_LEFT, Vector.Diagonal.UP_RIGHT)
-                .map(Vector::getVector)
-                .collect(ImmutableList.toImmutableList());
+    private Collection<int[]> calculateWhiteOffsets() {
+        final List<Vector> moves =
+                new ArrayList<>(List.of(Vector.Vertical.UP, Vector.Diagonal.UP_LEFT, Vector.Diagonal.UP_RIGHT));
+
+        if (isFirstMove()) {
+            moves.add(Vector.Jump.UP);
+        }
+
+        return moves.stream().map(Vector::getVector).collect(ImmutableList.toImmutableList());
     }
 
-    private static Collection<int[]> calculateBlackOffsets() {
-        return Stream.of(Vector.Jump.DOWN, Vector.Vertical.DOWN, Vector.Diagonal.DOWN_LEFT, Vector.Diagonal.DOWN_RIGHT)
-                .map(Vector::getVector)
-                .collect(ImmutableList.toImmutableList());
+    private Collection<int[]> calculateBlackOffsets() {
+        final List<Vector> moves =
+                new ArrayList<>(List.of(Vector.Vertical.DOWN, Vector.Diagonal.DOWN_LEFT, Vector.Diagonal.DOWN_RIGHT));
+
+        if (isFirstMove()) {
+            moves.add(Vector.Jump.DOWN);
+        }
+
+        return moves.stream().map(Vector::getVector).collect(ImmutableList.toImmutableList());
     }
 }

@@ -6,6 +6,7 @@
 package engine.piece;
 
 import com.google.common.collect.ImmutableList;
+import engine.board.Board;
 import engine.board.Coordinate;
 import java.util.Collection;
 import java.util.Optional;
@@ -19,7 +20,7 @@ public interface JumpingPiece extends Piece {
     Collection<int[]> getMoveOffsets();
 
     @Override
-    default Collection<Coordinate> calculatePossibleDestinations() {
+    default Collection<Coordinate> calculatePossibleDestinations(final Board board) {
         return getMoveOffsets().stream()
                 .map(offset -> getPosition().to(offset[0], offset[1]))
                 .filter(Optional::isPresent)

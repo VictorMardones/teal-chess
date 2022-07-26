@@ -38,7 +38,7 @@ public interface Piece {
      * @return List of possible moves.
      */
     default Collection<Move> calculateLegalMoves(final Board board) {
-        return calculatePossibleDestinations().stream()
+        return calculatePossibleDestinations(board).stream()
                 .map(board::getTile)
                 .filter(this::isAccessible)
                 .map(tile -> createMove(tile, board))
@@ -47,7 +47,7 @@ public interface Piece {
                 .collect(ImmutableList.toImmutableList());
     }
 
-    Collection<Coordinate> calculatePossibleDestinations();
+    Collection<Coordinate> calculatePossibleDestinations(final Board board);
 
     default boolean isInMoveRange(final Board board, Coordinate coordinate) {
         return calculateLegalMoves(board).stream()
