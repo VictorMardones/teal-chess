@@ -16,7 +16,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-/** The queen, the strongest piece in the game. It can move horizontally, vertically and diagonally. */
+/**
+ * The queen, the strongest piece in the game. It can move horizontally, vertically and diagonally.
+ */
 @Getter
 @AllArgsConstructor
 @ToString(includeFieldNames = false)

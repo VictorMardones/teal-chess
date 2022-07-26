@@ -14,7 +14,9 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/** A single chess tile, which may or may not contain a piece. */
+/**
+ * A single chess tile, which may or may not contain a piece.
+ */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public abstract class Tile {
@@ -34,7 +36,7 @@ public abstract class Tile {
      * Factory method for creating a new tile.
      *
      * @param coordinate The tile's coordinate.
-     * @param piece The piece on the tile.
+     * @param piece      The piece on the tile.
      * @return A new tile.
      */
     public static Tile create(final Coordinate coordinate, final Piece piece) {

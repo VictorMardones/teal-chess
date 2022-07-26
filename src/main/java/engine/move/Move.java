@@ -16,7 +16,9 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-/** The action of moving a piece. */
+/**
+ * The action of moving a piece.
+ */
 @Slf4j
 @EqualsAndHashCode
 @ToString(includeFieldNames = false)
@@ -98,8 +100,8 @@ public abstract class Move {
         /**
          * Creates a move in the specified direction.
          *
-         * @param board The chessboard.
-         * @param source Source coordinate.
+         * @param board       The chessboard.
+         * @param source      Source coordinate.
          * @param destination Destination coordinate.
          * @return Move that goes from the source to the destination, if possible.
          */

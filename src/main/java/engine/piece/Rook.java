@@ -16,7 +16,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-/** The rook piece. It can move horizontally and vertically. */
+/**
+ * The rook piece. It can move horizontally and vertically.
+ */
 @Getter
 @AllArgsConstructor
 @ToString(includeFieldNames = false)

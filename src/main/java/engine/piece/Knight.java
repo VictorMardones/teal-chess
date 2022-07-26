@@ -15,7 +15,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-/** The knight piece. It moves in an L shape. */
+/**
+ * The knight piece. It moves in an L shape.
+ */
 @AllArgsConstructor
 @Getter
 @ToString(includeFieldNames = false)

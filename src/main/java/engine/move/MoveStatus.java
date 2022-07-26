@@ -5,7 +5,9 @@
 
 package engine.move;
 
-/** Tells whether the move is possible or not, including the reason. */
+/**
+ * Tells whether the move is possible or not, including the reason.
+ */
 public enum MoveStatus {
     DONE,
     ILLEGAL,

@@ -18,7 +18,9 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/** A chess piece. */
+/**
+ * A chess piece.
+ */
 public interface Piece {
 
     Coordinate getPosition();
@@ -95,7 +97,7 @@ public interface Piece {
      * Creates a move, based on the piece and the destination.
      *
      * @param destination The destination tile.
-     * @param board The current game board.
+     * @param board       The current game board.
      * @return A move, selected depending on the source and destination.
      */
     default Optional<Move> createMove(final Tile destination, final Board board) {

@@ -11,7 +11,9 @@ import engine.piece.Pawn;
 import engine.piece.Piece;
 import lombok.EqualsAndHashCode;
 
-/** A move where a pawn captures another piece. */
+/**
+ * A move where a pawn captures another piece.
+ */
 @EqualsAndHashCode(callSuper = true)
 public class PawnCaptureMove extends CaptureMove {
     public PawnCaptureMove(Board board, Pawn pawn, Coordinate destination, Piece capturedPiece) {

@@ -10,7 +10,9 @@ import engine.board.Coordinate;
 import engine.piece.Piece;
 import lombok.EqualsAndHashCode;
 
-/** A move where a piece captures another piece. */
+/**
+ * A move where a piece captures another piece.
+ */
 @EqualsAndHashCode(callSuper = true)
 public class CaptureMove extends Move {
 

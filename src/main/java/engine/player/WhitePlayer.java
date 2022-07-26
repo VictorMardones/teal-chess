@@ -11,7 +11,9 @@ import engine.piece.King;
 import engine.piece.Piece;
 import java.util.Collection;
 
-/** The player that uses the white pieces. */
+/**
+ * The player that uses the white pieces.
+ */
 public class WhitePlayer extends Player {
     public WhitePlayer(Board board, King king, Collection<Move> whiteLegalMoves, Collection<Move> blackLegalMoves) {
         super(board, king, whiteLegalMoves, blackLegalMoves);

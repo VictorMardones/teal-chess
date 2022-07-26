@@ -10,7 +10,9 @@ import engine.board.Coordinate;
 import engine.piece.Pawn;
 import lombok.EqualsAndHashCode;
 
-/** A move where a pawn gets to another tile. */
+/**
+ * A move where a pawn gets to another tile.
+ */
 @EqualsAndHashCode(callSuper = true)
 public class PawnMove extends Move {
     public PawnMove(Board board, Pawn pawn, Coordinate destination) {

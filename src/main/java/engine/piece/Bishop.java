@@ -15,7 +15,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-/** The bishop piece. It can move diagonally. */
+/**
+ * The bishop piece. It can move diagonally.
+ */
 @Getter
 @AllArgsConstructor
 @ToString(includeFieldNames = false)

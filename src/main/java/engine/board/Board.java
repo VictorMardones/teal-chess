@@ -18,7 +18,9 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-/** The game board, made of 8x8 tiles. */
+/**
+ * The game board, made of 8x8 tiles.
+ */
 @Slf4j
 @ToString
 public final class Board {
