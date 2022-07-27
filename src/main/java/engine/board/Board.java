@@ -58,13 +58,13 @@ public final class Board {
         blackPieces = calculateActivePieces(gameBoard, Alliance.BLACK);
         log.debug("Black pieces: {}", blackPieces);
 
+        enPassantPawn = builder.enPassantPawn;
+        log.debug("En passant pawn: {}", enPassantPawn);
+
         final Collection<Move> whiteLegals = calculateLegals(whitePieces);
         log.debug("White legals: {}", whiteLegals);
         final Collection<Move> blackLegals = calculateLegals(blackPieces);
         log.debug("Black legals: {}", blackLegals);
-
-        enPassantPawn = builder.enPassantPawn;
-        log.debug("En passant pawn: {}", enPassantPawn);
 
         whitePlayer = new WhitePlayer(this, builder.whiteKing, whiteLegals, blackLegals);
         log.debug("White player: {}", whitePlayer);

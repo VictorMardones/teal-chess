@@ -8,7 +8,6 @@ package engine.piece;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import engine.board.Board;
 import engine.board.Tile;
 import engine.player.Alliance;
 import java.util.Optional;
@@ -23,9 +22,6 @@ class PieceTest {
 
     @Spy
     Piece piece;
-
-    @Mock
-    Board board;
 
     @Mock
     Tile destinationTile;
@@ -86,7 +82,7 @@ class PieceTest {
     void isEmptyAccesible() {
         when(destinationTile.getPiece()).thenReturn(Optional.empty());
 
-        assertThat(piece.isAccessible(board, destinationTile)).isTrue();
+        assertThat(piece.isAccessible(destinationTile)).isTrue();
     }
 
     @Test
@@ -95,7 +91,7 @@ class PieceTest {
         when(destinationTile.getPiece()).thenReturn(Optional.of(destinationPiece));
         when(destinationPiece.getAlliance()).thenReturn(Alliance.WHITE);
 
-        assertThat(piece.isAccessible(board, destinationTile)).isTrue();
+        assertThat(piece.isAccessible(destinationTile)).isTrue();
     }
 
     @Test
@@ -104,6 +100,6 @@ class PieceTest {
         when(destinationTile.getPiece()).thenReturn(Optional.of(destinationPiece));
         when(destinationPiece.getAlliance()).thenReturn(Alliance.BLACK);
 
-        assertThat(piece.isAccessible(board, destinationTile)).isFalse();
+        assertThat(piece.isAccessible(destinationTile)).isFalse();
     }
 }

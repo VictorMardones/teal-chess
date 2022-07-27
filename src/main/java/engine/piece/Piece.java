@@ -40,7 +40,7 @@ public interface Piece {
     default Collection<Move> calculateLegals(final Board board) {
         return calculatePossibleDestinations(board).stream()
                 .map(board::getTile)
-                .filter(tile -> isAccessible(board, tile))
+                .filter(this::isAccessible)
                 .map(tile -> createMove(tile, board))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -86,7 +86,7 @@ public interface Piece {
      * @param destination The target destination.
      * @return True if the piece can get to the destination.
      */
-    default boolean isAccessible(final Board board, final Tile destination) {
+    default boolean isAccessible(final Tile destination) {
         final var pieceAtDestination = destination.getPiece();
         return pieceAtDestination.isEmpty() || isEnemyOf(pieceAtDestination.get());
     }
