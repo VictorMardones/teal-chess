@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 class TilePanel extends JPanel {
 
-    private static final Dimension TILE_PANEL_DIMENSION = new Dimension(10, 10);
+    private static final Dimension SIZE = new Dimension(10, 10);
     private static final Color LIGHT_TILE_COLOR = Color.decode("#FFCE9E");
     private static final Color BLACK_TILE_COLOR = Color.decode("#D18B47");
 
@@ -42,7 +42,7 @@ class TilePanel extends JPanel {
         this.table = table;
         this.coordinate = coordinate;
 
-        setPreferredSize(TILE_PANEL_DIMENSION);
+        setPreferredSize(SIZE);
         assignTileColor();
         assignPieceIcon(table.getChessboard());
         validate();
@@ -105,23 +105,33 @@ class TilePanel extends JPanel {
     }
 
     private void secondLeftClick() {
-        log.debug("Selected the destination {}", coordinate);
-        table.setDestinationTile(table.getChessboard().getTile(coordinate));
+        // TODO: Replace all these long method calls with forwarding methods
+        if (table.getChessboard().getTile(coordinate).getPiece().isPresent()
+                && !table.getChessboard()
+                        .getTile(coordinate)
+                        .getPiece()
+                        .get()
+                        .getAlliance()
+                        .equals(table.getChessboard().getCurrentPlayer().getAlliance())) {
 
-        final var move = Move.Factory.create(
-                table.getChessboard(),
-                table.getSourceTile().getCoordinate(),
-                table.getDestinationTile().getCoordinate());
+            log.debug("Selected the destination {}", coordinate);
+            table.setDestinationTile(table.getChessboard().getTile(coordinate));
 
-        if (move.isPresent()) {
-            final var moveTransition = table.getChessboard().getCurrentPlayer().makeMove(move.get());
+            final var move = Move.Factory.create(
+                    table.getChessboard(),
+                    table.getSourceTile().getCoordinate(),
+                    table.getDestinationTile().getCoordinate());
 
-            if (moveTransition.getMoveStatus().isDone()) {
-                table.setChessboard(moveTransition.getBoard());
-                table.addMoveToLog(move.get());
+            if (move.isPresent()) {
+                final var moveTransition =
+                        table.getChessboard().getCurrentPlayer().makeMove(move.get());
+
+                if (moveTransition.getMoveStatus().isDone()) {
+                    table.setChessboard(moveTransition.getBoard());
+                    table.addMoveToLog(move.get());
+                }
             }
         }
-
         table.resetSelection();
     }
 
@@ -137,10 +147,7 @@ class TilePanel extends JPanel {
         removeAll();
 
         if (board.getTile(coordinate).getPiece().isPresent()) {
-            PieceIconLoader.loadIcon(
-                            board.getTile(coordinate).getPiece().get(),
-                            TILE_PANEL_DIMENSION.width * 6,
-                            TILE_PANEL_DIMENSION.height * 6)
+            PieceIconLoader.load(board.getTile(coordinate).getPiece().get(), SIZE.width * 6, SIZE.height * 6)
                     .ifPresent(image -> add(new JLabel(new ImageIcon(image))));
         }
     }
@@ -150,14 +157,12 @@ class TilePanel extends JPanel {
     }
 
     private void highlightLegals(final Board board) {
-        if (table.isHighlightLegalMoves()) {
+        if (table.isHighlightLegals()) {
             selectedPieceLegals(board).stream()
                     .filter(move -> move.getDestination() == coordinate)
                     .forEach(move -> {
                         final var image = SvgImporter.importSvg(
-                                new File("art/misc/green_dot.svg"),
-                                TILE_PANEL_DIMENSION.width * 4,
-                                TILE_PANEL_DIMENSION.height * 4);
+                                new File("art/misc/green_dot.svg"), SIZE.width * 4, SIZE.height * 4);
 
                         image.ifPresent(bufferedImage -> add(new JLabel(new ImageIcon(bufferedImage))));
                     });
@@ -169,7 +174,7 @@ class TilePanel extends JPanel {
             return Collections.emptyList();
         }
 
-        return table.getSelectedPiece().calculateLegalMoves(board);
+        return table.getSelectedPiece().calculateLegals(board);
     }
 
     private boolean isOpponentPieceSelected(Board board) {

@@ -11,10 +11,10 @@ import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor
 public class MoveLog {
 
-    @Getter
     private final List<Move> moves = new ArrayList<>();
 
     public void add(final Move move) {

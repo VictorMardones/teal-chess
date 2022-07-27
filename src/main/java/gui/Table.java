@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Table {
 
-    private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(700, 600);
+    private static final Dimension SIZE = new Dimension(700, 600);
 
     private final JFrame gameFrame;
     private final BoardPanel boardPanel;
@@ -51,16 +51,16 @@ public class Table {
     private BoardDirection boardDirection;
 
     @Getter
-    private boolean highlightLegalMoves;
+    private boolean highlightLegals;
 
     public Table() {
         chessboard = Board.createStandardBoard();
         boardDirection = BoardDirection.NORMAL;
-        highlightLegalMoves = true;
+        highlightLegals = true;
 
         gameFrame = new JFrame("Chess game, made in Java");
         gameFrame.setLayout(new BorderLayout());
-        gameFrame.setSize(OUTER_FRAME_DIMENSION);
+        gameFrame.setSize(SIZE);
 
         gameFrame.setJMenuBar(createMenuBar());
 
@@ -110,8 +110,8 @@ public class Table {
             boardPanel.drawBoard(chessboard);
         });
 
-        final var highlightCheckbox = new JCheckBoxMenuItem("Highlight Legal Moves", highlightLegalMoves);
-        highlightCheckbox.addActionListener(e -> highlightLegalMoves = highlightCheckbox.isSelected());
+        final var highlightCheckbox = new JCheckBoxMenuItem("Highlight Legal Moves", highlightLegals);
+        highlightCheckbox.addActionListener(e -> highlightLegals = highlightCheckbox.isSelected());
 
         preferencesMenu.add(flipBoard);
         preferencesMenu.add(highlightCheckbox);

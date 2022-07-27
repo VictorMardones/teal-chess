@@ -14,7 +14,7 @@ public final class PieceIconLoader {
 
     private static final String PIECE_ICON_PATH = "art/pieces";
 
-    public static Optional<BufferedImage> loadIcon(final Piece piece, final int width, final int height) {
+    public static Optional<BufferedImage> load(final Piece piece, final int width, final int height) {
         return SvgImporter.importSvg(new File(getIconPath(piece)), width, height);
     }
 

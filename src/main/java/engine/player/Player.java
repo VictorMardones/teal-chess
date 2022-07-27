@@ -34,16 +34,16 @@ public abstract class Player {
 
     @Getter
     @ToString.Exclude
-    protected final Collection<Move> legalMoves;
+    protected final Collection<Move> legals;
 
     private final boolean inCheck;
     private Boolean noEscapeMoves;
 
-    protected Player(Board board, King king, Collection<Move> legalMoves, Collection<Move> opponentMoves) {
+    protected Player(Board board, King king, Collection<Move> legals, Collection<Move> opponentMoves) {
         this.board = board;
         this.king = king;
 
-        this.legalMoves = ImmutableList.copyOf(Iterables.concat(legalMoves, calculateCastles(opponentMoves)));
+        this.legals = ImmutableList.copyOf(Iterables.concat(legals, calculateCastles(opponentMoves)));
         inCheck = !Player.calculateAttacksOnTile(king.getPosition(), opponentMoves)
                 .isEmpty();
     }
@@ -60,8 +60,8 @@ public abstract class Player {
      * @param move The move to check
      * @return True if the move is legal
      */
-    public boolean isMoveLegal(final Move move) {
-        return legalMoves.contains(move);
+    public boolean isLegal(final Move move) {
+        return legals.contains(move);
     }
 
     /**
@@ -85,7 +85,7 @@ public abstract class Player {
 
     private boolean hasNoEscapeMoves() {
         if (noEscapeMoves == null) {
-            noEscapeMoves = legalMoves.stream()
+            noEscapeMoves = legals.stream()
                     .map(this::makeMove)
                     .noneMatch(transition -> transition.getMoveStatus().isDone());
         }
@@ -108,7 +108,7 @@ public abstract class Player {
     }
 
     public MoveTransition makeMove(Move move) {
-        if (!isMoveLegal(move)) {
+        if (!isLegal(move)) {
             return new MoveTransition(board, move, MoveStatus.ILLEGAL);
         }
 
@@ -116,7 +116,7 @@ public abstract class Player {
 
         final Collection<Move> kingAttacks = Player.calculateAttacksOnTile(
                 transitionBoard.getCurrentPlayer().getOpponent().king.getPosition(),
-                transitionBoard.getCurrentPlayer().legalMoves);
+                transitionBoard.getCurrentPlayer().legals);
 
         if (!kingAttacks.isEmpty()) {
             return new MoveTransition(board, move, MoveStatus.LEAVES_PLAYER_IN_CHECK);
@@ -147,7 +147,7 @@ public abstract class Player {
     public abstract Player getOpponent();
 
     // TODO: Refactor this method, maybe use combinator pattern
-    protected Collection<Move> calculateCastles(final Collection<Move> opponentLegalMoves) {
+    protected Collection<Move> calculateCastles(final Collection<Move> opponentLegals) {
 
         final List<Move> castles = new ArrayList<>();
 
@@ -157,7 +157,7 @@ public abstract class Player {
 
         final var kingPosition = king.getPosition();
 
-        if (isKingSideCastlePossible(kingPosition, opponentLegalMoves)) {
+        if (isKingSideCastlePossible(kingPosition, opponentLegals)) {
             final var rook =
                     (Rook) board.getTile(kingPosition.right(3).get()).getPiece().get();
             final var kingDestination = kingPosition.right(2).get();
@@ -168,7 +168,7 @@ public abstract class Player {
             }
         }
 
-        if (isQueenSideCastlePossible(kingPosition, opponentLegalMoves)) {
+        if (isQueenSideCastlePossible(kingPosition, opponentLegals)) {
             final var rook =
                     (Rook) board.getTile(kingPosition.right(3).get()).getPiece().get();
             final var kingDestination = kingPosition.left(2).get();
@@ -182,22 +182,22 @@ public abstract class Player {
         return ImmutableList.copyOf(castles);
     }
 
-    private boolean isKingSideCastlePossible(Coordinate kingPosition, Collection<Move> opponentLegalMoves) {
+    private boolean isKingSideCastlePossible(Coordinate kingPosition, Collection<Move> opponentLegals) {
         return isTileFree(kingPosition, 1)
                 && isTileFree(kingPosition, 2)
                 && isTileRook(kingPosition, 3)
-                && isUnreachableByEnemy(kingPosition, 1, opponentLegalMoves)
-                && isUnreachableByEnemy(kingPosition, 2, opponentLegalMoves);
+                && isUnreachableByEnemy(kingPosition, 1, opponentLegals)
+                && isUnreachableByEnemy(kingPosition, 2, opponentLegals);
     }
 
-    private boolean isQueenSideCastlePossible(Coordinate kingPosition, Collection<Move> opponentLegalMoves) {
+    private boolean isQueenSideCastlePossible(Coordinate kingPosition, Collection<Move> opponentLegals) {
         return isTileFree(kingPosition, -1)
                 && isTileFree(kingPosition, -2)
                 && isTileFree(kingPosition, -3)
                 && isTileRook(kingPosition, -4)
-                && isUnreachableByEnemy(kingPosition, -1, opponentLegalMoves)
-                && isUnreachableByEnemy(kingPosition, -2, opponentLegalMoves)
-                && isUnreachableByEnemy(kingPosition, -3, opponentLegalMoves);
+                && isUnreachableByEnemy(kingPosition, -1, opponentLegals)
+                && isUnreachableByEnemy(kingPosition, -2, opponentLegals)
+                && isUnreachableByEnemy(kingPosition, -3, opponentLegals);
     }
 
     private boolean isTileFree(final Coordinate kingPosition, final int offset) {
@@ -207,11 +207,11 @@ public abstract class Player {
     }
 
     private boolean isUnreachableByEnemy(
-            final Coordinate kingPosition, final int offset, Collection<Move> opponentLegalMoves) {
+            final Coordinate kingPosition, final int offset, Collection<Move> opponentLegals) {
         final var destination = kingPosition.right(offset);
 
         return destination.isPresent()
-                && Player.calculateAttacksOnTile(destination.get(), opponentLegalMoves)
+                && Player.calculateAttacksOnTile(destination.get(), opponentLegals)
                         .isEmpty();
     }
 

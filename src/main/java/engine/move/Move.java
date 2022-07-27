@@ -96,7 +96,7 @@ public abstract class Move {
          * @return Move that goes from the source to the destination, if possible.
          */
         public static Optional<Move> create(final Board board, final Coordinate source, final Coordinate destination) {
-            return board.getCurrentPlayerLegalMoves().stream()
+            return board.getCurrentPlayerLegals().stream()
                     .filter(isMovePossible(source, destination))
                     .findFirst();
         }

@@ -55,14 +55,14 @@ public final class Board {
         blackPieces = calculateActivePieces(gameBoard, Alliance.BLACK);
         log.debug("Black pieces: {}", blackPieces);
 
-        final Collection<Move> whiteLegalMoves = calculateLegalMoves(whitePieces);
-        log.debug("White legal moves: {}", whiteLegalMoves);
-        final Collection<Move> blackLegalMoves = calculateLegalMoves(blackPieces);
-        log.debug("Black legal moves: {}", blackLegalMoves);
+        final Collection<Move> whiteLegals = calculateLegals(whitePieces);
+        log.debug("White legals: {}", whiteLegals);
+        final Collection<Move> blackLegals = calculateLegals(blackPieces);
+        log.debug("Black legals: {}", blackLegals);
 
-        whitePlayer = new WhitePlayer(this, builder.whiteKing, whiteLegalMoves, blackLegalMoves);
+        whitePlayer = new WhitePlayer(this, builder.whiteKing, whiteLegals, blackLegals);
         log.debug("White player: {}", whitePlayer);
-        blackPlayer = new BlackPlayer(this, builder.blackKing, blackLegalMoves, whiteLegalMoves);
+        blackPlayer = new BlackPlayer(this, builder.blackKing, blackLegals, whiteLegals);
         log.debug("Black player: {}", blackPlayer);
 
         currentPlayer = builder.moveMaker.choosePlayer(List.of(whitePlayer, blackPlayer));
@@ -137,15 +137,15 @@ public final class Board {
                 .collect(ImmutableList.toImmutableList());
     }
 
-    private Collection<Move> calculateLegalMoves(Collection<Piece> pieces) {
+    private Collection<Move> calculateLegals(Collection<Piece> pieces) {
         return pieces.stream()
-                .map(piece -> piece.calculateLegalMoves(this))
+                .map(piece -> piece.calculateLegals(this))
                 .flatMap(Collection::stream)
                 .collect(ImmutableList.toImmutableList());
     }
 
-    public Collection<Move> getCurrentPlayerLegalMoves() {
-        return ImmutableList.copyOf(currentPlayer.getLegalMoves());
+    public Collection<Move> getCurrentPlayerLegals() {
+        return ImmutableList.copyOf(currentPlayer.getLegals());
     }
 
     public String toText() {

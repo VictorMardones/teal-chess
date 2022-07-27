@@ -15,8 +15,8 @@ import java.util.Collection;
  * The player that uses the white pieces.
  */
 public class WhitePlayer extends Player {
-    public WhitePlayer(Board board, King king, Collection<Move> whiteLegalMoves, Collection<Move> blackLegalMoves) {
-        super(board, king, whiteLegalMoves, blackLegalMoves);
+    public WhitePlayer(Board board, King king, Collection<Move> whiteLegals, Collection<Move> blackLegals) {
+        super(board, king, whiteLegals, blackLegals);
     }
 
     @Override

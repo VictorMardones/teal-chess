@@ -37,7 +37,7 @@ public interface Piece {
      * @param board Current state of the game board.
      * @return List of possible moves.
      */
-    default Collection<Move> calculateLegalMoves(final Board board) {
+    default Collection<Move> calculateLegals(final Board board) {
         return calculatePossibleDestinations(board).stream()
                 .map(board::getTile)
                 .filter(this::isAccessible)
@@ -50,7 +50,7 @@ public interface Piece {
     Collection<Coordinate> calculatePossibleDestinations(final Board board);
 
     default boolean isInMoveRange(final Board board, Coordinate coordinate) {
-        return calculateLegalMoves(board).stream()
+        return calculateLegals(board).stream()
                 .map(Move::getDestination)
                 .anyMatch(destination -> destination == coordinate);
     }
