@@ -8,6 +8,8 @@ package engine.piece;
 import com.google.common.collect.ImmutableList;
 import engine.board.Coordinate;
 import engine.move.Move;
+import engine.piece.vector.Diagonal;
+import engine.piece.vector.Vector;
 import engine.player.Alliance;
 import java.util.Arrays;
 import java.util.Collection;
@@ -49,6 +51,6 @@ public class Bishop implements SlidingPiece {
     }
 
     private static Collection<int[]> calculateMoveVectors() {
-        return Arrays.stream(Vector.Diagonal.values()).map(Vector::getVector).collect(ImmutableList.toImmutableList());
+        return Arrays.stream(Diagonal.values()).map(Vector::getVector).collect(ImmutableList.toImmutableList());
     }
 }

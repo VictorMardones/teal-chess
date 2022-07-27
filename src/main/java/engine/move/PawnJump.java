@@ -6,7 +6,6 @@
 package engine.move;
 
 import engine.board.Board;
-import engine.board.Board.Builder;
 import engine.board.Coordinate;
 import engine.piece.Pawn;
 import lombok.EqualsAndHashCode;
@@ -19,20 +18,22 @@ public class PawnJump extends Move {
 
     @Override
     public Board execute() {
-        final var builder = new Builder(
-                board.getWhitePlayer().getKing(), board.getBlackPlayer().getKing());
+        final var builder = Board.builder();
+
+        builder.whiteKing(board.getWhitePlayer().getKing())
+                .blackKing(board.getBlackPlayer().getKing());
 
         board.getCurrentPlayer().getActivePieces().stream()
                 .filter(activePiece -> !piece.equals(activePiece))
-                .forEach(builder::withPiece);
+                .forEach(builder::piece);
 
-        board.getCurrentPlayer().getOpponent().getActivePieces().forEach(builder::withPiece);
+        board.getCurrentPlayer().getOpponent().getActivePieces().forEach(builder::piece);
 
         final var movedPawn = piece.move(this);
 
-        builder.withPiece(movedPawn);
-        builder.withEnPassantPawn((Pawn) movedPawn);
-        builder.withMoveMaker(board.getCurrentPlayer().getOpponent().getAlliance());
+        builder.piece(movedPawn);
+        builder.enPassantPawn((Pawn) movedPawn);
+        builder.moveMaker(board.getCurrentPlayer().getOpponent().getAlliance());
         return builder.build();
     }
 }

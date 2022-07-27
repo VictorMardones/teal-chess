@@ -8,6 +8,8 @@ package engine.piece;
 import com.google.common.collect.ImmutableList;
 import engine.board.Coordinate;
 import engine.move.Move;
+import engine.piece.vector.LShaped;
+import engine.piece.vector.Vector;
 import engine.player.Alliance;
 import java.util.Arrays;
 import java.util.Collection;
@@ -49,6 +51,6 @@ public class Knight implements JumpingPiece {
     }
 
     private static Collection<int[]> calculateMoveOffsets() {
-        return Arrays.stream(Vector.LShaped.values()).map(Vector::getVector).collect(ImmutableList.toImmutableList());
+        return Arrays.stream(LShaped.values()).map(Vector::getVector).collect(ImmutableList.toImmutableList());
     }
 }

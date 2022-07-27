@@ -81,37 +81,43 @@ public final class Board {
         final var whiteKing = new King(Coordinate.of("e1"), Alliance.WHITE);
         final var blackKing = new King(Coordinate.of("e8"), Alliance.BLACK);
 
-        final var builder = new Builder(whiteKing, blackKing);
+        final var builder = builder();
 
-        builder.withPiece(new Rook(Coordinate.of("a8"), Alliance.BLACK))
-                .withPiece(new Knight(Coordinate.of("b8"), Alliance.BLACK))
-                .withPiece(new Bishop(Coordinate.of("c8"), Alliance.BLACK))
-                .withPiece(new Queen(Coordinate.of("d8"), Alliance.BLACK))
-                .withPiece(blackKing)
-                .withPiece(new Bishop(Coordinate.of("f8"), Alliance.BLACK))
-                .withPiece(new Knight(Coordinate.of("g8"), Alliance.BLACK))
-                .withPiece(new Rook(Coordinate.of("h8"), Alliance.BLACK));
+        builder.piece(new Rook(Coordinate.of("a8"), Alliance.BLACK))
+                .piece(new Knight(Coordinate.of("b8"), Alliance.BLACK))
+                .piece(new Bishop(Coordinate.of("c8"), Alliance.BLACK))
+                .piece(new Queen(Coordinate.of("d8"), Alliance.BLACK))
+                .piece(blackKing)
+                .blackKing(blackKing)
+                .piece(new Bishop(Coordinate.of("f8"), Alliance.BLACK))
+                .piece(new Knight(Coordinate.of("g8"), Alliance.BLACK))
+                .piece(new Rook(Coordinate.of("h8"), Alliance.BLACK));
 
         IntStream.range(8, 16)
                 .mapToObj(Coordinate::of)
                 .map(coordinate -> new Pawn(coordinate, Alliance.BLACK))
-                .forEach(builder::withPiece);
+                .forEach(builder::piece);
 
         IntStream.range(48, 56)
                 .mapToObj(Coordinate::of)
                 .map(coordinate -> new Pawn(coordinate, Alliance.WHITE))
-                .forEach(builder::withPiece);
+                .forEach(builder::piece);
 
-        builder.withPiece(new Rook(Coordinate.of("a1"), Alliance.WHITE))
-                .withPiece(new Knight(Coordinate.of("b1"), Alliance.WHITE))
-                .withPiece(new Bishop(Coordinate.of("c1"), Alliance.WHITE))
-                .withPiece(new Queen(Coordinate.of("d1"), Alliance.WHITE))
-                .withPiece(whiteKing)
-                .withPiece(new Bishop(Coordinate.of("f1"), Alliance.WHITE))
-                .withPiece(new Knight(Coordinate.of("g1"), Alliance.WHITE))
-                .withPiece(new Rook(Coordinate.of("h1"), Alliance.WHITE));
+        builder.piece(new Rook(Coordinate.of("a1"), Alliance.WHITE))
+                .piece(new Knight(Coordinate.of("b1"), Alliance.WHITE))
+                .piece(new Bishop(Coordinate.of("c1"), Alliance.WHITE))
+                .piece(new Queen(Coordinate.of("d1"), Alliance.WHITE))
+                .piece(whiteKing)
+                .whiteKing(whiteKing)
+                .piece(new Bishop(Coordinate.of("f1"), Alliance.WHITE))
+                .piece(new Knight(Coordinate.of("g1"), Alliance.WHITE))
+                .piece(new Rook(Coordinate.of("h1"), Alliance.WHITE));
 
-        return builder.withMoveMaker(Alliance.WHITE).build();
+        return builder.moveMaker(Alliance.WHITE).build();
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     public Tile getTile(Coordinate coordinate) {
@@ -165,43 +171,41 @@ public final class Board {
 
     public static class Builder {
 
-        private final Map<Coordinate, Piece> boardConfig;
+        private final Map<Coordinate, Piece> boardConfig = new HashMap<>();
         private Alliance moveMaker;
         private King whiteKing;
         private King blackKing;
+        private Pawn enPassantPawn;
 
-        public Builder(King whiteKing, King blackKing) {
-            boardConfig = new HashMap<>();
-            this.whiteKing = whiteKing;
-            this.blackKing = blackKing;
-        }
-
-        public Builder withPiece(final Piece piece) {
+        public Builder piece(final Piece piece) {
             boardConfig.put(piece.getPosition(), piece);
             return this;
         }
 
-        public Builder withMoveMaker(final Alliance moveMaker) {
+        public Builder moveMaker(final Alliance moveMaker) {
             this.moveMaker = moveMaker;
             return this;
         }
 
-        public Builder withWhiteKing(final King whiteKing) {
+        public Builder whiteKing(final King whiteKing) {
             this.whiteKing = whiteKing;
             return this;
         }
 
-        public Builder withBlackKing(final King blackKing) {
+        public Builder blackKing(final King blackKing) {
             this.blackKing = blackKing;
             return this;
         }
 
-        public Builder withEnPassantPawn(Pawn pawn) {
+        public Builder enPassantPawn(Pawn pawn) {
             // TODO: Implement this
             return this;
         }
 
         public Board build() {
+            Objects.requireNonNull(whiteKing);
+            Objects.requireNonNull(blackKing);
+
             return new Board(this);
         }
     }

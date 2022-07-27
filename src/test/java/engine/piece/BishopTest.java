@@ -10,6 +10,8 @@ import static org.mockito.Mockito.when;
 
 import engine.board.Coordinate;
 import engine.move.Move;
+import engine.piece.vector.Diagonal;
+import engine.piece.vector.Vertical;
 import engine.player.Alliance;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,12 +47,12 @@ class BishopTest {
 
     @Test
     void diagonalMove() {
-        assertThat(bishop.getMoveVectors()).contains(Vector.Diagonal.UP_RIGHT.getVector());
+        assertThat(bishop.getMoveVectors()).contains(Diagonal.UP_RIGHT.getVector());
     }
 
     @Test
     void illegalMove() {
-        assertThat(bishop.getMoveVectors()).doesNotContain(Vector.Vertical.UP.getVector());
+        assertThat(bishop.getMoveVectors()).doesNotContain(Vertical.UP.getVector());
     }
 
     @Test

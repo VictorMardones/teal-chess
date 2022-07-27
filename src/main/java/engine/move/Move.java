@@ -6,7 +6,6 @@
 package engine.move;
 
 import engine.board.Board;
-import engine.board.Board.Builder;
 import engine.board.Coordinate;
 import engine.piece.Piece;
 import java.util.Optional;
@@ -60,20 +59,22 @@ public abstract class Move {
      */
     public Board execute() {
 
-        final var builder = new Builder(
-                board.getWhitePlayer().getKing(), board.getBlackPlayer().getKing());
+        final var builder = Board.builder();
+
+        builder.whiteKing(board.getWhitePlayer().getKing())
+                .blackKing(board.getBlackPlayer().getKing());
 
         board.getCurrentPlayer().getActivePieces().stream()
                 .filter(activePiece -> !piece.equals(activePiece))
-                .forEach(builder::withPiece);
+                .forEach(builder::piece);
 
-        board.getCurrentPlayer().getOpponent().getActivePieces().forEach(builder::withPiece);
+        board.getCurrentPlayer().getOpponent().getActivePieces().forEach(builder::piece);
 
         log.info("Moving the selected piece to {}", piece.move(this));
 
-        builder.withPiece(piece.move(this));
+        builder.piece(piece.move(this));
 
-        builder.withMoveMaker(board.getCurrentPlayer().getOpponent().getAlliance());
+        builder.moveMaker(board.getCurrentPlayer().getOpponent().getAlliance());
         return builder.build();
     }
 

@@ -21,20 +21,24 @@ public class PawnEnPassantMove extends PawnCaptureMove {
 
     @Override
     public Board execute() {
-        final var builder = new Board.Builder(
-                board.getWhitePlayer().getKing(), board.getBlackPlayer().getKing());
+        final var builder = Board.builder();
+
+        builder.whiteKing(board.getWhitePlayer().getKing())
+                .blackKing(board.getWhitePlayer().getKing());
 
         board.getCurrentPlayer().getActivePieces().stream()
                 .filter(activePiece -> !piece.equals(activePiece))
-                .forEach(builder::withPiece);
+                .forEach(builder::piece);
 
-        board.getCurrentPlayer().getOpponent().getActivePieces().stream().filter(activePiece -> !capturedPiece.equals(activePiece)).forEach(builder::withPiece);
+        board.getCurrentPlayer().getOpponent().getActivePieces().stream()
+                .filter(activePiece -> !capturedPiece.equals(activePiece))
+                .forEach(builder::piece);
 
         log.info("Moving the selected piece to {}", piece.move(this));
 
-        builder.withPiece(piece.move(this));
+        builder.piece(piece.move(this));
 
-        builder.withMoveMaker(board.getCurrentPlayer().getOpponent().getAlliance());
+        builder.moveMaker(board.getCurrentPlayer().getOpponent().getAlliance());
         return builder.build();
     }
 }

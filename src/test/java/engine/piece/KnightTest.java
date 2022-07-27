@@ -10,6 +10,8 @@ import static org.mockito.Mockito.when;
 
 import engine.board.Coordinate;
 import engine.move.Move;
+import engine.piece.vector.LShaped;
+import engine.piece.vector.Vertical;
 import engine.player.Alliance;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,12 +47,12 @@ class KnightTest {
 
     @Test
     void lShapedMove() {
-        assertThat(knight.getMoveOffsets()).contains(Vector.LShaped.UP_UP_LEFT.getVector());
+        assertThat(knight.getMoveOffsets()).contains(LShaped.UP_UP_LEFT.getVector());
     }
 
     @Test
     void illegalMove() {
-        assertThat(knight.getMoveOffsets()).doesNotContain(Vector.Vertical.UP.getVector());
+        assertThat(knight.getMoveOffsets()).doesNotContain(Vertical.UP.getVector());
     }
 
     @Test

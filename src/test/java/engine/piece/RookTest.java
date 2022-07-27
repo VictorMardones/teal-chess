@@ -10,6 +10,9 @@ import static org.mockito.Mockito.when;
 
 import engine.board.Coordinate;
 import engine.move.Move;
+import engine.piece.vector.Diagonal;
+import engine.piece.vector.Horizontal;
+import engine.piece.vector.Vertical;
 import engine.player.Alliance;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,17 +48,17 @@ class RookTest {
 
     @Test
     void horizontalMove() {
-        assertThat(rook.getMoveVectors()).contains(Vector.Horizontal.RIGHT.getVector());
+        assertThat(rook.getMoveVectors()).contains(Horizontal.RIGHT.getVector());
     }
 
     @Test
     void verticalMove() {
-        assertThat(rook.getMoveVectors()).contains(Vector.Vertical.UP.getVector());
+        assertThat(rook.getMoveVectors()).contains(Vertical.UP.getVector());
     }
 
     @Test
     void illegalMove() {
-        assertThat(rook.getMoveVectors()).doesNotContain(Vector.Diagonal.DOWN_RIGHT.getVector());
+        assertThat(rook.getMoveVectors()).doesNotContain(Diagonal.DOWN_RIGHT.getVector());
     }
 
     @Test

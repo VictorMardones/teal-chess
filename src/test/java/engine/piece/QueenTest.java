@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 import engine.board.Coordinate;
 import engine.move.Move;
+import engine.piece.vector.*;
 import engine.player.Alliance;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,22 +46,22 @@ class QueenTest {
 
     @Test
     void diagonalMove() {
-        assertThat(queen.getMoveVectors()).contains(Vector.Diagonal.DOWN_RIGHT.getVector());
+        assertThat(queen.getMoveVectors()).contains(Diagonal.DOWN_RIGHT.getVector());
     }
 
     @Test
     void horizontalMove() {
-        assertThat(queen.getMoveVectors()).contains(Vector.Horizontal.LEFT.getVector());
+        assertThat(queen.getMoveVectors()).contains(Horizontal.LEFT.getVector());
     }
 
     @Test
     void verticalMove() {
-        assertThat(queen.getMoveVectors()).contains(Vector.Vertical.UP.getVector());
+        assertThat(queen.getMoveVectors()).contains(Vertical.UP.getVector());
     }
 
     @Test
     void illegalMove() {
-        assertThat(queen.getMoveVectors()).doesNotContain(Vector.LShaped.UP_UP_LEFT.getVector());
+        assertThat(queen.getMoveVectors()).doesNotContain(LShaped.UP_UP_LEFT.getVector());
     }
 
     @Test

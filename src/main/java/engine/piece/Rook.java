@@ -8,6 +8,9 @@ package engine.piece;
 import com.google.common.collect.ImmutableList;
 import engine.board.Coordinate;
 import engine.move.Move;
+import engine.piece.vector.Horizontal;
+import engine.piece.vector.Vector;
+import engine.piece.vector.Vertical;
 import engine.player.Alliance;
 import java.util.Arrays;
 import java.util.Collection;
@@ -50,7 +53,7 @@ public class Rook implements SlidingPiece {
 
     @Override
     public Collection<int[]> getMoveVectors() {
-        return Stream.concat(Arrays.stream(Vector.Horizontal.values()), Arrays.stream(Vector.Vertical.values()))
+        return Stream.concat(Arrays.stream(Horizontal.values()), Arrays.stream(Vertical.values()))
                 .map(Vector::getVector)
                 .collect(ImmutableList.toImmutableList());
     }

@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 import engine.board.Coordinate;
 import engine.move.Move;
+import engine.piece.vector.*;
 import engine.player.Alliance;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,23 +46,23 @@ class PawnTest {
 
     @Test
     void whiteMoves() {
-        assertThat(pawn.getMoveOffsets()).contains(Vector.Vertical.UP.getVector());
-        assertThat(pawn.getMoveOffsets()).contains(Vector.Jump.UP.getVector());
-        assertThat(pawn.getMoveOffsets()).contains(Vector.Diagonal.UP_RIGHT.getVector());
+        assertThat(pawn.getMoveOffsets()).contains(Vertical.UP.getVector());
+        assertThat(pawn.getMoveOffsets()).contains(Jump.UP.getVector());
+        assertThat(pawn.getMoveOffsets()).contains(Diagonal.UP_RIGHT.getVector());
     }
 
     @Test
     void blackMoves() {
         final var blackPawn = new Pawn(coordinate, Alliance.BLACK);
 
-        assertThat(blackPawn.getMoveOffsets()).contains(Vector.Vertical.DOWN.getVector());
-        assertThat(blackPawn.getMoveOffsets()).contains(Vector.Jump.DOWN.getVector());
-        assertThat(blackPawn.getMoveOffsets()).contains(Vector.Diagonal.DOWN_RIGHT.getVector());
+        assertThat(blackPawn.getMoveOffsets()).contains(Vertical.DOWN.getVector());
+        assertThat(blackPawn.getMoveOffsets()).contains(Jump.DOWN.getVector());
+        assertThat(blackPawn.getMoveOffsets()).contains(Diagonal.DOWN_RIGHT.getVector());
     }
 
     @Test
     void illegalMove() {
-        assertThat(pawn.getMoveOffsets()).doesNotContain(Vector.Horizontal.RIGHT.getVector());
+        assertThat(pawn.getMoveOffsets()).doesNotContain(Horizontal.RIGHT.getVector());
     }
 
     @Test

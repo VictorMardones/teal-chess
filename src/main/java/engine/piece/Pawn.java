@@ -13,6 +13,10 @@ import engine.move.Move;
 import engine.move.PawnCaptureMove;
 import engine.move.PawnJump;
 import engine.move.PawnMove;
+import engine.piece.vector.Diagonal;
+import engine.piece.vector.Jump;
+import engine.piece.vector.Vector;
+import engine.piece.vector.Vertical;
 import engine.player.Alliance;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -116,22 +120,20 @@ public class Pawn implements JumpingPiece {
     }
 
     private Collection<int[]> calculateWhiteOffsets() {
-        final List<Vector> moves =
-                new ArrayList<>(List.of(Vector.Vertical.UP, Vector.Diagonal.UP_LEFT, Vector.Diagonal.UP_RIGHT));
+        final List<Vector> moves = new ArrayList<>(List.of(Vertical.UP, Diagonal.UP_LEFT, Diagonal.UP_RIGHT));
 
         if (isFirstMove()) {
-            moves.add(Vector.Jump.UP);
+            moves.add(Jump.UP);
         }
 
         return moves.stream().map(Vector::getVector).collect(ImmutableList.toImmutableList());
     }
 
     private Collection<int[]> calculateBlackOffsets() {
-        final List<Vector> moves =
-                new ArrayList<>(List.of(Vector.Vertical.DOWN, Vector.Diagonal.DOWN_LEFT, Vector.Diagonal.DOWN_RIGHT));
+        final List<Vector> moves = new ArrayList<>(List.of(Vertical.DOWN, Diagonal.DOWN_LEFT, Diagonal.DOWN_RIGHT));
 
         if (isFirstMove()) {
-            moves.add(Vector.Jump.DOWN);
+            moves.add(Jump.DOWN);
         }
 
         return moves.stream().map(Vector::getVector).collect(ImmutableList.toImmutableList());
