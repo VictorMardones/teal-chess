@@ -106,13 +106,18 @@ class TilePanel extends JPanel {
 
     private void secondLeftClick() {
         // TODO: Replace all these long method calls with forwarding methods
+        // TODO: Invert this condition check
         if (table.getChessboard().getTile(coordinate).getPiece().isPresent()
-                && !table.getChessboard()
+                && table.getChessboard()
                         .getTile(coordinate)
                         .getPiece()
                         .get()
                         .getAlliance()
                         .equals(table.getChessboard().getCurrentPlayer().getAlliance())) {
+            table.resetSelection();
+
+            return;
+        } else {
 
             log.debug("Selected the destination {}", coordinate);
             table.setDestinationTile(table.getChessboard().getTile(coordinate));

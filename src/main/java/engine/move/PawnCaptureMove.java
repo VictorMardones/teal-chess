@@ -19,4 +19,9 @@ public class PawnCaptureMove extends CaptureMove {
     public PawnCaptureMove(Board board, Pawn pawn, Coordinate destination, Piece capturedPiece) {
         super(board, pawn, destination, capturedPiece);
     }
+
+    @Override
+    public String toString() {
+        return String.format("%sx%s", piece.getPosition().toString().charAt(0), getDestination());
+    }
 }

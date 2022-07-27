@@ -21,4 +21,9 @@ public class CaptureMove extends Move {
 
         this.capturedPiece = capturedPiece;
     }
+
+    @Override
+    public String toString() {
+        return piece.toChar() + getDestination().toString();
+    }
 }
