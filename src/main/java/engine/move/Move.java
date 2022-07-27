@@ -70,7 +70,7 @@ public abstract class Move {
 
         board.getCurrentPlayer().getOpponent().getActivePieces().forEach(builder::piece);
 
-        log.info("Moving the selected piece to {}", piece.move(this));
+        log.debug("Moving the selected piece to {}", piece.move(this));
 
         builder.piece(piece.move(this));
 
@@ -97,13 +97,23 @@ public abstract class Move {
          * @return Move that goes from the source to the destination, if possible.
          */
         public static Optional<Move> create(final Board board, final Coordinate source, final Coordinate destination) {
+            if (source.equals(destination)) {
+                return Optional.empty();
+            }
+
+            log.debug(
+                    "Current piece legals: {}",
+                    board.getCurrentPlayerLegals().stream()
+                            .filter(move -> move.getSource().equals(source))
+                            .toList());
+
             return board.getCurrentPlayerLegals().stream()
                     .filter(isMovePossible(source, destination))
                     .findFirst();
         }
 
         private static Predicate<Move> isMovePossible(Coordinate source, Coordinate destination) {
-            return move -> move.getSource() == source && move.getDestination() == destination;
+            return move -> move.getSource().equals(source) && move.getDestination() == destination;
         }
     }
 

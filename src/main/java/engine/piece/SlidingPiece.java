@@ -31,7 +31,7 @@ public interface SlidingPiece extends Piece {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(board::getTile)
-                .takeWhile(this::isAccessible)
+                .takeWhile(tile -> isAccessible(board, tile))
                 .map(Tile::getCoordinate)
                 .collect(ImmutableList.toImmutableList());
     }

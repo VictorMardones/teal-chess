@@ -39,6 +39,10 @@ public enum Alliance {
                 .orElse(null);
     }
 
+    public int getOppositeDirection() {
+        return -direction;
+    }
+
     @Override
     public String toString() {
         return "" + super.toString().toLowerCase().charAt(0);

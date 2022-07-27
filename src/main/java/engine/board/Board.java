@@ -46,6 +46,9 @@ public final class Board {
     @Getter
     private final BlackPlayer blackPlayer;
 
+    @Getter
+    private final Pawn enPassantPawn;
+
     private Board(Builder builder) {
         gameBoard = createGameBoard(builder);
         log.debug("Current gameboard: {}", gameBoard);
@@ -59,6 +62,9 @@ public final class Board {
         log.debug("White legals: {}", whiteLegals);
         final Collection<Move> blackLegals = calculateLegals(blackPieces);
         log.debug("Black legals: {}", blackLegals);
+
+        enPassantPawn = builder.enPassantPawn;
+        log.debug("En passant pawn: {}", enPassantPawn);
 
         whitePlayer = new WhitePlayer(this, builder.whiteKing, whiteLegals, blackLegals);
         log.debug("White player: {}", whitePlayer);
@@ -198,7 +204,7 @@ public final class Board {
         }
 
         public Builder enPassantPawn(Pawn pawn) {
-            // TODO: Implement this
+            this.enPassantPawn = pawn;
             return this;
         }
 

@@ -91,7 +91,7 @@ public class Table {
         final var fileMenu = new JMenu("File");
 
         final var openPGN = new JMenuItem("Load PGN file");
-        openPGN.addActionListener(e -> log.info("Open PGN file!"));
+        openPGN.addActionListener(e -> log.debug("Open PGN file!"));
         fileMenu.add(openPGN);
 
         final var exit = new JMenuItem("Exit");

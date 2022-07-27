@@ -9,10 +9,7 @@ import com.google.common.collect.ImmutableList;
 import engine.board.Board;
 import engine.board.Coordinate;
 import engine.board.Tile;
-import engine.move.Move;
-import engine.move.PawnCaptureMove;
-import engine.move.PawnJump;
-import engine.move.PawnMove;
+import engine.move.*;
 import engine.piece.vector.Diagonal;
 import engine.piece.vector.Jump;
 import engine.piece.vector.Vector;
@@ -55,14 +52,49 @@ public class Pawn implements JumpingPiece {
     public Optional<Move> createMove(Tile destination, Board board) {
 
         if (isCaptureMove(destination)) {
-            return createCaptureMove(board, destination);
+            if (!isEnPassantPossible(board, destination)) {
+                return createCaptureMove(board, destination);
+            }
+
+            log.debug("En passant is possible!");
+            return createEnPassantMove(board, destination);
         }
 
-        if (isJumpPossible(board)) {
+        if (isJumpPossible(board, destination)) {
             return createJumpMove(board, destination);
         }
 
         return createForwardMove(board, destination);
+    }
+
+    private Optional<Move> createEnPassantMove(Board board, Tile destination) {
+        final var enPassantMove =
+                new EnPassantMove(board, this, destination.getCoordinate(), board.getEnPassantPawn());
+
+        log.debug("Created en passant move: {}", enPassantMove);
+        return Optional.of(enPassantMove);
+    }
+
+    private boolean isEnPassantPossible(final Board board, Tile destination) {
+
+        if (board.getEnPassantPawn() == null) {
+            return false;
+        }
+
+        var side = destination.getCoordinate().to(0, alliance.getOppositeDirection());
+
+        if (side.isEmpty()) {
+            return false;
+        }
+
+        return board.getTile(side.get()).getPiece().isPresent()
+                && board.getTile(side.get()).getPiece().get().equals(board.getEnPassantPawn())
+                && destination.getPiece().isEmpty();
+    }
+
+    @Override
+    public boolean isAccessible(Board board, Tile destination) {
+        return isEnPassantPossible(board, destination) || JumpingPiece.super.isAccessible(board, destination);
     }
 
     private boolean isCaptureMove(Tile destination) {
@@ -83,18 +115,15 @@ public class Pawn implements JumpingPiece {
         return Optional.of(new PawnJump(board, this, destination.getCoordinate()));
     }
 
-    private boolean isJumpPossible(final Board board) {
+    private boolean isJumpPossible(final Board board, Tile destination) {
 
         var forward = position.up(alliance.getDirection());
-        var destination = position.up(2 * alliance.getDirection());
 
-        if (forward.isEmpty() || destination.isEmpty()) {
+        if (forward.isEmpty()) {
             return false;
         }
 
-        return isFirstMove()
-                && isAccessible(board.getTile(forward.get()))
-                && isAccessible(board.getTile(destination.get()));
+        return isFirstMove() && isAccessible(board, board.getTile(forward.get())) && isAccessible(board, destination);
     }
 
     private Optional<Move> createForwardMove(Board board, Tile destination) {

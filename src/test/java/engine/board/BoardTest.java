@@ -16,10 +16,11 @@ class BoardTest {
     @Test
     void toText() {
         assertThat(board.toText())
-                .contains("r  n  b  q  k  b  n  r")
-                .contains("p  p  p  p  p  p  p  p")
+                .containsOnlyOnce("r  n  b  q  k  b  n  r")
+                .containsOnlyOnce("p  p  p  p  p  p  p  p")
                 .contains("-  -  -  -  -  -  -  -")
-                .contains("P  P  P  P  P  P  P  P")
-                .contains("R  N  B  Q  K  B  N  R");
+                .containsOnlyOnce("P  P  P  P  P  P  P  P")
+                .containsOnlyOnce("R  N  B  Q  K  B  N  R")
+                .contains("\n");
     }
 }

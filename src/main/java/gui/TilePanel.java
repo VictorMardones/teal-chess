@@ -106,37 +106,25 @@ class TilePanel extends JPanel {
 
     private void secondLeftClick() {
         // TODO: Replace all these long method calls with forwarding methods
-        // TODO: Invert this condition check
-        if (table.getChessboard().getTile(coordinate).getPiece().isPresent()
-                && table.getChessboard()
-                        .getTile(coordinate)
-                        .getPiece()
-                        .get()
-                        .getAlliance()
-                        .equals(table.getChessboard().getCurrentPlayer().getAlliance())) {
-            table.resetSelection();
+        log.debug("Selected the destination {}", coordinate);
+        table.setDestinationTile(table.getChessboard().getTile(coordinate));
 
-            return;
-        } else {
+        final var move = Move.Factory.create(
+                table.getChessboard(),
+                table.getSourceTile().getCoordinate(),
+                table.getDestinationTile().getCoordinate());
 
-            log.debug("Selected the destination {}", coordinate);
-            table.setDestinationTile(table.getChessboard().getTile(coordinate));
+        log.debug("Is there a move that can get to the destination? {}", move.isPresent());
 
-            final var move = Move.Factory.create(
-                    table.getChessboard(),
-                    table.getSourceTile().getCoordinate(),
-                    table.getDestinationTile().getCoordinate());
+        if (move.isPresent()) {
+            final var moveTransition = table.getChessboard().getCurrentPlayer().makeMove(move.get());
 
-            if (move.isPresent()) {
-                final var moveTransition =
-                        table.getChessboard().getCurrentPlayer().makeMove(move.get());
-
-                if (moveTransition.getMoveStatus().isDone()) {
-                    table.setChessboard(moveTransition.getBoard());
-                    table.addMoveToLog(move.get());
-                }
+            if (moveTransition.getMoveStatus().isDone()) {
+                table.setChessboard(moveTransition.getBoard());
+                table.addMoveToLog(move.get());
             }
         }
+
         table.resetSelection();
     }
 

@@ -12,10 +12,11 @@ import engine.piece.Piece;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
+// TODO: Fix implementation, highlighted moves don't match moves that are executed after clicking
 @EqualsAndHashCode(callSuper = true)
 @Slf4j
-public class PawnEnPassantMove extends PawnCaptureMove {
-    public PawnEnPassantMove(Board board, Pawn pawn, Coordinate destination, Piece capturedPiece) {
+public class EnPassantMove extends CaptureMove {
+    public EnPassantMove(Board board, Pawn pawn, Coordinate destination, Piece capturedPiece) {
         super(board, pawn, destination, capturedPiece);
     }
 
@@ -34,7 +35,7 @@ public class PawnEnPassantMove extends PawnCaptureMove {
                 .filter(activePiece -> !capturedPiece.equals(activePiece))
                 .forEach(builder::piece);
 
-        log.info("Moving the selected piece to {}", piece.move(this));
+        log.debug("Moving the selected piece to {}", piece.move(this));
 
         builder.piece(piece.move(this));
 

@@ -36,6 +36,16 @@ class AllianceTest {
     }
 
     @Test
+    void getWhiteOppositeDirection() {
+        assertThat(Alliance.WHITE.getOppositeDirection()).isNegative().isEqualTo(-1);
+    }
+
+    @Test
+    void getBlackOppositeDirection() {
+        assertThat(Alliance.BLACK.getOppositeDirection()).isPositive().isEqualTo(1);
+    }
+
+    @Test
     void chooseWhitePlayer() {
         when(whitePlayer.getAlliance()).thenReturn(Alliance.WHITE);
         when(blackPlayer.getAlliance()).thenReturn(Alliance.BLACK);
