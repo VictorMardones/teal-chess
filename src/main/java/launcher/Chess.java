@@ -17,6 +17,8 @@ public final class Chess {
     public static void main(String[] args) {
         System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "Debug");
 
+        System.setProperty("awt.useSystemAAFontSettings", "on");
+
         new Table();
     }
 }

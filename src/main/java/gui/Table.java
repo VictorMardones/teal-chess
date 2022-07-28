@@ -12,6 +12,7 @@ import engine.board.Board;
 import engine.board.Tile;
 import engine.move.Move;
 import engine.piece.Piece;
+import io.FontLoader;
 import java.awt.*;
 import java.util.List;
 import javax.swing.*;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Table {
 
     private static final Dimension SIZE = new Dimension(700, 600);
+    private static final String FONT_PATH = "art/fonts/NotoSans-Regular.ttf";
 
     private final JFrame gameFrame;
     private final BoardPanel boardPanel;
@@ -60,6 +62,8 @@ public class Table {
     public Table() {
         reloadTheme();
 
+        setUIFont(FontLoader.load(FONT_PATH));
+
         chessboard = Board.createStandardBoard();
         boardDirection = BoardDirection.NORMAL;
         highlightLegals = true;
@@ -86,6 +90,21 @@ public class Table {
 
         gameFrame.setVisible(true);
         gameFrame.pack();
+    }
+
+    private void setUIFont(Font font) {
+
+        var keys = UIManager.getLookAndFeel().getDefaults().keys();
+
+        while (keys.hasMoreElements()) {
+
+            var key = keys.nextElement();
+            var value = UIManager.get(key);
+
+            if (value instanceof Font) {
+                UIManager.put(key, font);
+            }
+        }
     }
 
     private void reloadTheme() {
