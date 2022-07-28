@@ -19,7 +19,6 @@ import javax.swing.border.EtchedBorder;
 public class TakenPiecesPanel extends JPanel {
 
     private static final Dimension SIZE = new Dimension(40, 80);
-    private static final Color BACKGROUND_COLOR = Color.decode("0xFDF5E6");
     private static final EtchedBorder BORDER = new EtchedBorder(EtchedBorder.RAISED);
 
     private final JPanel northPanel;
@@ -28,14 +27,10 @@ public class TakenPiecesPanel extends JPanel {
     public TakenPiecesPanel() {
         super(new BorderLayout());
 
-        setBackground(BACKGROUND_COLOR);
         setBorder(BORDER);
 
         northPanel = new JPanel(new GridLayout(8, 2));
-        northPanel.setBackground(BACKGROUND_COLOR);
-
         southPanel = new JPanel(new GridLayout(8, 2));
-        southPanel.setBackground(BACKGROUND_COLOR);
 
         add(northPanel, BorderLayout.NORTH);
         add(southPanel, BorderLayout.SOUTH);

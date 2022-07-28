@@ -5,6 +5,7 @@
 
 package gui;
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import com.google.common.collect.Lists;
 import engine.board.Board;
 import engine.board.Tile;
@@ -54,6 +55,8 @@ public class Table {
     private boolean highlightLegals;
 
     public Table() {
+        FlatDarkLaf.setup();
+
         chessboard = Board.createStandardBoard();
         boardDirection = BoardDirection.NORMAL;
         highlightLegals = true;

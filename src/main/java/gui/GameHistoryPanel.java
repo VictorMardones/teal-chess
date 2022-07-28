@@ -11,24 +11,27 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 public class GameHistoryPanel extends JPanel {
 
+    private static final Dimension SIZE = new Dimension(150, 400);
+    public static final int ROW_HEIGHT = 25;
     private final DataModel model;
     private final JScrollPane scrollPane;
-
-    private static final Dimension SIZE = new Dimension(100, 400);
 
     public GameHistoryPanel() {
         super(new BorderLayout());
         model = new DataModel();
 
         final var table = new JTable(model);
-        table.setRowHeight(15);
+        table.setRowHeight(ROW_HEIGHT);
+        table.setDefaultRenderer(Object.class, createCenteredRenderer());
 
         scrollPane = new JScrollPane(table);
         scrollPane.setColumnHeaderView(table.getTableHeader());
@@ -36,6 +39,12 @@ public class GameHistoryPanel extends JPanel {
 
         add(scrollPane, BorderLayout.CENTER);
         setVisible(true);
+    }
+
+    private TableCellRenderer createCenteredRenderer() {
+        var centeredRenderer = new DefaultTableCellRenderer();
+        centeredRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        return centeredRenderer;
     }
 
     public void redo(final Board board, final MoveLog moveLog) {
