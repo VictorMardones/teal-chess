@@ -35,7 +35,7 @@ class TilePanel extends JPanel {
     private final transient Table table;
     private final transient Coordinate coordinate;
 
-    TilePanel(Table table, final BoardPanel boardPanel, final Coordinate coordinate) {
+    TilePanel(Table table, final Coordinate coordinate) {
 
         super(new GridBagLayout());
 
@@ -47,7 +47,12 @@ class TilePanel extends JPanel {
         assignPieceIcon(table.getChessboard());
         validate();
 
-        addMouseListener(new MouseListener() {
+        addMouseListener(createMouseListener());
+    }
+
+    private MouseListener createMouseListener() {
+
+        return new MouseListener() {
             @Override
             public void mouseClicked(final MouseEvent e) {
                 if (isLeftMouseButton(e)) {
@@ -83,7 +88,7 @@ class TilePanel extends JPanel {
             public void mouseExited(final MouseEvent e) {
                 // Do nothing
             }
-        });
+        };
     }
 
     private void firstLeftClick() {

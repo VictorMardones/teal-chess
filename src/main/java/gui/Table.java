@@ -73,7 +73,7 @@ public class Table {
 
         moveLog = new MoveLog();
 
-        gameFrame.add(boardPanel, BorderLayout.CENTER);
+        gameFrame.add(new SquarePanel<>(boardPanel), BorderLayout.CENTER);
 
         gameFrame.add(takenPiecesPanel, BorderLayout.WEST);
         gameFrame.add(gameHistoryPanel, BorderLayout.EAST);

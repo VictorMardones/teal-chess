@@ -90,12 +90,8 @@ public class GameHistoryPanel extends JPanel {
 
     private static class DataModel extends DefaultTableModel {
 
-        private final List<Row> values;
         private static final String[] NAMES = {"White", "Black"};
-
-        public DataModel() {
-            this.values = new ArrayList<>();
-        }
+        private final List<Row> values = new ArrayList<>();
 
         public void clear() {
             values.clear();
