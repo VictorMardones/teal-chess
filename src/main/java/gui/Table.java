@@ -6,6 +6,7 @@
 package gui;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import com.google.common.collect.Lists;
 import engine.board.Board;
 import engine.board.Tile;
@@ -54,8 +55,10 @@ public class Table {
     @Getter
     private boolean highlightLegals;
 
+    private boolean darkTheme = true;
+
     public Table() {
-        FlatDarkLaf.setup();
+        reloadTheme();
 
         chessboard = Board.createStandardBoard();
         boardDirection = BoardDirection.NORMAL;
@@ -80,7 +83,21 @@ public class Table {
 
         gameFrame.setLocationRelativeTo(null);
         gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
         gameFrame.setVisible(true);
+        gameFrame.pack();
+    }
+
+    private void reloadTheme() {
+        if (darkTheme) {
+            FlatDarkLaf.setup();
+        } else {
+            FlatLightLaf.setup();
+        }
+
+        if (gameFrame != null) {
+            SwingUtilities.updateComponentTreeUI(gameFrame);
+        }
     }
 
     private JMenuBar createMenuBar() {
@@ -116,8 +133,15 @@ public class Table {
         final var highlightCheckbox = new JCheckBoxMenuItem("Highlight Legal Moves", highlightLegals);
         highlightCheckbox.addActionListener(e -> highlightLegals = highlightCheckbox.isSelected());
 
+        final var darkThemeCheckbox = new JCheckBoxMenuItem("Dark Theme", darkTheme);
+        darkThemeCheckbox.addActionListener(e -> {
+            darkTheme = darkThemeCheckbox.isSelected();
+            reloadTheme();
+        });
+
         preferencesMenu.add(flipBoard);
         preferencesMenu.add(highlightCheckbox);
+        preferencesMenu.add(darkThemeCheckbox);
         return preferencesMenu;
     }
 
