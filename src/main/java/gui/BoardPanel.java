@@ -15,7 +15,7 @@ import javax.swing.*;
 
 class BoardPanel extends JPanel {
 
-    private static final Dimension SIZE = new Dimension(400, 350);
+    public static final Dimension INITIAL_SIZE = new Dimension(500, 500);
 
     private final transient Table table;
     private final List<TilePanel> boardTiles;
@@ -34,7 +34,7 @@ class BoardPanel extends JPanel {
                     add(tilePanel);
                 });
 
-        setPreferredSize(SIZE);
+        setPreferredSize(INITIAL_SIZE);
         validate();
     }
 

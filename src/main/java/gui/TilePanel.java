@@ -47,10 +47,10 @@ class TilePanel extends JPanel {
         assignPieceIcon(table.getChessboard());
         validate();
 
-        addMouseListener(createMouseListener());
+        addMouseListener(clickListener());
     }
 
-    private MouseListener createMouseListener() {
+    private MouseListener clickListener() {
 
         return new MouseListener() {
             @Override

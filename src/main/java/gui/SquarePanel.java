@@ -17,11 +17,11 @@ public class SquarePanel<T extends JPanel> extends JPanel {
     public SquarePanel(final T square) {
         this.square = square;
 
-        addComponentListener(createResizeListener());
+        addComponentListener(resizeListener());
         add(this.square);
     }
 
-    private ComponentListener createResizeListener() {
+    private ComponentListener resizeListener() {
 
         return new ComponentListener() {
 

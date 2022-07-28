@@ -18,7 +18,7 @@ import javax.swing.border.EtchedBorder;
 
 public class TakenPiecesPanel extends JPanel {
 
-    private static final Dimension SIZE = new Dimension(40, 80);
+    private static final Dimension INITIAL_SIZE = new Dimension(40, 80);
     private static final EtchedBorder BORDER = new EtchedBorder(EtchedBorder.RAISED);
 
     private final JPanel northPanel;
@@ -35,7 +35,7 @@ public class TakenPiecesPanel extends JPanel {
         add(northPanel, BorderLayout.NORTH);
         add(southPanel, BorderLayout.SOUTH);
 
-        setPreferredSize(SIZE);
+        setPreferredSize(INITIAL_SIZE);
     }
 
     public void redo(final MoveLog moveLog) {
@@ -44,13 +44,13 @@ public class TakenPiecesPanel extends JPanel {
 
         // TODO: Do this process on a single loop
         getTakenPieces(moveLog, Alliance.WHITE).stream()
-                .map(piece -> PieceIconLoader.load(piece, SIZE.width / 2, SIZE.width / 2))
+                .map(piece -> PieceIconLoader.load(piece, INITIAL_SIZE.width / 2, INITIAL_SIZE.width / 2))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(image -> southPanel.add(new JLabel(new ImageIcon(image))));
 
         getTakenPieces(moveLog, Alliance.BLACK).stream()
-                .map(piece -> PieceIconLoader.load(piece, SIZE.width / 2, SIZE.width / 2))
+                .map(piece -> PieceIconLoader.load(piece, INITIAL_SIZE.width / 2, INITIAL_SIZE.width / 2))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(image -> northPanel.add(new JLabel(new ImageIcon(image))));

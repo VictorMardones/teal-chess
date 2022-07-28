@@ -20,7 +20,7 @@ import lombok.Setter;
 
 public class GameHistoryPanel extends JPanel {
 
-    private static final Dimension SIZE = new Dimension(150, 400);
+    private static final Dimension INITIAL_SIZE = new Dimension(150, 400);
     public static final int ROW_HEIGHT = 25;
     private final DataModel model;
     private final JScrollPane scrollPane;
@@ -35,7 +35,7 @@ public class GameHistoryPanel extends JPanel {
 
         scrollPane = new JScrollPane(table);
         scrollPane.setColumnHeaderView(table.getTableHeader());
-        scrollPane.setPreferredSize(SIZE);
+        scrollPane.setPreferredSize(INITIAL_SIZE);
 
         add(scrollPane, BorderLayout.CENTER);
         setVisible(true);

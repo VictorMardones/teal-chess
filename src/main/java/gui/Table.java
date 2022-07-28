@@ -5,6 +5,9 @@
 
 package gui;
 
+import static java.awt.Frame.MAXIMIZED_BOTH;
+import static java.awt.Frame.NORMAL;
+
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.google.common.collect.Lists;
@@ -14,6 +17,7 @@ import engine.move.Move;
 import engine.piece.Piece;
 import io.FontLoader;
 import java.awt.*;
+import java.awt.event.WindowStateListener;
 import java.util.List;
 import javax.swing.*;
 import lombok.Getter;
@@ -23,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Table {
 
-    private static final Dimension SIZE = new Dimension(700, 600);
+    private static final Dimension INITIAL_SIZE = new Dimension(700, 600);
     private static final String FONT_PATH = "art/fonts/NotoSans-Regular.ttf";
 
     private final JFrame gameFrame;
@@ -70,7 +74,7 @@ public class Table {
 
         gameFrame = new JFrame("Chess game, made in Java");
         gameFrame.setLayout(new BorderLayout());
-        gameFrame.setSize(SIZE);
+        gameFrame.setSize(INITIAL_SIZE);
 
         gameFrame.setJMenuBar(createMenuBar());
 
@@ -88,8 +92,19 @@ public class Table {
         gameFrame.setLocationRelativeTo(null);
         gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        gameFrame.addWindowStateListener(maximizeListener());
+
         gameFrame.setVisible(true);
         gameFrame.pack();
+    }
+
+    private WindowStateListener maximizeListener() {
+        return e -> {
+            if (e.getOldState() == MAXIMIZED_BOTH && e.getNewState() == NORMAL) {
+                boardPanel.setPreferredSize(BoardPanel.INITIAL_SIZE);
+                gameFrame.pack();
+            }
+        };
     }
 
     private void setUIFont(Font font) {
