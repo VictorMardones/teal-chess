@@ -14,7 +14,9 @@ import engine.player.Player;
 import engine.player.WhitePlayer;
 import java.util.*;
 import java.util.stream.IntStream;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,7 +51,7 @@ public final class Board {
     @Getter
     private final Pawn enPassantPawn;
 
-    private Board(Builder builder) {
+    private Board(BoardBuilder builder) {
         gameBoard = createGameBoard(builder);
         log.debug("Current gameboard: {}", gameBoard);
 
@@ -75,26 +77,30 @@ public final class Board {
         log.debug("Current player: {}", currentPlayer.getAlliance());
     }
 
-    private List<Tile> createGameBoard(final Builder builder) {
+    private List<Tile> createGameBoard(final BoardBuilder builder) {
         return IntStream.range(MIN_TILES, MAX_TILES)
                 .mapToObj(Coordinate::of)
                 .map(coordinate -> Tile.create(coordinate, builder.boardConfig.get(coordinate)))
                 .collect(ImmutableList.toImmutableList());
     }
 
+    /**
+     * Creates a standard chessboard, which consists of a rank filled with 8 pawns on each side with a formation of 8 major pieces behind.
+     * @return The standard chessboard
+     */
     // TODO: Parse a text file to create the board
     public static Board createStandardBoard() {
+
         final var whiteKing = new King(Coordinate.of("e1"), Alliance.WHITE);
         final var blackKing = new King(Coordinate.of("e8"), Alliance.BLACK);
 
-        final var builder = builder();
+        final var builder = new BoardBuilder(whiteKing, blackKing);
 
         builder.piece(new Rook(Coordinate.of("a8"), Alliance.BLACK))
                 .piece(new Knight(Coordinate.of("b8"), Alliance.BLACK))
                 .piece(new Bishop(Coordinate.of("c8"), Alliance.BLACK))
                 .piece(new Queen(Coordinate.of("d8"), Alliance.BLACK))
                 .piece(blackKing)
-                .blackKing(blackKing)
                 .piece(new Bishop(Coordinate.of("f8"), Alliance.BLACK))
                 .piece(new Knight(Coordinate.of("g8"), Alliance.BLACK))
                 .piece(new Rook(Coordinate.of("h8"), Alliance.BLACK));
@@ -114,7 +120,6 @@ public final class Board {
                 .piece(new Bishop(Coordinate.of("c1"), Alliance.WHITE))
                 .piece(new Queen(Coordinate.of("d1"), Alliance.WHITE))
                 .piece(whiteKing)
-                .whiteKing(whiteKing)
                 .piece(new Bishop(Coordinate.of("f1"), Alliance.WHITE))
                 .piece(new Knight(Coordinate.of("g1"), Alliance.WHITE))
                 .piece(new Rook(Coordinate.of("h1"), Alliance.WHITE));
@@ -122,8 +127,25 @@ public final class Board {
         return builder.moveMaker(Alliance.WHITE).build();
     }
 
-    public static Builder builder() {
-        return new Builder();
+    /**
+     * The board is a complex object, so this builder is the standard method to create it.
+     * Both white and black kings must be supplied for the board to be legal.
+     * This builder is intended for creating a new board from scratch.
+     * @return The board builder
+     */
+    public static BoardBuilder builder(King whiteKing, King blackKing) {
+        return new BoardBuilder(whiteKing, blackKing);
+    }
+
+    /**
+     * A special builder intended to be used when players make a move.
+     * This can only be used after the board has been initialized at least once.
+     * It keeps the current state of the board and lets you specify only the differences from the previous turn.
+     * The next move maker will be the current player's opponent.
+     * @return The next turn builder
+     */
+    public BoardBuilder nextTurnBuilder() {
+        return new BoardBuilder(this);
     }
 
     public Tile getTile(Coordinate coordinate) {
@@ -175,35 +197,41 @@ public final class Board {
         return (coordinate.index() + 1) % NUMBER_OF_RANKS == 0 ? "%s  \n" : "%s  ";
     }
 
-    public static class Builder {
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class BoardBuilder {
 
         private final Map<Coordinate, Piece> boardConfig = new HashMap<>();
+        private final King whiteKing;
+        private final King blackKing;
         private Alliance moveMaker;
-        private King whiteKing;
-        private King blackKing;
         private Pawn enPassantPawn;
 
-        public Builder piece(final Piece piece) {
+        private BoardBuilder(Board board) {
+            whiteKing = board.getWhitePlayer().getKing();
+            blackKing = board.getBlackPlayer().getKing();
+
+            board.getWhitePieces().forEach(this::piece);
+            board.getBlackPieces().forEach(this::piece);
+
+            moveMaker(board.getCurrentPlayer().getOpponent().getAlliance());
+        }
+
+        public BoardBuilder piece(final Piece piece) {
             boardConfig.put(piece.getPosition(), piece);
             return this;
         }
 
-        public Builder moveMaker(final Alliance moveMaker) {
+        public BoardBuilder withoutPiece(final Piece piece) {
+            boardConfig.remove(piece.getPosition(), piece);
+            return this;
+        }
+
+        private BoardBuilder moveMaker(final Alliance moveMaker) {
             this.moveMaker = moveMaker;
             return this;
         }
 
-        public Builder whiteKing(final King whiteKing) {
-            this.whiteKing = whiteKing;
-            return this;
-        }
-
-        public Builder blackKing(final King blackKing) {
-            this.blackKing = blackKing;
-            return this;
-        }
-
-        public Builder enPassantPawn(Pawn pawn) {
+        public BoardBuilder enPassantPawn(Pawn pawn) {
             this.enPassantPawn = pawn;
             return this;
         }

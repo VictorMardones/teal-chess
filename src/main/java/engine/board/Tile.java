@@ -35,9 +35,9 @@ public abstract class Tile {
     /**
      * Factory method for creating a new tile.
      *
-     * @param coordinate The tile's coordinate.
-     * @param piece      The piece on the tile.
-     * @return A new tile.
+     * @param coordinate The tile's coordinate
+     * @param piece      The piece on the tile
+     * @return A new tile
      */
     public static Tile create(final Coordinate coordinate, final Piece piece) {
         return piece != null ? new OccupiedTile(coordinate, piece) : EMPTY_TILES_CACHE.get(coordinate.index());
@@ -46,7 +46,7 @@ public abstract class Tile {
     /**
      * Obtains the piece contained by the tile.
      *
-     * @return Piece on the tile.
+     * @return Piece on the tile
      */
     public abstract Optional<Piece> getPiece();
 

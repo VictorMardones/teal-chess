@@ -18,22 +18,10 @@ public class PawnJump extends Move {
 
     @Override
     public Board execute() {
-        final var builder = Board.builder();
-
-        builder.whiteKing(board.getWhitePlayer().getKing())
-                .blackKing(board.getBlackPlayer().getKing());
-
-        board.getCurrentPlayer().getActivePieces().stream()
-                .filter(activePiece -> !piece.equals(activePiece))
-                .forEach(builder::piece);
-
-        board.getCurrentPlayer().getOpponent().getActivePieces().forEach(builder::piece);
-
-        final var movedPawn = piece.move(this);
-
-        builder.piece(movedPawn)
-                .enPassantPawn((Pawn) movedPawn)
-                .moveMaker(board.getCurrentPlayer().getOpponent().getAlliance());
-        return builder.build();
+        return board.nextTurnBuilder()
+                .withoutPiece(piece)
+                .piece(piece.move(this))
+                .enPassantPawn((Pawn) piece.move(this))
+                .build();
     }
 }

@@ -19,27 +19,4 @@ public class EnPassantMove extends CaptureMove {
     public EnPassantMove(Board board, Pawn pawn, Coordinate destination, Piece capturedPiece) {
         super(board, pawn, destination, capturedPiece);
     }
-
-    @Override
-    public Board execute() {
-        final var builder = Board.builder();
-
-        builder.whiteKing(board.getWhitePlayer().getKing())
-                .blackKing(board.getWhitePlayer().getKing());
-
-        board.getCurrentPlayer().getActivePieces().stream()
-                .filter(activePiece -> !piece.equals(activePiece))
-                .forEach(builder::piece);
-
-        board.getCurrentPlayer().getOpponent().getActivePieces().stream()
-                .filter(activePiece -> !capturedPiece.equals(activePiece))
-                .forEach(builder::piece);
-
-        log.debug("Moving the selected piece to {}", piece.move(this));
-
-        builder.piece(piece.move(this));
-
-        builder.moveMaker(board.getCurrentPlayer().getOpponent().getAlliance());
-        return builder.build();
-    }
 }

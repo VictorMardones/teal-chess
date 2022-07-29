@@ -23,6 +23,15 @@ public class CaptureMove extends Move {
     }
 
     @Override
+    public Board execute() {
+        return board.nextTurnBuilder()
+                .withoutPiece(piece)
+                .withoutPiece(capturedPiece)
+                .piece(piece.move(this))
+                .build();
+    }
+
+    @Override
     public String toString() {
         return piece.toChar() + getDestination().toString();
     }

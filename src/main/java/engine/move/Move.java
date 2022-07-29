@@ -58,42 +58,33 @@ public abstract class Move {
      * @return The new board, after the move was performed
      */
     public Board execute() {
-
-        final var builder = Board.builder();
-
-        builder.whiteKing(board.getWhitePlayer().getKing())
-                .blackKing(board.getBlackPlayer().getKing());
-
-        board.getCurrentPlayer().getActivePieces().stream()
-                .filter(activePiece -> !piece.equals(activePiece))
-                .forEach(builder::piece);
-
-        board.getCurrentPlayer().getOpponent().getActivePieces().forEach(builder::piece);
-
-        log.debug("Moving the selected piece to {}", piece.move(this));
-
-        builder.piece(piece.move(this));
-
-        builder.moveMaker(board.getCurrentPlayer().getOpponent().getAlliance());
-        return builder.build();
+        return board.nextTurnBuilder()
+                .withoutPiece(piece)
+                .piece(piece.move(this))
+                .build();
     }
 
     public Coordinate getSource() {
         return piece.getPosition();
     }
 
-    public static final class Factory {
+    @Override
+    public String toString() {
+        return getDestination().toString();
+    }
 
-        private Factory() {
+    public static final class MoveFactory {
+
+        private MoveFactory() {
             throw new IllegalStateException("You cannot instantiate me!");
         }
 
         /**
          * Creates a move in the specified direction.
          *
-         * @param board       The chessboard.
-         * @param source      Source coordinate.
-         * @param destination Destination coordinate.
+         * @param board       The chessboard
+         * @param source      Source coordinate
+         * @param destination Destination coordinate
          * @return Move that goes from the source to the destination, if possible.
          */
         public static Optional<Move> create(final Board board, final Coordinate source, final Coordinate destination) {
@@ -115,10 +106,5 @@ public abstract class Move {
         private static Predicate<Move> isMovePossible(Coordinate source, Coordinate destination) {
             return move -> move.getSource().equals(source) && move.getDestination() == destination;
         }
-    }
-
-    @Override
-    public String toString() {
-        return getDestination().toString();
     }
 }

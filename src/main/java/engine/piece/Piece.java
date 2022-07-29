@@ -34,8 +34,8 @@ public interface Piece {
     /**
      * Calculates all the moves that a piece can do.
      *
-     * @param board Current state of the game board.
-     * @return List of possible moves.
+     * @param board Current state of the game board
+     * @return List of possible moves
      */
     default Collection<Move> calculateLegals(final Board board) {
         return calculatePossibleDestinations(board).stream()
@@ -83,8 +83,8 @@ public interface Piece {
      * Checks if the given piece can get the destination. This happens only if the destination is free
      * or has a piece that can be captured.
      *
-     * @param destination The target destination.
-     * @return True if the piece can get to the destination.
+     * @param destination The target destination
+     * @return True if the piece can get to the destination
      */
     default boolean isAccessible(final Tile destination) {
         final var pieceAtDestination = destination.getPiece();
@@ -96,9 +96,9 @@ public interface Piece {
     /**
      * Creates a move, based on the piece and the destination.
      *
-     * @param destination The destination tile.
-     * @param board       The current game board.
-     * @return A move, selected depending on the source and destination.
+     * @param destination The destination tile
+     * @param board       The current game board
+     * @return A move, selected depending on the source and destination
      */
     default Optional<Move> createMove(final Tile destination, final Board board) {
         if (destination.getPiece().isEmpty()) {

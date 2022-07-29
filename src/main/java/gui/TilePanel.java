@@ -114,7 +114,7 @@ class TilePanel extends JPanel {
         log.debug("Selected the destination {}", coordinate);
         table.setDestinationTile(table.getChessboard().getTile(coordinate));
 
-        final var move = Move.Factory.create(
+        final var move = Move.MoveFactory.create(
                 table.getChessboard(),
                 table.getSourceTile().getCoordinate(),
                 table.getDestinationTile().getCoordinate());
