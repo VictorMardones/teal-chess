@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Table {
 
     private static final Dimension INITIAL_SIZE = new Dimension(700, 600);
-    private static final String FONT_PATH = "art/fonts/NotoSans-Regular.ttf";
+    private static final String FONT_PATH = "NotoSans-Regular.ttf";
 
     private final JFrame gameFrame;
     private final BoardPanel boardPanel;

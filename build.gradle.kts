@@ -3,10 +3,11 @@ plugins {
     jacoco
     id("org.sonarqube") version "3.4.0.2513"
     id("com.diffplug.spotless") version "6.8.0"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 group = "cl.vmardones"
-version = "1.0-SNAPSHOT"
+version = "0.1"
 
 repositories {
     mavenCentral()
@@ -41,28 +42,42 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.23.1")
 }
 
-tasks.compileJava {
-    dependsOn(tasks.spotlessApply)
-}
-
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
-}
-
-tasks.test {
-    finalizedBy(tasks.jacocoTestReport)
-}
-
-tasks.jacocoTestReport {
-    dependsOn(tasks.test)
-
-    reports {
-        xml.required.set(true)
+tasks {
+    compileJava {
+        dependsOn(spotlessApply)
     }
-}
 
-tasks.sonarqube {
-    dependsOn(tasks.jacocoTestReport)
+    getByName<Test>("test") {
+        useJUnitPlatform()
+    }
+
+    test {
+        finalizedBy(jacocoTestReport)
+    }
+
+    jacocoTestReport {
+        dependsOn(test)
+
+        reports {
+            xml.required.set(true)
+        }
+    }
+
+    this.sonarqube {
+        dependsOn(jacocoTestReport)
+    }
+
+    shadowJar {
+        manifest {
+            attributes("Main-Class" to "launcher.Chess")
+            attributes("Implementation-Title" to project.name)
+        }
+    }
+
+    withType<AbstractArchiveTask> {
+        isPreserveFileTimestamps = false
+        isReproducibleFileOrder = true
+    }
 }
 
 spotless {
@@ -78,4 +93,8 @@ spotless {
         indentWithSpaces(4)
         endWithNewline()
     }
+}
+
+shadow {
+
 }

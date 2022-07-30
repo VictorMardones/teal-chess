@@ -8,7 +8,7 @@ package engine.board;
 /**
  * An exception that is thrown when trying to access coordinate outside of the chessboard.
  */
-public class InvalidCoordinateException extends RuntimeException {
+class InvalidCoordinateException extends RuntimeException {
 
     /**
      * Constructs a new invalid coordinate exception with the specified message.

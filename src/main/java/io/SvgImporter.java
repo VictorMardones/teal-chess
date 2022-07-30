@@ -17,15 +17,16 @@ import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 
 @Slf4j
-public final class SvgImporter {
+final class SvgImporter {
 
     private SvgImporter() {
         throw new IllegalStateException("You cannot instantiate me!");
     }
 
-    public static Optional<BufferedImage> importSvg(final File file, final int width, final int height) {
+    static Optional<BufferedImage> get(final InputStream inputStream, final int width, final int height)
+            throws IOException {
 
-        if (!file.exists()) {
+        if (inputStream == null) {
             log.error("The file does not exist!");
             return Optional.empty();
         }
@@ -35,7 +36,7 @@ public final class SvgImporter {
         transcoder.addTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH, (float) width);
         transcoder.addTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT, (float) height);
 
-        try (var inputStream = new FileInputStream(file);
+        try (inputStream;
                 var outputStream = new ByteArrayOutputStream()) {
 
             var input = new TranscoderInput(inputStream);
@@ -48,8 +49,8 @@ public final class SvgImporter {
             var imageData = outputStream.toByteArray();
             return Optional.ofNullable(ImageIO.read(new ByteArrayInputStream(imageData)));
 
-        } catch (IOException | TranscoderException e) {
-            log.error("Failed to load images!", e);
+        } catch (TranscoderException e) {
+            log.error("Failed to transcode the SVG image!", e);
             return Optional.empty();
         }
     }

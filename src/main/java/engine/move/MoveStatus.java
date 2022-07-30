@@ -11,7 +11,7 @@ package engine.move;
 public enum MoveStatus {
     DONE,
     ILLEGAL,
-    LEAVES_PLAYER_IN_CHECK;
+    LEAVES_OPPONENT_IN_CHECK;
 
     public boolean isDone() {
         return this == DONE;

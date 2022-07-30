@@ -14,11 +14,10 @@ import engine.move.Move;
 import engine.piece.Piece;
 import engine.player.Alliance;
 import io.PieceIconLoader;
-import io.SvgImporter;
+import io.SvgLoader;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
@@ -159,8 +158,7 @@ class TilePanel extends JPanel {
             selectedPieceLegals(board).stream()
                     .filter(move -> move.getDestination() == coordinate)
                     .forEach(move -> {
-                        final var image = SvgImporter.importSvg(
-                                new File("art/misc/green_dot.svg"), SIZE.width * 4, SIZE.height * 4);
+                        final var image = SvgLoader.load("art/misc/green_dot.svg", SIZE.width * 4, SIZE.height * 4);
 
                         image.ifPresent(bufferedImage -> add(new JLabel(new ImageIcon(bufferedImage))));
                     });

@@ -119,7 +119,7 @@ public abstract class Player {
                 transitionBoard.getCurrentPlayer().legals);
 
         if (!kingAttacks.isEmpty()) {
-            return new MoveTransition(board, move, MoveStatus.LEAVES_PLAYER_IN_CHECK);
+            return new MoveTransition(board, move, MoveStatus.LEAVES_OPPONENT_IN_CHECK);
         }
 
         return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
