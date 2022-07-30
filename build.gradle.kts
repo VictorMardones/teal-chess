@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "cl.vmardones"
-version = "0.1"
+version = "0.0"
 
 repositories {
     mavenCentral()
@@ -69,8 +69,9 @@ tasks {
 
     shadowJar {
         manifest {
-            attributes("Main-Class" to "launcher.Chess")
+            attributes("Main-Class" to "cl.vmardones.chess.launcher.Chess")
             attributes("Implementation-Title" to project.name)
+            attributes("Implementation-Version" to project.version)
         }
     }
 
@@ -93,8 +94,4 @@ spotless {
         indentWithSpaces(4)
         endWithNewline()
     }
-}
-
-shadow {
-
 }
