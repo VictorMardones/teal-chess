@@ -14,6 +14,9 @@ repositories {
 }
 
 dependencies {
+    implementation("info.picocli:picocli:4.6.3")
+    annotationProcessor("info.picocli:picocli-codegen:4.6.3")
+
     implementation("com.google.guava:guava:31.1-jre")
 
     implementation("org.apache.xmlgraphics:batik-all:1.14")
@@ -45,6 +48,7 @@ dependencies {
 tasks {
     compileJava {
         dependsOn(spotlessApply)
+        options.compilerArgs = options.compilerArgs + listOf("-Aproject=${project.group}/${project.name}")
     }
 
     getByName<Test>("test") {

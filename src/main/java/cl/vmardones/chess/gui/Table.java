@@ -56,21 +56,24 @@ public class Table {
     private Piece selectedPiece;
 
     @Getter
-    private BoardDirection boardDirection;
-
-    @Getter
     private boolean highlightLegals;
 
-    private boolean darkTheme = true;
+    private boolean darkTheme;
 
-    public Table() {
+    @Getter
+    private BoardDirection boardDirection;
+
+    public Table(final boolean darkTheme, final boolean highlightLegals, final boolean flipBoard) {
+        this.darkTheme = darkTheme;
+        this.highlightLegals = highlightLegals;
+        boardDirection = flipBoard ? BoardDirection.FLIPPED : BoardDirection.NORMAL;
+
         reloadTheme();
 
         setUIFont(FontLoader.load(FONT_PATH));
 
         chessboard = Board.createStandardBoard();
         boardDirection = BoardDirection.NORMAL;
-        highlightLegals = true;
 
         gameFrame = new JFrame("Chess game, made in Java");
         gameFrame.setLayout(new BorderLayout());

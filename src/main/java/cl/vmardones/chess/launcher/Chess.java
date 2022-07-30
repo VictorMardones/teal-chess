@@ -5,8 +5,8 @@
 
 package cl.vmardones.chess.launcher;
 
-import cl.vmardones.chess.gui.Table;
-import org.slf4j.impl.SimpleLogger;
+import cl.vmardones.chess.cli.MainCommand;
+import picocli.CommandLine;
 
 public final class Chess {
 
@@ -14,11 +14,7 @@ public final class Chess {
         throw new IllegalStateException("You cannot instantiate me!");
     }
 
-    public static void main(String[] args) {
-        System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "Debug");
-
-        System.setProperty("awt.useSystemAAFontSettings", "on");
-
-        new Table();
+    public static void main(String... args) {
+        new CommandLine(new MainCommand()).execute(args);
     }
 }
