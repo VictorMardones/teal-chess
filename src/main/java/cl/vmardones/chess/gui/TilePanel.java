@@ -125,7 +125,7 @@ class TilePanel extends JPanel {
 
             if (moveTransition.getMoveStatus().isDone()) {
                 table.setChessboard(moveTransition.getBoard());
-                table.addMoveToLog(move.get());
+                table.addToLog(move.get());
             }
         }
 

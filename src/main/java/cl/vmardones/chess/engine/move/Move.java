@@ -73,6 +73,10 @@ public abstract class Move {
         return getDestination().toString();
     }
 
+    public boolean isNull() {
+        return piece.getPosition() == destination;
+    }
+
     public static final class MoveFactory {
 
         private MoveFactory() {

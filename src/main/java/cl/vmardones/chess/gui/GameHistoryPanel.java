@@ -6,17 +6,13 @@
 package cl.vmardones.chess.gui;
 
 import cl.vmardones.chess.engine.board.Board;
-import cl.vmardones.chess.engine.move.Move;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 public class GameHistoryPanel extends JPanel {
 
@@ -48,29 +44,15 @@ public class GameHistoryPanel extends JPanel {
     }
 
     public void redo(final Board board, final MoveLog moveLog) {
-        var currentRow = 0;
-        model.clear();
 
-        for (var move : moveLog.getMoves()) {
+        final var lastMove = moveLog.getLastMove();
 
-            final var moveText = move.toString();
+        if (lastMove.isPresent()) {
+            final var moveText = lastMove.get().toString();
 
-            if (move.getPiece().isWhite()) {
-                model.setValueAt(moveText, currentRow, 0);
-            } else {
-                model.setValueAt(moveText, currentRow, 1);
-                currentRow++;
-            }
-        }
-
-        if (moveLog.getMoves().size() > 0) {
-            final var lastMove = moveLog.getMoves().get(moveLog.size() - 1);
-            final var moveText = lastMove.toString();
-
-            if (lastMove.getPiece().isWhite()) {
-                model.setValueAt(moveText + calculateCheckAndCheckMateHash(board), currentRow, 0);
-            } else {
-                model.setValueAt(moveText + calculateCheckAndCheckMateHash(board), currentRow - 1, 1);
+            switch (lastMove.get().getPiece().getAlliance()) {
+                case WHITE -> model.setValueAt(moveText + checkmateHash(board), model.getLastRowIndex() + 1, 0);
+                case BLACK -> model.setValueAt(moveText + checkmateHash(board), model.getLastRowIndex(), 1);
             }
         }
 
@@ -78,7 +60,7 @@ public class GameHistoryPanel extends JPanel {
         vertical.setValue(vertical.getMaximum());
     }
 
-    private String calculateCheckAndCheckMateHash(Board board) {
+    private String checkmateHash(Board board) {
         if (board.getCurrentPlayer().isInCheckmate()) {
             return "#";
         } else if (board.getCurrentPlayer().isInCheck()) {
@@ -90,75 +72,25 @@ public class GameHistoryPanel extends JPanel {
 
     private static class DataModel extends DefaultTableModel {
 
-        private static final String[] NAMES = {"White", "Black"};
-        private final List<Row> values = new ArrayList<>();
-
-        public void clear() {
-            values.clear();
-            setRowCount(0);
+        public DataModel() {
+            super(new Vector<>(List.of("White", "Black")), 0);
         }
 
-        @Override
-        public int getRowCount() {
-            if (values == null) {
-                return 0;
-            }
-
-            return values.size();
-        }
-
-        @Override
-        public int getColumnCount() {
-            return NAMES.length;
-        }
-
-        @Override
-        public Object getValueAt(int row, int column) {
-            final var currentRow = values.get(row);
-
-            if (column == 0) {
-                return currentRow.getWhiteMove();
-            }
-
-            return currentRow.getBlackMove();
+        void clear() {
+            dataVector = new Vector<>(0);
         }
 
         @Override
         public void setValueAt(Object aValue, int row, int column) {
-            final Row currentRow;
-
-            if (values.size() <= row) {
-                currentRow = new Row();
-                values.add(currentRow);
+            if (row > getLastRowIndex()) {
+                addRow(new Vector<>(List.of(aValue, "")));
             } else {
-                currentRow = values.get(row);
-            }
-
-            if (column == 0) {
-                currentRow.setWhiteMove((String) aValue);
-                fireTableRowsInserted(row, row);
-            } else if (column == 1) {
-                currentRow.setBlackMove((String) aValue);
-                fireTableCellUpdated(row, column);
+                super.setValueAt(aValue, row, column);
             }
         }
 
-        @Override
-        public Class<?> getColumnClass(int columnIndex) {
-            return Move.class;
+        int getLastRowIndex() {
+            return getRowCount() - 1;
         }
-
-        @Override
-        public String getColumnName(int column) {
-            return NAMES[column];
-        }
-    }
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    private static class Row {
-        private String whiteMove;
-        private String blackMove;
     }
 }

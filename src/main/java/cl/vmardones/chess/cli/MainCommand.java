@@ -49,7 +49,7 @@ public class MainCommand implements Runnable {
     static class ChessVersionProvider implements IVersionProvider {
 
         @Override
-        public String[] getVersion() throws Exception {
+        public String[] getVersion() {
 
             final var implementationVersion = getClass().getPackage().getImplementationVersion();
 

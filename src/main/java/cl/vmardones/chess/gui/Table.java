@@ -194,7 +194,7 @@ public class Table {
         boardPanel.drawBoard(getChessboard());
     }
 
-    public void addMoveToLog(Move move) {
+    public void addToLog(Move move) {
         moveLog.add(move);
     }
 

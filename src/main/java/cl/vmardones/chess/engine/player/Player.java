@@ -108,6 +108,10 @@ public abstract class Player {
     }
 
     public MoveTransition makeMove(Move move) {
+        if (move.isNull()) {
+            return new MoveTransition(board, move, MoveStatus.NULL);
+        }
+
         if (!isLegal(move)) {
             return new MoveTransition(board, move, MoveStatus.ILLEGAL);
         }

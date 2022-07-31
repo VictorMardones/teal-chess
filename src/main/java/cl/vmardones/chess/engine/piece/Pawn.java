@@ -80,14 +80,16 @@ public class Pawn implements JumpingPiece {
             return false;
         }
 
-        var side = destination.getCoordinate().to(0, alliance.getOppositeDirection());
+        final var side = destination.getCoordinate().to(0, alliance.getOppositeDirection());
 
         if (side.isEmpty()) {
             return false;
         }
 
-        return board.getTile(side.get()).getPiece().isPresent()
-                && board.getTile(side.get()).getPiece().get().equals(board.getEnPassantPawn())
+        final var pieceAtSide = board.getTile(side.get()).getPiece();
+
+        return pieceAtSide.isPresent()
+                && pieceAtSide.get().equals(board.getEnPassantPawn())
                 && destination.getPiece().isEmpty();
     }
 

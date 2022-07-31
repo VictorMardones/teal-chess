@@ -10,6 +10,7 @@ package cl.vmardones.chess.engine.move;
  */
 public enum MoveStatus {
     DONE,
+    NULL,
     ILLEGAL,
     LEAVES_OPPONENT_IN_CHECK;
 

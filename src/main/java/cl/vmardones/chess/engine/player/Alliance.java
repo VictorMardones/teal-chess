@@ -23,7 +23,6 @@ public enum Alliance {
      * The black side, on the top of the board.
      */
     BLACK(-1);
-
     private final int direction;
 
     /**
