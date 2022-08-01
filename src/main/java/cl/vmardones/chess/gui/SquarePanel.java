@@ -10,55 +10,55 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import javax.swing.*;
 
-public class SquarePanel<T extends JPanel> extends JPanel {
+class SquarePanel<T extends JPanel> extends JPanel {
 
-    private final T square;
+  private final T square;
 
-    public SquarePanel(final T square) {
-        this.square = square;
+  public SquarePanel(final T square) {
+    this.square = square;
 
-        addComponentListener(resizeListener());
-        add(this.square);
+    addComponentListener(resizeListener());
+    add(this.square);
+  }
+
+  private ComponentListener resizeListener() {
+
+    return new ComponentListener() {
+
+      public void componentResized(final ComponentEvent e) {
+        resize();
+        revalidate();
+      }
+
+      public void componentMoved(final ComponentEvent e) {
+        // Do nothing
+      }
+
+      public void componentShown(final ComponentEvent e) {
+        // Do nothing
+      }
+
+      public void componentHidden(final ComponentEvent e) {
+        // Do nothing
+      }
+    };
+  }
+
+  private void resize() {
+
+    final var containerHeight = getHeight();
+    final var containerWidth = getWidth();
+
+    if (containerHeight > containerWidth) {
+      square.setPreferredSize(new SquareDimension(containerWidth));
+    } else if (containerHeight < containerWidth) {
+      square.setPreferredSize(new SquareDimension(containerHeight));
     }
+  }
 
-    private ComponentListener resizeListener() {
-
-        return new ComponentListener() {
-
-            public void componentResized(ComponentEvent e) {
-                resize();
-                revalidate();
-            }
-
-            public void componentMoved(ComponentEvent e) {
-                // Do nothing
-            }
-
-            public void componentShown(ComponentEvent e) {
-                // Do nothing
-            }
-
-            public void componentHidden(ComponentEvent e) {
-                // Do nothing
-            }
-        };
+  private static class SquareDimension extends Dimension {
+    public SquareDimension(final int side) {
+      super(side, side);
     }
-
-    private void resize() {
-
-        var containerHeight = getHeight();
-        var containerWidth = getWidth();
-
-        if (containerHeight > containerWidth) {
-            square.setPreferredSize(new SquareDimension(containerWidth));
-        } else if (containerHeight < containerWidth) {
-            square.setPreferredSize(new SquareDimension(containerHeight));
-        }
-    }
-
-    private static class SquareDimension extends Dimension {
-        public SquareDimension(int side) {
-            super(side, side);
-        }
-    }
+  }
 }

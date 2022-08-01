@@ -11,26 +11,28 @@ import cl.vmardones.chess.engine.piece.King;
 import cl.vmardones.chess.engine.piece.Piece;
 import java.util.Collection;
 
-/**
- * The player that uses the white pieces.
- */
+/** The player that uses the white pieces. */
 public class WhitePlayer extends Player {
-    public WhitePlayer(Board board, King king, Collection<Move> whiteLegals, Collection<Move> blackLegals) {
-        super(board, king, whiteLegals, blackLegals);
-    }
+  public WhitePlayer(
+      final Board board,
+      final King king,
+      final Collection<Move> whiteLegals,
+      final Collection<Move> blackLegals) {
+    super(board, king, whiteLegals, blackLegals);
+  }
 
-    @Override
-    public Collection<Piece> getActivePieces() {
-        return board.getWhitePieces();
-    }
+  @Override
+  public Collection<Piece> getActivePieces() {
+    return board.getWhitePieces();
+  }
 
-    @Override
-    public Alliance getAlliance() {
-        return Alliance.WHITE;
-    }
+  @Override
+  public Alliance getAlliance() {
+    return Alliance.WHITE;
+  }
 
-    @Override
-    public Player getOpponent() {
-        return board.getBlackPlayer();
-    }
+  @Override
+  public Player getOpponent() {
+    return board.getBlackPlayer();
+  }
 }

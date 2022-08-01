@@ -5,16 +5,14 @@
 
 package cl.vmardones.chess.engine.move;
 
-/**
- * Tells whether the move is possible or not, including the reason.
- */
+/** Tells whether the move is possible or not, including the reason. */
 public enum MoveStatus {
-    DONE,
-    NULL,
-    ILLEGAL,
-    LEAVES_OPPONENT_IN_CHECK;
+  DONE,
+  NULL,
+  ILLEGAL,
+  LEAVES_OPPONENT_IN_CHECK;
 
-    public boolean isDone() {
-        return this == DONE;
-    }
+  public boolean isDone() {
+    return this == DONE;
+  }
 }

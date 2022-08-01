@@ -11,8 +11,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Horizontal implements Vector {
-    LEFT(new int[] {-1, 0}),
-    RIGHT(new int[] {1, 0});
+  LEFT(new int[] {-1, 0}),
+  RIGHT(new int[] {1, 0});
 
-    private final int[] vector;
+  private final int[] vector;
 }

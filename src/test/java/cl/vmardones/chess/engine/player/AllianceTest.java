@@ -17,51 +17,49 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class AllianceTest {
 
-    List<Player> players;
+  List<Player> players;
 
-    @Mock
-    Player whitePlayer;
+  @Mock Player whitePlayer;
 
-    @Mock
-    Player blackPlayer;
+  @Mock Player blackPlayer;
 
-    @Test
-    void getWhiteDirection() {
-        assertThat(Alliance.WHITE.getDirection()).isPositive().isEqualTo(1);
-    }
+  @Test
+  void getWhiteDirection() {
+    assertThat(Alliance.WHITE.getDirection()).isPositive().isEqualTo(1);
+  }
 
-    @Test
-    void getBlackDirection() {
-        assertThat(Alliance.BLACK.getDirection()).isNegative().isEqualTo(-1);
-    }
+  @Test
+  void getBlackDirection() {
+    assertThat(Alliance.BLACK.getDirection()).isNegative().isEqualTo(-1);
+  }
 
-    @Test
-    void getWhiteOppositeDirection() {
-        assertThat(Alliance.WHITE.getOppositeDirection()).isNegative().isEqualTo(-1);
-    }
+  @Test
+  void getWhiteOppositeDirection() {
+    assertThat(Alliance.WHITE.getOppositeDirection()).isNegative().isEqualTo(-1);
+  }
 
-    @Test
-    void getBlackOppositeDirection() {
-        assertThat(Alliance.BLACK.getOppositeDirection()).isPositive().isEqualTo(1);
-    }
+  @Test
+  void getBlackOppositeDirection() {
+    assertThat(Alliance.BLACK.getOppositeDirection()).isPositive().isEqualTo(1);
+  }
 
-    @Test
-    void chooseWhitePlayer() {
-        when(whitePlayer.getAlliance()).thenReturn(Alliance.WHITE);
-        when(blackPlayer.getAlliance()).thenReturn(Alliance.BLACK);
+  @Test
+  void chooseWhitePlayer() {
+    when(whitePlayer.getAlliance()).thenReturn(Alliance.WHITE);
+    when(blackPlayer.getAlliance()).thenReturn(Alliance.BLACK);
 
-        players = List.of(blackPlayer, whitePlayer);
+    players = List.of(blackPlayer, whitePlayer);
 
-        assertThat(Alliance.WHITE.choosePlayer(players)).isEqualTo(whitePlayer);
-    }
+    assertThat(Alliance.WHITE.choosePlayer(players)).isEqualTo(whitePlayer);
+  }
 
-    @Test
-    void chooseBlackPlayer() {
-        when(whitePlayer.getAlliance()).thenReturn(Alliance.WHITE);
-        when(blackPlayer.getAlliance()).thenReturn(Alliance.BLACK);
+  @Test
+  void chooseBlackPlayer() {
+    when(whitePlayer.getAlliance()).thenReturn(Alliance.WHITE);
+    when(blackPlayer.getAlliance()).thenReturn(Alliance.BLACK);
 
-        players = List.of(whitePlayer, blackPlayer);
+    players = List.of(whitePlayer, blackPlayer);
 
-        assertThat(Alliance.BLACK.choosePlayer(players)).isEqualTo(blackPlayer);
-    }
+    assertThat(Alliance.BLACK.choosePlayer(players)).isEqualTo(blackPlayer);
+  }
 }

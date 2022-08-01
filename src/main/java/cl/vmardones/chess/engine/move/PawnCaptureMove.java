@@ -11,17 +11,16 @@ import cl.vmardones.chess.engine.piece.Pawn;
 import cl.vmardones.chess.engine.piece.Piece;
 import lombok.EqualsAndHashCode;
 
-/**
- * A move where a pawn captures another piece.
- */
+/** A move where a pawn captures another piece. */
 @EqualsAndHashCode(callSuper = true)
 public class PawnCaptureMove extends CaptureMove {
-    public PawnCaptureMove(Board board, Pawn pawn, Coordinate destination, Piece capturedPiece) {
-        super(board, pawn, destination, capturedPiece);
-    }
+  public PawnCaptureMove(
+      final Board board, final Pawn pawn, final Coordinate destination, final Piece capturedPiece) {
+    super(board, pawn, destination, capturedPiece);
+  }
 
-    @Override
-    public String toString() {
-        return String.format("%sx%s", piece.getPosition().toString().charAt(0), getDestination());
-    }
+  @Override
+  public String toString() {
+    return String.format("%sx%s", piece.getPosition().toString().charAt(0), getDestination());
+  }
 }

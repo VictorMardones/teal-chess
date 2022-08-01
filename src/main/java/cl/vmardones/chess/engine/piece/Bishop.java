@@ -17,40 +17,40 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-/**
- * The bishop piece. It can move diagonally.
- */
+/** The bishop piece. It can move diagonally. */
 @Getter
 @AllArgsConstructor
 @ToString(includeFieldNames = false)
 public class Bishop implements SlidingPiece {
 
-    private static final Collection<int[]> MOVE_VECTORS = calculateMoveVectors();
+  private static final Collection<int[]> MOVE_VECTORS = calculateMoveVectors();
 
-    private Coordinate position;
-    private Alliance alliance;
-    private boolean firstMove;
+  private Coordinate position;
+  private Alliance alliance;
+  private boolean firstMove;
 
-    public Bishop(Coordinate position, Alliance alliance) {
-        this(position, alliance, true);
-    }
+  public Bishop(final Coordinate position, final Alliance alliance) {
+    this(position, alliance, true);
+  }
 
-    @Override
-    public PieceType getPieceType() {
-        return PieceType.BISHOP;
-    }
+  @Override
+  public PieceType getPieceType() {
+    return PieceType.BISHOP;
+  }
 
-    @Override
-    public Bishop move(final Move move) {
-        return new Bishop(move.getDestination(), alliance, false);
-    }
+  @Override
+  public Bishop move(final Move move) {
+    return new Bishop(move.getDestination(), alliance, false);
+  }
 
-    @Override
-    public Collection<int[]> getMoveVectors() {
-        return MOVE_VECTORS;
-    }
+  @Override
+  public Collection<int[]> getMoveVectors() {
+    return MOVE_VECTORS;
+  }
 
-    private static Collection<int[]> calculateMoveVectors() {
-        return Arrays.stream(Diagonal.values()).map(Vector::getVector).collect(ImmutableList.toImmutableList());
-    }
+  private static Collection<int[]> calculateMoveVectors() {
+    return Arrays.stream(Diagonal.values())
+        .map(Vector::getVector)
+        .collect(ImmutableList.toImmutableList());
+  }
 }

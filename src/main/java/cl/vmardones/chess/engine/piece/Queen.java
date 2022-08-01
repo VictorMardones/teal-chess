@@ -28,36 +28,36 @@ import lombok.ToString;
 @ToString(includeFieldNames = false)
 public class Queen implements SlidingPiece {
 
-    private static final Collection<int[]> MOVE_VECTORS = calculateMoveVectors();
+  private static final Collection<int[]> MOVE_VECTORS = calculateMoveVectors();
 
-    private Coordinate position;
-    private Alliance alliance;
-    private boolean firstMove;
+  private Coordinate position;
+  private Alliance alliance;
+  private boolean firstMove;
 
-    public Queen(Coordinate position, Alliance alliance) {
-        this(position, alliance, true);
-    }
+  public Queen(final Coordinate position, final Alliance alliance) {
+    this(position, alliance, true);
+  }
 
-    @Override
-    public PieceType getPieceType() {
-        return PieceType.QUEEN;
-    }
+  @Override
+  public PieceType getPieceType() {
+    return PieceType.QUEEN;
+  }
 
-    @Override
-    public Queen move(final Move move) {
-        return new Queen(move.getDestination(), alliance, false);
-    }
+  @Override
+  public Queen move(final Move move) {
+    return new Queen(move.getDestination(), alliance, false);
+  }
 
-    @Override
-    public Collection<int[]> getMoveVectors() {
-        return MOVE_VECTORS;
-    }
+  @Override
+  public Collection<int[]> getMoveVectors() {
+    return MOVE_VECTORS;
+  }
 
-    private static Collection<int[]> calculateMoveVectors() {
-        return Stream.concat(
-                        Arrays.stream(Diagonal.values()),
-                        Stream.concat(Arrays.stream(Horizontal.values()), Arrays.stream(Vertical.values())))
-                .map(Vector::getVector)
-                .collect(ImmutableList.toImmutableList());
-    }
+  private static Collection<int[]> calculateMoveVectors() {
+    return Stream.concat(
+            Arrays.stream(Diagonal.values()),
+            Stream.concat(Arrays.stream(Horizontal.values()), Arrays.stream(Vertical.values())))
+        .map(Vector::getVector)
+        .collect(ImmutableList.toImmutableList());
+  }
 }

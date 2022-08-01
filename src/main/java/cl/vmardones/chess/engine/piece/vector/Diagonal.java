@@ -11,10 +11,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Diagonal implements Vector {
-    UP_LEFT(new int[] {-1, 1}),
-    UP_RIGHT(new int[] {1, 1}),
-    DOWN_LEFT(new int[] {-1, -1}),
-    DOWN_RIGHT(new int[] {1, -1});
+  UP_LEFT(new int[] {-1, 1}),
+  UP_RIGHT(new int[] {1, 1}),
+  DOWN_LEFT(new int[] {-1, -1}),
+  DOWN_RIGHT(new int[] {1, -1});
 
-    private final int[] vector;
+  private final int[] vector;
 }

@@ -15,38 +15,43 @@ import javax.swing.*;
 
 class BoardPanel extends JPanel {
 
-    public static final Dimension INITIAL_SIZE = new Dimension(500, 500);
+  public static final Dimension INITIAL_SIZE = new Dimension(500, 500);
 
-    private final transient Table table;
-    private final List<TilePanel> boardTiles;
+  private final transient Table table;
+  private final List<TilePanel> boardTiles;
 
-    BoardPanel(Table table) {
-        super(new GridLayout(8, 8));
-        this.table = table;
+  BoardPanel(final Table table) {
+    super(new GridLayout(8, 8));
+    this.table = table;
 
-        boardTiles = new ArrayList<>();
+    boardTiles = new ArrayList<>();
 
-        IntStream.range(Board.MIN_TILES, Board.MAX_TILES)
-                .mapToObj(Coordinate::of)
-                .map(coordinate -> new TilePanel(table, coordinate))
-                .forEach(tilePanel -> {
-                    boardTiles.add(tilePanel);
-                    add(tilePanel);
-                });
+    IntStream.range(Board.MIN_TILES, Board.MAX_TILES)
+        .mapToObj(Coordinate::of)
+        .map(coordinate -> new TilePanel(table, coordinate))
+        .forEach(
+            tilePanel -> {
+              boardTiles.add(tilePanel);
+              add(tilePanel);
+            });
 
-        setPreferredSize(INITIAL_SIZE);
-        validate();
-    }
+    setPreferredSize(INITIAL_SIZE);
+    validate();
+  }
 
-    public void drawBoard(final Board board) {
-        removeAll();
+  public void drawBoard(final Board board) {
+    removeAll();
 
-        table.getBoardDirection().traverse(boardTiles).forEach(tilePanel -> {
-            tilePanel.drawTile(board);
-            add(tilePanel);
-        });
+    table
+        .getBoardDirection()
+        .traverse(boardTiles)
+        .forEach(
+            tilePanel -> {
+              tilePanel.drawTile(board);
+              add(tilePanel);
+            });
 
-        validate();
-        repaint();
-    }
+    validate();
+    repaint();
+  }
 }

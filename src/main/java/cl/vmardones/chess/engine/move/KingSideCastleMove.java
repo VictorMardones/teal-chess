@@ -14,12 +14,17 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class KingSideCastleMove extends CastleMove {
 
-    public KingSideCastleMove(Board board, Piece piece, Coordinate destination, Rook rook, Coordinate rookDestination) {
-        super(board, piece, destination, rook, rookDestination);
-    }
+  public KingSideCastleMove(
+      final Board board,
+      final Piece piece,
+      final Coordinate destination,
+      final Rook rook,
+      final Coordinate rookDestination) {
+    super(board, piece, destination, rook, rookDestination);
+  }
 
-    @Override
-    public String toString() {
-        return "0-0";
-    }
+  @Override
+  public String toString() {
+    return "0-0";
+  }
 }

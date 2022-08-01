@@ -12,16 +12,17 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 public class PawnJump extends Move {
-    public PawnJump(Board board, Pawn pawn, Coordinate destination) {
-        super(board, pawn, destination);
-    }
+  public PawnJump(final Board board, final Pawn pawn, final Coordinate destination) {
+    super(board, pawn, destination);
+  }
 
-    @Override
-    public Board execute() {
-        return board.nextTurnBuilder()
-                .withoutPiece(piece)
-                .piece(piece.move(this))
-                .enPassantPawn((Pawn) piece.move(this))
-                .build();
-    }
+  @Override
+  public Board execute() {
+    return board
+        .nextTurnBuilder()
+        .withoutPiece(piece)
+        .piece(piece.move(this))
+        .enPassantPawn((Pawn) piece.move(this))
+        .build();
+  }
 }

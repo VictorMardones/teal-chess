@@ -22,46 +22,45 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class KnightTest {
 
-    Knight knight;
+  Knight knight;
 
-    Coordinate coordinate = Coordinate.of("c1");
-    Coordinate destination = Coordinate.of("d1");
+  Coordinate coordinate = Coordinate.of("c1");
+  Coordinate destination = Coordinate.of("d1");
 
-    @Mock
-    Move move;
+  @Mock Move move;
 
-    @BeforeEach
-    void setUp() {
-        knight = new Knight(coordinate, Alliance.WHITE);
-    }
+  @BeforeEach
+  void setUp() {
+    knight = new Knight(coordinate, Alliance.WHITE);
+  }
 
-    @Test
-    void constructor() {
-        assertThat(new Knight(coordinate, Alliance.BLACK)).matches(Knight::isFirstMove);
-    }
+  @Test
+  void constructor() {
+    assertThat(new Knight(coordinate, Alliance.BLACK)).matches(Knight::isFirstMove);
+  }
 
-    @Test
-    void getPieceType() {
-        assertThat(knight.getPieceType()).isEqualTo(Piece.PieceType.KNIGHT);
-    }
+  @Test
+  void getPieceType() {
+    assertThat(knight.getPieceType()).isEqualTo(Piece.PieceType.KNIGHT);
+  }
 
-    @Test
-    void lShapedMove() {
-        assertThat(knight.getMoveOffsets()).contains(LShaped.UP_UP_LEFT.getVector());
-    }
+  @Test
+  void lShapedMove() {
+    assertThat(knight.getMoveOffsets()).contains(LShaped.UP_UP_LEFT.getVector());
+  }
 
-    @Test
-    void illegalMove() {
-        assertThat(knight.getMoveOffsets()).doesNotContain(Vertical.UP.getVector());
-    }
+  @Test
+  void illegalMove() {
+    assertThat(knight.getMoveOffsets()).doesNotContain(Vertical.UP.getVector());
+  }
 
-    @Test
-    void move() {
-        when(move.getDestination()).thenReturn(destination);
+  @Test
+  void move() {
+    when(move.getDestination()).thenReturn(destination);
 
-        assertThat(knight.move(move))
-                .isInstanceOf(Knight.class)
-                .matches(knight -> knight.getPosition().equals(destination))
-                .matches(knight -> !knight.isFirstMove());
-    }
+    assertThat(knight.move(move))
+        .isInstanceOf(Knight.class)
+        .matches(knight -> knight.getPosition().equals(destination))
+        .matches(knight -> !knight.isFirstMove());
+  }
 }

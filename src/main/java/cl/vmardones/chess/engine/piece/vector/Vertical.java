@@ -11,8 +11,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Vertical implements Vector {
-    UP(new int[] {0, 1}),
-    DOWN(new int[] {0, -1});
+  UP(new int[] {0, 1}),
+  DOWN(new int[] {0, -1});
 
-    private final int[] vector;
+  private final int[] vector;
 }

@@ -14,83 +14,84 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
-public class GameHistoryPanel extends JPanel {
+class GameHistoryPanel extends JPanel {
 
-    private static final Dimension INITIAL_SIZE = new Dimension(150, 400);
-    public static final int ROW_HEIGHT = 25;
-    private final DataModel model;
-    private final JScrollPane scrollPane;
+  private static final Dimension INITIAL_SIZE = new Dimension(150, 400);
+  public static final int ROW_HEIGHT = 25;
+  private final DataModel model;
+  private final JScrollPane scrollPane;
 
-    public GameHistoryPanel() {
-        super(new BorderLayout());
-        model = new DataModel();
+  public GameHistoryPanel() {
+    super(new BorderLayout());
+    model = new DataModel();
 
-        final var table = new JTable(model);
-        table.setRowHeight(ROW_HEIGHT);
-        table.setDefaultRenderer(Object.class, createCenteredRenderer());
+    final var table = new JTable(model);
+    table.setRowHeight(ROW_HEIGHT);
+    table.setDefaultRenderer(Object.class, createCenteredRenderer());
 
-        scrollPane = new JScrollPane(table);
-        scrollPane.setColumnHeaderView(table.getTableHeader());
-        scrollPane.setPreferredSize(INITIAL_SIZE);
+    scrollPane = new JScrollPane(table);
+    scrollPane.setColumnHeaderView(table.getTableHeader());
+    scrollPane.setPreferredSize(INITIAL_SIZE);
 
-        add(scrollPane, BorderLayout.CENTER);
-        setVisible(true);
+    add(scrollPane, BorderLayout.CENTER);
+    setVisible(true);
+  }
+
+  private TableCellRenderer createCenteredRenderer() {
+    final var centeredRenderer = new DefaultTableCellRenderer();
+    centeredRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+    return centeredRenderer;
+  }
+
+  public void redo(final Board board, final MoveLog moveLog) {
+
+    final var lastMove = moveLog.getLastMove();
+
+    if (lastMove.isPresent()) {
+      final var moveText = lastMove.get().toString();
+
+      switch (lastMove.get().getPiece().getAlliance()) {
+        case WHITE -> model.setValueAt(
+            moveText + checkmateHash(board), model.getLastRowIndex() + 1, 0);
+        case BLACK -> model.setValueAt(moveText + checkmateHash(board), model.getLastRowIndex(), 1);
+      }
     }
 
-    private TableCellRenderer createCenteredRenderer() {
-        var centeredRenderer = new DefaultTableCellRenderer();
-        centeredRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-        return centeredRenderer;
+    final var vertical = scrollPane.getVerticalScrollBar();
+    vertical.setValue(vertical.getMaximum());
+  }
+
+  private String checkmateHash(final Board board) {
+    if (board.getCurrentPlayer().isInCheckmate()) {
+      return "#";
+    } else if (board.getCurrentPlayer().isInCheck()) {
+      return "+";
     }
 
-    public void redo(final Board board, final MoveLog moveLog) {
+    return "";
+  }
 
-        final var lastMove = moveLog.getLastMove();
+  private static class DataModel extends DefaultTableModel {
 
-        if (lastMove.isPresent()) {
-            final var moveText = lastMove.get().toString();
-
-            switch (lastMove.get().getPiece().getAlliance()) {
-                case WHITE -> model.setValueAt(moveText + checkmateHash(board), model.getLastRowIndex() + 1, 0);
-                case BLACK -> model.setValueAt(moveText + checkmateHash(board), model.getLastRowIndex(), 1);
-            }
-        }
-
-        final var vertical = scrollPane.getVerticalScrollBar();
-        vertical.setValue(vertical.getMaximum());
+    public DataModel() {
+      super(new Vector<>(List.of("White", "Black")), 0);
     }
 
-    private String checkmateHash(Board board) {
-        if (board.getCurrentPlayer().isInCheckmate()) {
-            return "#";
-        } else if (board.getCurrentPlayer().isInCheck()) {
-            return "+";
-        }
-
-        return "";
+    void clear() {
+      dataVector = new Vector<>(0);
     }
 
-    private static class DataModel extends DefaultTableModel {
-
-        public DataModel() {
-            super(new Vector<>(List.of("White", "Black")), 0);
-        }
-
-        void clear() {
-            dataVector = new Vector<>(0);
-        }
-
-        @Override
-        public void setValueAt(Object aValue, int row, int column) {
-            if (row > getLastRowIndex()) {
-                addRow(new Vector<>(List.of(aValue, "")));
-            } else {
-                super.setValueAt(aValue, row, column);
-            }
-        }
-
-        int getLastRowIndex() {
-            return getRowCount() - 1;
-        }
+    @Override
+    public void setValueAt(final Object aValue, final int row, final int column) {
+      if (row > getLastRowIndex()) {
+        addRow(new Vector<>(List.of(aValue, "")));
+      } else {
+        super.setValueAt(aValue, row, column);
+      }
     }
+
+    int getLastRowIndex() {
+      return getRowCount() - 1;
+    }
+  }
 }

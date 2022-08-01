@@ -11,14 +11,14 @@ import org.junit.jupiter.api.Test;
 
 class MoveStatusTest {
 
-    @Test
-    void isDone() {
-        assertThat(MoveStatus.DONE.isDone()).isTrue();
-    }
+  @Test
+  void isDone() {
+    assertThat(MoveStatus.DONE.isDone()).isTrue();
+  }
 
-    @Test
-    void isNotDone() {
-        assertThat(MoveStatus.LEAVES_OPPONENT_IN_CHECK.isDone()).isFalse();
-        assertThat(MoveStatus.ILLEGAL.isDone()).isFalse();
-    }
+  @Test
+  void isNotDone() {
+    assertThat(MoveStatus.LEAVES_OPPONENT_IN_CHECK.isDone()).isFalse();
+    assertThat(MoveStatus.ILLEGAL.isDone()).isFalse();
+  }
 }

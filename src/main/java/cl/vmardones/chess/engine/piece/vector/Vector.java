@@ -7,5 +7,5 @@ package cl.vmardones.chess.engine.piece.vector;
 
 public interface Vector {
 
-    int[] getVector();
+  int[] getVector();
 }

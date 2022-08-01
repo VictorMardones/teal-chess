@@ -11,53 +11,56 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.IVersionProvider;
 import picocli.CommandLine.Option;
 
-@Command(name = "chess-game", mixinStandardHelpOptions = true, versionProvider = MainCommand.ChessVersionProvider.class)
+@Command(
+    name = "chess-game",
+    mixinStandardHelpOptions = true,
+    versionProvider = MainCommand.ChessVersionProvider.class)
 public class MainCommand implements Runnable {
 
-    @Option(
-            names = {"-D", "--debug"},
-            description = "Enable debug mode")
-    private boolean debugMode;
+  @Option(
+      names = {"-D", "--debug"},
+      description = "Enable debug mode")
+  private boolean debugMode;
 
-    @Option(
-            names = {"-d", "--dark-theme"},
-            description = "Enable dark theme")
-    private boolean darkTheme;
+  @Option(
+      names = {"-d", "--dark-theme"},
+      description = "Enable dark theme")
+  private boolean darkTheme;
 
-    @Option(
-            names = {"-l", "--highlight-legals"},
-            description = "Highlight legal moves when selecting a piece",
-            negatable = true)
-    private boolean highlightLegals = true;
+  @Option(
+      names = {"-l", "--highlight-legals"},
+      description = "Highlight legal moves when selecting a piece",
+      negatable = true)
+  private boolean highlightLegals = true;
 
-    @Option(
-            names = {"-f", "--flip-board"},
-            description = "Flip the board, white appears at the top and black at the bottom")
-    private boolean flipBoard;
+  @Option(
+      names = {"-f", "--flip-board"},
+      description = "Flip the board, white appears at the top and black at the bottom")
+  private boolean flipBoard;
+
+  @Override
+  public void run() {
+    System.setProperty("awt.useSystemAAFontSettings", "on");
+
+    if (debugMode) {
+      System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "Debug");
+    }
+
+    new Table(darkTheme, highlightLegals, flipBoard);
+  }
+
+  static class ChessVersionProvider implements IVersionProvider {
 
     @Override
-    public void run() {
-        System.setProperty("awt.useSystemAAFontSettings", "on");
+    public String[] getVersion() {
 
-        if (debugMode) {
-            System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "Debug");
-        }
+      final var implementationVersion = getClass().getPackage().getImplementationVersion();
 
-        new Table(darkTheme, highlightLegals, flipBoard);
+      if (implementationVersion.isBlank()) {
+        return new String[] {"UNKNOWN"};
+      }
+
+      return new String[] {implementationVersion};
     }
-
-    static class ChessVersionProvider implements IVersionProvider {
-
-        @Override
-        public String[] getVersion() {
-
-            final var implementationVersion = getClass().getPackage().getImplementationVersion();
-
-            if (implementationVersion.isBlank()) {
-                return new String[] {"UNKNOWN"};
-            }
-
-            return new String[] {implementationVersion};
-        }
-    }
+  }
 }

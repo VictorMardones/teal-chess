@@ -24,56 +24,55 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class QueenTest {
 
-    Queen queen;
+  Queen queen;
 
-    Coordinate coordinate = Coordinate.of("c1");
-    Coordinate destination = Coordinate.of("d1");
+  Coordinate coordinate = Coordinate.of("c1");
+  Coordinate destination = Coordinate.of("d1");
 
-    @Mock
-    Move move;
+  @Mock Move move;
 
-    @BeforeEach
-    void setUp() {
-        queen = new Queen(coordinate, Alliance.BLACK);
-    }
+  @BeforeEach
+  void setUp() {
+    queen = new Queen(coordinate, Alliance.BLACK);
+  }
 
-    @Test
-    void constructor() {
-        assertThat(new Queen(coordinate, Alliance.BLACK)).matches(Queen::isFirstMove);
-    }
+  @Test
+  void constructor() {
+    assertThat(new Queen(coordinate, Alliance.BLACK)).matches(Queen::isFirstMove);
+  }
 
-    @Test
-    void getPieceType() {
-        assertThat(queen.getPieceType()).isEqualTo(Piece.PieceType.QUEEN);
-    }
+  @Test
+  void getPieceType() {
+    assertThat(queen.getPieceType()).isEqualTo(Piece.PieceType.QUEEN);
+  }
 
-    @Test
-    void diagonalMove() {
-        assertThat(queen.getMoveVectors()).contains(Diagonal.DOWN_RIGHT.getVector());
-    }
+  @Test
+  void diagonalMove() {
+    assertThat(queen.getMoveVectors()).contains(Diagonal.DOWN_RIGHT.getVector());
+  }
 
-    @Test
-    void horizontalMove() {
-        assertThat(queen.getMoveVectors()).contains(Horizontal.LEFT.getVector());
-    }
+  @Test
+  void horizontalMove() {
+    assertThat(queen.getMoveVectors()).contains(Horizontal.LEFT.getVector());
+  }
 
-    @Test
-    void verticalMove() {
-        assertThat(queen.getMoveVectors()).contains(Vertical.UP.getVector());
-    }
+  @Test
+  void verticalMove() {
+    assertThat(queen.getMoveVectors()).contains(Vertical.UP.getVector());
+  }
 
-    @Test
-    void illegalMove() {
-        assertThat(queen.getMoveVectors()).doesNotContain(LShaped.UP_UP_LEFT.getVector());
-    }
+  @Test
+  void illegalMove() {
+    assertThat(queen.getMoveVectors()).doesNotContain(LShaped.UP_UP_LEFT.getVector());
+  }
 
-    @Test
-    void move() {
-        when(move.getDestination()).thenReturn(destination);
+  @Test
+  void move() {
+    when(move.getDestination()).thenReturn(destination);
 
-        assertThat(queen.move(move))
-                .isInstanceOf(Queen.class)
-                .matches(queen -> queen.getPosition().equals(destination))
-                .matches(queen -> !queen.isFirstMove());
-    }
+    assertThat(queen.move(move))
+        .isInstanceOf(Queen.class)
+        .matches(queen -> queen.getPosition().equals(destination))
+        .matches(queen -> !queen.isFirstMove());
+  }
 }

@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 final class ResourceImporter {
 
-    static InputStream get(String path) {
-        return ResourceImporter.class.getClassLoader().getResourceAsStream(path);
-    }
+  static InputStream get(final String path) {
+    return ResourceImporter.class.getClassLoader().getResourceAsStream(path);
+  }
 }

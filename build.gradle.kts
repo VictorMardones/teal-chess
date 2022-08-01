@@ -88,7 +88,7 @@ tasks {
 spotless {
     java {
         licenseHeaderFile("license.template")
-        palantirJavaFormat()
+        googleJavaFormat()
     }
 
     format("misc") {

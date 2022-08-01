@@ -15,36 +15,35 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 class MoveLog {
 
-    @Getter
-    private final List<Move> moves = new ArrayList<>();
+  @Getter private final List<Move> moves = new ArrayList<>();
 
-    private Move lastMove;
+  private Move lastMove;
 
-    void add(final Move move) {
-        moves.add(move);
-        lastMove = move;
-    }
+  void add(final Move move) {
+    moves.add(move);
+    lastMove = move;
+  }
 
-    int size() {
-        return moves.size();
-    }
+  int size() {
+    return moves.size();
+  }
 
-    void clear() {
-        moves.clear();
-    }
+  void clear() {
+    moves.clear();
+  }
 
-    Move remove(final int index) {
-        return moves.remove(index);
-    }
+  Move remove(final int index) {
+    return moves.remove(index);
+  }
 
-    boolean remove(final Move move) {
-        return moves.remove(move);
-    }
+  boolean remove(final Move move) {
+    return moves.remove(move);
+  }
 
-    Optional<Move> getLastMove() {
+  Optional<Move> getLastMove() {
 
-        final var move = lastMove;
-        lastMove = null;
-        return Optional.ofNullable(move);
-    }
+    final var move = lastMove;
+    lastMove = null;
+    return Optional.ofNullable(move);
+  }
 }

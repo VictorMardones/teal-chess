@@ -9,41 +9,32 @@ import java.util.Collection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/**
- * Represents the chess piece's color, which can be white or black.
- */
+/** Represents the chess piece's color, which can be white or black. */
 @AllArgsConstructor
 @Getter
 public enum Alliance {
-    /**
-     * The white side, on the bottom of the board.
-     */
-    WHITE(1),
-    /**
-     * The black side, on the top of the board.
-     */
-    BLACK(-1);
-    private final int direction;
+  /** The white side, on the bottom of the board. */
+  WHITE(1),
+  /** The black side, on the top of the board. */
+  BLACK(-1);
+  private final int direction;
 
-    /**
-     * Chooses the first player of this alliance.
-     *
-     * @param players Players to choose from
-     * @return The chosen player
-     */
-    public Player choosePlayer(final Collection<Player> players) {
-        return players.stream()
-                .filter(player -> player.getAlliance() == this)
-                .findFirst()
-                .orElse(null);
-    }
+  /**
+   * Chooses the first player of this alliance.
+   *
+   * @param players Players to choose from
+   * @return The chosen player
+   */
+  public Player choosePlayer(final Collection<Player> players) {
+    return players.stream().filter(player -> player.getAlliance() == this).findFirst().orElse(null);
+  }
 
-    public int getOppositeDirection() {
-        return -direction;
-    }
+  public int getOppositeDirection() {
+    return -direction;
+  }
 
-    @Override
-    public String toString() {
-        return "" + super.toString().toLowerCase().charAt(0);
-    }
+  @Override
+  public String toString() {
+    return "" + super.toString().toLowerCase().charAt(0);
+  }
 }

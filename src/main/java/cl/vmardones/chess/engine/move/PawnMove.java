@@ -10,12 +10,10 @@ import cl.vmardones.chess.engine.board.Coordinate;
 import cl.vmardones.chess.engine.piece.Pawn;
 import lombok.EqualsAndHashCode;
 
-/**
- * A move where a pawn gets to another tile.
- */
+/** A move where a pawn gets to another tile. */
 @EqualsAndHashCode(callSuper = true)
 public class PawnMove extends Move {
-    public PawnMove(Board board, Pawn pawn, Coordinate destination) {
-        super(board, pawn, destination);
-    }
+  public PawnMove(final Board board, final Pawn pawn, final Coordinate destination) {
+    super(board, pawn, destination);
+  }
 }

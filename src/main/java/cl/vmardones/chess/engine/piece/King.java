@@ -30,36 +30,36 @@ import lombok.ToString;
 @ToString(includeFieldNames = false)
 public class King implements JumpingPiece {
 
-    private static final Collection<int[]> MOVE_OFFSETS = calculateMoveOffsets();
+  private static final Collection<int[]> MOVE_OFFSETS = calculateMoveOffsets();
 
-    private Coordinate position;
-    private Alliance alliance;
-    private boolean firstMove;
+  private Coordinate position;
+  private Alliance alliance;
+  private boolean firstMove;
 
-    public King(Coordinate position, Alliance alliance) {
-        this(position, alliance, true);
-    }
+  public King(final Coordinate position, final Alliance alliance) {
+    this(position, alliance, true);
+  }
 
-    @Override
-    public PieceType getPieceType() {
-        return PieceType.KING;
-    }
+  @Override
+  public PieceType getPieceType() {
+    return PieceType.KING;
+  }
 
-    @Override
-    public King move(final Move move) {
-        return new King(move.getDestination(), alliance, false);
-    }
+  @Override
+  public King move(final Move move) {
+    return new King(move.getDestination(), alliance, false);
+  }
 
-    @Override
-    public Collection<int[]> getMoveOffsets() {
-        return MOVE_OFFSETS;
-    }
+  @Override
+  public Collection<int[]> getMoveOffsets() {
+    return MOVE_OFFSETS;
+  }
 
-    private static Collection<int[]> calculateMoveOffsets() {
-        return Stream.concat(
-                        Arrays.stream(Diagonal.values()),
-                        Stream.concat(Arrays.stream(Horizontal.values()), Arrays.stream(Vertical.values())))
-                .map(Vector::getVector)
-                .collect(ImmutableList.toImmutableList());
-    }
+  private static Collection<int[]> calculateMoveOffsets() {
+    return Stream.concat(
+            Arrays.stream(Diagonal.values()),
+            Stream.concat(Arrays.stream(Horizontal.values()), Arrays.stream(Vertical.values())))
+        .map(Vector::getVector)
+        .collect(ImmutableList.toImmutableList());
+  }
 }

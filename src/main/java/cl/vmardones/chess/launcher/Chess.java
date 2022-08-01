@@ -10,11 +10,11 @@ import picocli.CommandLine;
 
 public final class Chess {
 
-    private Chess() {
-        throw new IllegalStateException("You cannot instantiate me!");
-    }
+  private Chess() {
+    throw new IllegalStateException("You cannot instantiate me!");
+  }
 
-    public static void main(String... args) {
-        new CommandLine(new MainCommand()).execute(args);
-    }
+  public static void main(final String... args) {
+    new CommandLine(new MainCommand()).execute(args);
+  }
 }

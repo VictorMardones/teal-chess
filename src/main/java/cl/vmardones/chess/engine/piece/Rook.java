@@ -19,42 +19,40 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-/**
- * The rook piece. It can move horizontally and vertically.
- */
+/** The rook piece. It can move horizontally and vertically. */
 @Getter
 @AllArgsConstructor
 @ToString(includeFieldNames = false)
 public class Rook implements SlidingPiece {
 
-    private static final Collection<int[]> MOVE_VECTORS = calculateMoveVectors();
+  private static final Collection<int[]> MOVE_VECTORS = calculateMoveVectors();
 
-    private Coordinate position;
-    private Alliance alliance;
-    private boolean firstMove;
+  private Coordinate position;
+  private Alliance alliance;
+  private boolean firstMove;
 
-    public Rook(Coordinate position, Alliance alliance) {
-        this(position, alliance, true);
-    }
+  public Rook(final Coordinate position, final Alliance alliance) {
+    this(position, alliance, true);
+  }
 
-    @Override
-    public PieceType getPieceType() {
-        return PieceType.ROOK;
-    }
+  @Override
+  public PieceType getPieceType() {
+    return PieceType.ROOK;
+  }
 
-    @Override
-    public Rook move(final Move move) {
-        return new Rook(move.getDestination(), alliance, false);
-    }
+  @Override
+  public Rook move(final Move move) {
+    return new Rook(move.getDestination(), alliance, false);
+  }
 
-    private static Collection<int[]> calculateMoveVectors() {
-        return MOVE_VECTORS;
-    }
+  @Override
+  public Collection<int[]> getMoveVectors() {
+    return MOVE_VECTORS;
+  }
 
-    @Override
-    public Collection<int[]> getMoveVectors() {
-        return Stream.concat(Arrays.stream(Horizontal.values()), Arrays.stream(Vertical.values()))
-                .map(Vector::getVector)
-                .collect(ImmutableList.toImmutableList());
-    }
+  private static Collection<int[]> calculateMoveVectors() {
+    return Stream.concat(Arrays.stream(Horizontal.values()), Arrays.stream(Vertical.values()))
+        .map(Vector::getVector)
+        .collect(ImmutableList.toImmutableList());
+  }
 }

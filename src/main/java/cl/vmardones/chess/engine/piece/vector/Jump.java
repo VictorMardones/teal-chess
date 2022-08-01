@@ -11,8 +11,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Jump implements Vector {
-    UP(new int[] {0, 2}),
-    DOWN(new int[] {0, -2});
+  UP(new int[] {0, 2}),
+  DOWN(new int[] {0, -2});
 
-    private final int[] vector;
+  private final int[] vector;
 }

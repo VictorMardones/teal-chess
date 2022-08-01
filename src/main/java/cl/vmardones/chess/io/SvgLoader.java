@@ -11,17 +11,17 @@ import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class SvgLoader {
+public final class SvgLoader {
 
-    public static Optional<BufferedImage> load(final String path, final int width, final int height) {
+  public static Optional<BufferedImage> load(final String path, final int width, final int height) {
 
-        final var iconResource = ResourceImporter.get(path);
+    final var iconResource = ResourceImporter.get(path);
 
-        try {
-            return SvgImporter.get(iconResource, width, height);
-        } catch (IOException e) {
-            log.warn("Could not load the SVG file " + path);
-            return Optional.empty();
-        }
+    try {
+      return SvgImporter.get(iconResource, width, height);
+    } catch (final IOException e) {
+      log.warn("Could not load the SVG file " + path);
+      return Optional.empty();
     }
+  }
 }
