@@ -32,6 +32,8 @@ public final class Coordinate {
 
   private final int index;
 
+  /* Indexnotation initialization */
+
   private Coordinate(final int index) {
     if (isOutsideBoard(index)) {
       throw new InvalidCoordinateException("Index is outside chessboard: " + index);
@@ -43,6 +45,23 @@ public final class Coordinate {
   private static boolean isOutsideBoard(final int index) {
     return index < Board.MIN_TILES || index >= Board.MAX_TILES;
   }
+
+  /**
+   * Create a coordinate, using an array index.
+   *
+   * @param index The array index of the coordinate
+   * @return The created coordinate
+   * @throws InvalidCoordinateException If the coordinate isn't inside the chessboard
+   */
+  public static Coordinate of(final int index) {
+    if (isOutsideBoard(index)) {
+      throw new InvalidCoordinateException("Index is outside chessboard: " + index);
+    }
+
+    return COORDINATES_CACHE.get(index);
+  }
+
+  /* Algebraic notation initialization */
 
   /**
    * Create a coordinate, indicating its position with chess algebraic notation.
@@ -59,20 +78,16 @@ public final class Coordinate {
     return COORDINATES_CACHE.get(calculateIndex(algebraic));
   }
 
-  /**
-   * Create a coordinate, using an array index
-   *
-   * @param index The array index of the coordinate
-   * @return The created coordinate
-   * @throws InvalidCoordinateException If the coordinate isn't inside the chessboard
-   */
-  public static Coordinate of(final int index) {
-    if (isOutsideBoard(index)) {
-      throw new InvalidCoordinateException("Index is outside chessboard: " + index);
-    }
+  private static int calculateIndex(final String algebraicCoordinate) {
+    final var column = Column.indexOf(algebraicCoordinate.charAt(0));
+    final var rank =
+        Board.SIDE_LENGTH
+            * (Board.SIDE_LENGTH - Integer.parseInt("" + algebraicCoordinate.charAt(1)));
 
-    return COORDINATES_CACHE.get(index);
+    return column + rank;
   }
+
+  /* Getters and comparations */
 
   /**
    * Get the array index of this coordinate. Indexes start at 0 in the a8 coordinate, and end at 63
@@ -82,35 +97,6 @@ public final class Coordinate {
    */
   public int index() {
     return index;
-  }
-
-  private static int calculateIndex(final String algebraicCoordinate) {
-    final var column = Column.indexOf(algebraicCoordinate.charAt(0));
-    final var rank =
-        Board.NUMBER_OF_RANKS
-            * (Board.NUMBER_OF_RANKS - Integer.parseInt("" + algebraicCoordinate.charAt(1)));
-
-    return column + rank;
-  }
-
-  /**
-   * Obtains the rank (row in chess terminology) of this coordinate. The rank is a number between 1
-   * (bottom of the board, white side) and 8 (top of the board, black side).
-   *
-   * @return The coordinate's rank
-   */
-  public int getRank() {
-    return Board.NUMBER_OF_RANKS - index / Board.NUMBER_OF_RANKS;
-  }
-
-  /**
-   * Compares this coordinate with another, to see if they are on the same rank.
-   *
-   * @param other The other coordinate
-   * @return True if both are on the same rank
-   */
-  public boolean sameRankAs(final Coordinate other) {
-    return getRank() == other.getRank();
   }
 
   /**
@@ -140,7 +126,37 @@ public final class Coordinate {
    * @return The coordinate's column, as an index
    */
   public int getColumnIndex() {
-    return index % Board.NUMBER_OF_RANKS;
+    return index % Board.SIDE_LENGTH;
+  }
+
+  /**
+   * Obtains the rank (row in chess terminology) of this coordinate. The rank is a number between 1
+   * (bottom of the board, white side) and 8 (top of the board, black side).
+   *
+   * @return The coordinate's rank
+   */
+  public int getRank() {
+    return Board.SIDE_LENGTH - index / Board.SIDE_LENGTH;
+  }
+
+  /**
+   * Compares this coordinate with another, to see if they are on the same rank.
+   *
+   * @param other The other coordinate
+   * @return True if both are on the same rank
+   */
+  public boolean sameRankAs(final Coordinate other) {
+    return getRank() == other.getRank();
+  }
+
+  /**
+   * Convert the coordinate to algebraic notation.
+   *
+   * @return The coordinate's name
+   */
+  @Override
+  public String toString() {
+    return "" + getColumn() + getRank();
   }
 
   /**
@@ -149,7 +165,7 @@ public final class Coordinate {
    * @return The color, which is either black or white
    */
   public Alliance getColor() {
-    if ((index + index / Board.NUMBER_OF_RANKS) % 2 == 0) {
+    if ((index + index / Board.SIDE_LENGTH) % 2 == 0) {
       return Alliance.WHITE;
     }
 
@@ -166,6 +182,8 @@ public final class Coordinate {
     return getColor() == other.getColor();
   }
 
+  /* Traslation operations */
+
   /**
    * Gets the coordinate at a relative position.
    *
@@ -176,7 +194,7 @@ public final class Coordinate {
   public Optional<Coordinate> to(final int x, final int y) {
     try {
       final var destination =
-          COORDINATES_CACHE.get(index + horizontalClamp(x) - y * Board.NUMBER_OF_RANKS);
+          COORDINATES_CACHE.get(index + horizontalClamp(x) - y * Board.SIDE_LENGTH);
 
       if (illegalJump(x, destination)) {
         return Optional.empty();
@@ -194,7 +212,7 @@ public final class Coordinate {
   }
 
   private int horizontalClamp(final int x) {
-    return x % Board.NUMBER_OF_RANKS;
+    return x % Board.SIDE_LENGTH;
   }
 
   /**
@@ -235,16 +253,6 @@ public final class Coordinate {
    */
   public Optional<Coordinate> right(final int spaces) {
     return to(spaces, 0);
-  }
-
-  /**
-   * Convert the coordinate to algebraic notation.
-   *
-   * @return The coordinate's name
-   */
-  @Override
-  public String toString() {
-    return "" + getColumn() + getRank();
   }
 
   private enum Column {
