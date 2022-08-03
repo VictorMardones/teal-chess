@@ -5,7 +5,7 @@
 
 package cl.vmardones.chess.gui;
 
-import cl.vmardones.chess.engine.board.Board;
+import cl.vmardones.chess.engine.player.Player;
 import java.awt.*;
 import java.util.List;
 import java.util.Vector;
@@ -43,7 +43,7 @@ class GameHistoryPanel extends JPanel {
     return centeredRenderer;
   }
 
-  public void redo(final Board board, final MoveLog moveLog) {
+  public void redo(final Player currentPlayer, final MoveLog moveLog) {
 
     final var lastMove = moveLog.getLastMove();
 
@@ -52,8 +52,9 @@ class GameHistoryPanel extends JPanel {
 
       switch (lastMove.get().getPiece().getAlliance()) {
         case WHITE -> model.setValueAt(
-            moveText + checkmateHash(board), model.getLastRowIndex() + 1, 0);
-        case BLACK -> model.setValueAt(moveText + checkmateHash(board), model.getLastRowIndex(), 1);
+            moveText + checkmateHash(currentPlayer), model.getLastRowIndex() + 1, 0);
+        case BLACK -> model.setValueAt(
+            moveText + checkmateHash(currentPlayer), model.getLastRowIndex(), 1);
       }
     }
 
@@ -61,10 +62,10 @@ class GameHistoryPanel extends JPanel {
     vertical.setValue(vertical.getMaximum());
   }
 
-  private String checkmateHash(final Board board) {
-    if (board.getCurrentPlayer().isInCheckmate()) {
+  private String checkmateHash(final Player currentPlayer) {
+    if (currentPlayer.isInCheckmate()) {
       return "#";
-    } else if (board.getCurrentPlayer().isInCheck()) {
+    } else if (currentPlayer.isInCheck()) {
       return "+";
     }
 

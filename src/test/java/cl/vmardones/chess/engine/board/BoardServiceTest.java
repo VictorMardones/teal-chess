@@ -7,15 +7,23 @@ package cl.vmardones.chess.engine.board;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class BoardTest {
+class BoardServiceTest {
 
-  Board board = Board.createStandardBoard();
+  BoardService boardService;
+
+  @BeforeEach
+  void setUp() {
+    boardService = new BoardService();
+  }
 
   @Test
-  void toText() {
-    assertThat(board.toText())
+  void prettyPrint() {
+    var board = boardService.createStandardBoard();
+
+    assertThat(boardService.prettyPrint(board))
         .containsOnlyOnce("r  n  b  q  k  b  n  r")
         .containsOnlyOnce("p  p  p  p  p  p  p  p")
         .contains("-  -  -  -  -  -  -  -")

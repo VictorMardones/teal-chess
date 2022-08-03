@@ -10,6 +10,7 @@ import static javax.swing.SwingUtilities.isRightMouseButton;
 
 import cl.vmardones.chess.engine.board.Board;
 import cl.vmardones.chess.engine.board.Coordinate;
+import cl.vmardones.chess.engine.board.Tile;
 import cl.vmardones.chess.engine.move.Move;
 import cl.vmardones.chess.engine.piece.Piece;
 import cl.vmardones.chess.engine.player.Alliance;
@@ -43,7 +44,7 @@ class TilePanel extends JPanel {
 
     setPreferredSize(SIZE);
     assignTileColor();
-    assignPieceIcon(table.getChessboard());
+    assignPieceIcon(table.getTileAt(coordinate));
     validate();
 
     addMouseListener(clickListener());
@@ -92,7 +93,7 @@ class TilePanel extends JPanel {
 
   private void firstLeftClick() {
     log.debug("Selected the tile {}", coordinate);
-    table.setSourceTile(table.getChessboard().getTile(coordinate));
+    table.setSourceTile(table.getTileAt(coordinate));
 
     if (getSelectedPiece().isPresent()) {
       table.setSelectedPiece(getSelectedPiece().get());
@@ -111,21 +112,21 @@ class TilePanel extends JPanel {
   private void secondLeftClick() {
     // TODO: Replace all these long method calls with forwarding methods
     log.debug("Selected the destination {}", coordinate);
-    table.setDestinationTile(table.getChessboard().getTile(coordinate));
+    table.setDestinationTile(table.getTileAt(coordinate));
 
     final var move =
         Move.MoveFactory.create(
-            table.getChessboard(),
+            table.getGame().getCurrentPlayer().getLegals(),
             table.getSourceTile().getCoordinate(),
             table.getDestinationTile().getCoordinate());
 
     log.debug("Is there a move that can get to the destination? {}", move.isPresent());
 
     if (move.isPresent()) {
-      final var moveTransition = table.getChessboard().getCurrentPlayer().makeMove(move.get());
+      final var moveTransition = table.makeMove(move.get());
 
       if (moveTransition.getMoveStatus().isDone()) {
-        table.setChessboard(moveTransition.getBoard());
+        table.getGame().createNextTurn(move.get());
         table.addToLog(move.get());
       }
     }
@@ -135,18 +136,17 @@ class TilePanel extends JPanel {
 
   void drawTile(final Board board) {
     assignTileColor();
-    assignPieceIcon(board);
+    assignPieceIcon(table.getTileAt(coordinate));
     highlightLegals(board);
     validate();
     repaint();
   }
 
-  private void assignPieceIcon(final Board board) {
+  private void assignPieceIcon(final Tile tile) {
     removeAll();
 
-    if (board.getTile(coordinate).getPiece().isPresent()) {
-      PieceIconLoader.load(
-              board.getTile(coordinate).getPiece().get(), SIZE.width * 6, SIZE.height * 6)
+    if (tile.getPiece().isPresent()) {
+      PieceIconLoader.load(tile.getPiece().get(), SIZE.width * 6, SIZE.height * 6)
           .ifPresent(image -> add(new JLabel(new ImageIcon(image))));
     }
   }
@@ -170,14 +170,15 @@ class TilePanel extends JPanel {
   }
 
   private Collection<Move> selectedPieceLegals(final Board board) {
-    if (table.getSelectedPiece() == null || isOpponentPieceSelected(board)) {
+    if (table.getSelectedPiece() == null || isOpponentPieceSelected()) {
       return Collections.emptyList();
     }
 
     return table.getSelectedPiece().calculateLegals(board);
   }
 
-  private boolean isOpponentPieceSelected(final Board board) {
-    return table.getSelectedPiece().getAlliance() != board.getCurrentPlayer().getAlliance();
+  private boolean isOpponentPieceSelected() {
+    return table.getSelectedPiece().getAlliance()
+        != table.getGame().getCurrentPlayer().getAlliance();
   }
 }

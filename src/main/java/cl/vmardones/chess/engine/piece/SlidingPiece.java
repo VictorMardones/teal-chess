@@ -26,7 +26,7 @@ public interface SlidingPiece extends Piece {
   }
 
   private Collection<Coordinate> calculateOffsets(final int[] vector, final Board board) {
-    return IntStream.range(1, Board.NUMBER_OF_RANKS + 1)
+    return IntStream.range(1, Board.SIDE_LENGTH + 1)
         .mapToObj(i -> getPosition().to(vector[0] * i, vector[1] * i))
         .filter(Optional::isPresent)
         .map(Optional::get)

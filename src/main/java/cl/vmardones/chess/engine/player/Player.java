@@ -7,6 +7,7 @@ package cl.vmardones.chess.engine.player;
 
 import cl.vmardones.chess.engine.board.Board;
 import cl.vmardones.chess.engine.board.Coordinate;
+import cl.vmardones.chess.engine.game.Game;
 import cl.vmardones.chess.engine.move.*;
 import cl.vmardones.chess.engine.piece.King;
 import cl.vmardones.chess.engine.piece.Piece;
@@ -30,6 +31,8 @@ public abstract class Player {
 
   @Getter protected final King king;
 
+  protected final Game game;
+
   @Getter @ToString.Exclude protected final Collection<Move> legals;
 
   private final boolean inCheck;
@@ -38,10 +41,12 @@ public abstract class Player {
   protected Player(
       final Board board,
       final King king,
+      final Game game,
       final Collection<Move> legals,
       final Collection<Move> opponentMoves) {
     this.board = board;
     this.king = king;
+    this.game = game;
 
     this.legals = ImmutableList.copyOf(Iterables.concat(legals, calculateCastles(opponentMoves)));
     inCheck = !Player.calculateAttacksOnTile(king.getPosition(), opponentMoves).isEmpty();
@@ -87,7 +92,7 @@ public abstract class Player {
     if (noEscapeMoves == null) {
       noEscapeMoves =
           legals.stream()
-              .map(this::makeMove)
+              .map(move -> makeMove(this, move))
               .noneMatch(transition -> transition.getMoveStatus().isDone());
     }
 
@@ -108,7 +113,7 @@ public abstract class Player {
     return false;
   }
 
-  public MoveTransition makeMove(final Move move) {
+  public MoveTransition makeMove(final Player currentPlayer, final Move move) {
     if (move.isNull()) {
       return new MoveTransition(board, move, MoveStatus.NULL);
     }
@@ -117,19 +122,18 @@ public abstract class Player {
       return new MoveTransition(board, move, MoveStatus.ILLEGAL);
     }
 
-    final var transitionBoard = move.execute();
-
     final Collection<Move> kingAttacks =
         Player.calculateAttacksOnTile(
-            transitionBoard.getCurrentPlayer().getOpponent().king.getPosition(),
-            transitionBoard.getCurrentPlayer().legals);
+            currentPlayer.getKing().getPosition(), currentPlayer.getOpponent().getLegals());
 
     if (!kingAttacks.isEmpty()) {
       return new MoveTransition(board, move, MoveStatus.LEAVES_OPPONENT_IN_CHECK);
     }
 
-    return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
+    return new MoveTransition(move.execute(), move, MoveStatus.DONE);
   }
+
+  public abstract Player getOpponent();
 
   /**
    * Obtains the player's current pieces on the board.
@@ -144,13 +148,6 @@ public abstract class Player {
    * @return The player's alliance
    */
   public abstract Alliance getAlliance();
-
-  /**
-   * Obtains the player in the other side of the board.
-   *
-   * @return The opponent
-   */
-  public abstract Player getOpponent();
 
   // TODO: Refactor this method, maybe use combinator pattern
   protected Collection<Move> calculateCastles(final Collection<Move> opponentLegals) {

@@ -1,14 +1,26 @@
+/*
+ * Copyright (C) 2022  Víctor Mardones
+ * The full notice can be found at COPYRIGHT in the root directory.
+ */
+
 package cl.vmardones.chess.engine.game;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
+/** A mutable class that holds the current state of the game. */
 class GameState {
 
-    private Turn currentTurn;
+  @Getter(AccessLevel.PACKAGE)
+  @Setter(AccessLevel.PACKAGE)
+  private Turn currentTurn;
 
-    private TurnMemento save(){
-        return new TurnMemento(currentTurn);
-    }
+  TurnMemento save() {
+    return new TurnMemento(currentTurn);
+  }
 
-    private void load(final TurnMemento turnMemento){
-        currentTurn = turnMemento.state();
-    }
+  void load(final TurnMemento turnMemento) {
+    currentTurn = turnMemento.state();
+  }
 }

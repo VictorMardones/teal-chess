@@ -8,6 +8,7 @@ package cl.vmardones.chess.engine.move;
 import cl.vmardones.chess.engine.board.Board;
 import cl.vmardones.chess.engine.board.Coordinate;
 import cl.vmardones.chess.engine.piece.Piece;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.EqualsAndHashCode;
@@ -77,26 +78,23 @@ public abstract class Move {
     /**
      * Creates a move in the specified direction.
      *
-     * @param board The chessboard
      * @param source Source coordinate
      * @param destination Destination coordinate
      * @return Move that goes from the source to the destination, if possible.
      */
     public static Optional<Move> create(
-        final Board board, final Coordinate source, final Coordinate destination) {
+        final Collection<Move> currentPlayerLegals,
+        final Coordinate source,
+        final Coordinate destination) {
       if (source.equals(destination)) {
         return Optional.empty();
       }
 
       log.debug(
           "Current piece legals: {}",
-          board.getCurrentPlayerLegals().stream()
-              .filter(move -> move.getSource().equals(source))
-              .toList());
+          currentPlayerLegals.stream().filter(move -> move.getSource().equals(source)).toList());
 
-      return board.getCurrentPlayerLegals().stream()
-          .filter(isMovePossible(source, destination))
-          .findFirst();
+      return currentPlayerLegals.stream().filter(isMovePossible(source, destination)).findFirst();
     }
 
     private static Predicate<Move> isMovePossible(

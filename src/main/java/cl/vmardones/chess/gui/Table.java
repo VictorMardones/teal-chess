@@ -8,9 +8,11 @@ package cl.vmardones.chess.gui;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import static java.awt.Frame.NORMAL;
 
-import cl.vmardones.chess.engine.board.Board;
+import cl.vmardones.chess.engine.board.Coordinate;
 import cl.vmardones.chess.engine.board.Tile;
+import cl.vmardones.chess.engine.game.Game;
 import cl.vmardones.chess.engine.move.Move;
+import cl.vmardones.chess.engine.move.MoveTransition;
 import cl.vmardones.chess.engine.piece.Piece;
 import cl.vmardones.chess.io.FontLoader;
 import com.formdev.flatlaf.FlatDarkLaf;
@@ -37,7 +39,7 @@ public class Table {
 
   private final GameHistoryPanel gameHistoryPanel;
 
-  @Getter @Setter private Board chessboard;
+  @Getter @Setter private Game game;
 
   private final MoveLog moveLog;
 
@@ -59,11 +61,9 @@ public class Table {
     boardDirection = flipBoard ? BoardDirection.FLIPPED : BoardDirection.NORMAL;
 
     reloadTheme();
-
     setUIFont(FontLoader.load(FONT_PATH));
 
-    chessboard = Board.createStandardBoard();
-    boardDirection = BoardDirection.NORMAL;
+    game = new Game();
 
     gameFrame = new JFrame("Chess game, made in Java");
     gameFrame.setLayout(new BorderLayout());
@@ -153,7 +153,7 @@ public class Table {
     flipBoard.addActionListener(
         e -> {
           boardDirection = boardDirection.opposite();
-          boardPanel.drawBoard(chessboard);
+          boardPanel.drawBoard(game.getBoard());
         });
 
     final var highlightCheckbox = new JCheckBoxMenuItem("Highlight Legal Moves", highlightLegals);
@@ -179,13 +179,21 @@ public class Table {
   }
 
   public void update() {
-    gameHistoryPanel.redo(getChessboard(), moveLog);
+    gameHistoryPanel.redo(game.getCurrentPlayer(), moveLog);
     takenPiecesPanel.redo(moveLog);
-    boardPanel.drawBoard(getChessboard());
+    boardPanel.drawBoard(game.getBoard());
   }
 
   public void addToLog(final Move move) {
     moveLog.add(move);
+  }
+
+  Tile getTileAt(final Coordinate coordinate) {
+    return getGame().getBoard().getTile(coordinate);
+  }
+
+  MoveTransition makeMove(final Move move) {
+    return getGame().performMove(move);
   }
 
   public enum BoardDirection {

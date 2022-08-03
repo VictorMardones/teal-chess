@@ -29,8 +29,15 @@ public enum Alliance {
     return players.stream().filter(player -> player.getAlliance() == this).findFirst().orElse(null);
   }
 
+  public Alliance getOpposite() {
+    return switch (this) {
+      case WHITE -> BLACK;
+      case BLACK -> WHITE;
+    };
+  }
+
   public int getOppositeDirection() {
-    return -direction;
+    return getOpposite().getDirection();
   }
 
   @Override

@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2022  Víctor Mardones
+ * The full notice can be found at COPYRIGHT in the root directory.
+ */
+
 package cl.vmardones.chess.engine.board;
 
 import cl.vmardones.chess.engine.piece.King;
@@ -5,11 +10,10 @@ import cl.vmardones.chess.engine.piece.Pawn;
 import cl.vmardones.chess.engine.piece.Piece;
 import cl.vmardones.chess.engine.player.Alliance;
 import com.google.common.collect.ImmutableList;
-import lombok.*;
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.*;
 import java.util.stream.IntStream;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 /** The game board, made of 8x8 tiles. */
 @Slf4j
@@ -21,18 +25,15 @@ public class Board {
 
   private final List<Tile> tiles;
 
-  @Getter
-  private final Collection<Piece> whitePieces;
+  @Getter private final Collection<Piece> whitePieces;
 
-  private final King whiteKing;
+  @Getter private final King whiteKing;
 
-  @Getter
-  private final Collection<Piece> blackPieces;
+  @Getter private final Collection<Piece> blackPieces;
 
-  private final King blackKing;
+  @Getter private final King blackKing;
 
-  @Getter
-  private final Pawn enPassantPawn;
+  @Getter private final Pawn enPassantPawn;
 
   private Board(final BoardBuilder builder) {
     tiles = createTiles(builder);
@@ -54,18 +55,19 @@ public class Board {
 
   private List<Tile> createTiles(final BoardBuilder builder) {
     return IntStream.range(MIN_TILES, MAX_TILES)
-            .mapToObj(Coordinate::of)
-            .map(coordinate -> Tile.create(coordinate, builder.boardConfig.get(coordinate)))
-            .collect(ImmutableList.toImmutableList());
+        .mapToObj(Coordinate::of)
+        .map(coordinate -> Tile.create(coordinate, builder.boardConfig.get(coordinate)))
+        .collect(ImmutableList.toImmutableList());
   }
 
-  private Collection<Piece> calculateActivePieces(final List<Tile> gameBoard, final Alliance alliance) {
+  private Collection<Piece> calculateActivePieces(
+      final List<Tile> gameBoard, final Alliance alliance) {
     return gameBoard.stream()
-            .map(Tile::getPiece)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .filter(piece -> piece.getAlliance() == alliance)
-            .collect(ImmutableList.toImmutableList());
+        .map(Tile::getPiece)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .filter(piece -> piece.getAlliance() == alliance)
+        .collect(ImmutableList.toImmutableList());
   }
 
   /* Methods for checking the board */
