@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2022  Víctor Mardones
- * The full notice can be found at COPYRIGHT in the root directory.
+ * The full notice can be found at README.md in the root directory.
  */
 
 package cl.vmardones.chess.gui;
