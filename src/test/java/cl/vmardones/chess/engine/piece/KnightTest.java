@@ -24,8 +24,9 @@ class KnightTest {
 
   Knight knight;
 
-  Coordinate coordinate = Coordinate.of("c1");
-  Coordinate destination = Coordinate.of("d1");
+  @Mock Coordinate coordinate;
+
+  @Mock Coordinate destination;
 
   @Mock Move move;
 
@@ -46,7 +47,7 @@ class KnightTest {
 
   @Test
   void lShapedMove() {
-    assertThat(knight.getMoveOffsets()).contains(LShaped.UP_UP_LEFT.getVector());
+    assertThat(knight.getMoveOffsets()).containsOnlyOnce(LShaped.UP_UP_LEFT.getVector());
   }
 
   @Test

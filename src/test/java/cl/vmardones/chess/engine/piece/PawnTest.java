@@ -26,8 +26,9 @@ class PawnTest {
 
   Pawn pawn;
 
-  Coordinate coordinate = Coordinate.of("c1");
-  Coordinate destination = Coordinate.of("d1");
+  @Mock Coordinate coordinate;
+
+  @Mock Coordinate destination;
 
   @Mock Move move;
 
@@ -48,18 +49,18 @@ class PawnTest {
 
   @Test
   void whiteMoves() {
-    assertThat(pawn.getMoveOffsets()).contains(Vertical.UP.getVector());
-    assertThat(pawn.getMoveOffsets()).contains(Jump.UP.getVector());
-    assertThat(pawn.getMoveOffsets()).contains(Diagonal.UP_RIGHT.getVector());
+    assertThat(pawn.getMoveOffsets()).containsOnlyOnce(Vertical.UP.getVector());
+    assertThat(pawn.getMoveOffsets()).containsOnlyOnce(Jump.UP.getVector());
+    assertThat(pawn.getMoveOffsets()).containsOnlyOnce(Diagonal.UP_RIGHT.getVector());
   }
 
   @Test
   void blackMoves() {
     final var blackPawn = new Pawn(coordinate, Alliance.BLACK);
 
-    assertThat(blackPawn.getMoveOffsets()).contains(Vertical.DOWN.getVector());
-    assertThat(blackPawn.getMoveOffsets()).contains(Jump.DOWN.getVector());
-    assertThat(blackPawn.getMoveOffsets()).contains(Diagonal.DOWN_RIGHT.getVector());
+    assertThat(blackPawn.getMoveOffsets()).containsOnlyOnce(Vertical.DOWN.getVector());
+    assertThat(blackPawn.getMoveOffsets()).containsOnlyOnce(Jump.DOWN.getVector());
+    assertThat(blackPawn.getMoveOffsets()).containsOnlyOnce(Diagonal.DOWN_RIGHT.getVector());
   }
 
   @Test

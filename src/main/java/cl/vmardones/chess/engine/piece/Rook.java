@@ -23,7 +23,7 @@ import lombok.ToString;
 @Getter
 @AllArgsConstructor
 @ToString(includeFieldNames = false)
-public class Rook implements SlidingPiece {
+public final class Rook implements SlidingPiece {
 
   private static final Collection<int[]> MOVE_VECTORS = calculateMoveVectors();
 

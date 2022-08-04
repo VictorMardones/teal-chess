@@ -23,7 +23,7 @@ import org.apache.batik.transcoder.image.PNGTranscoder;
 final class SvgImporter {
 
   private SvgImporter() {
-    throw new IllegalStateException("You cannot instantiate me!");
+    throw new UnsupportedOperationException("You cannot instantiate me!");
   }
 
   static Optional<BufferedImage> get(

@@ -24,7 +24,7 @@ class TakenPiecesPanel extends JPanel {
   private final JPanel northPanel;
   private final JPanel southPanel;
 
-  public TakenPiecesPanel() {
+  TakenPiecesPanel() {
     super(new BorderLayout());
 
     setBorder(BORDER);
@@ -38,7 +38,7 @@ class TakenPiecesPanel extends JPanel {
     setPreferredSize(INITIAL_SIZE);
   }
 
-  public void redo(final MoveLog moveLog) {
+  void redo(final MoveLog moveLog) {
     northPanel.removeAll();
     southPanel.removeAll();
 

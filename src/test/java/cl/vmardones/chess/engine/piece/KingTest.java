@@ -26,8 +26,9 @@ class KingTest {
 
   King king;
 
-  Coordinate coordinate = Coordinate.of("c1");
-  Coordinate destination = Coordinate.of("d1");
+  @Mock Coordinate coordinate;
+
+  @Mock Coordinate destination;
 
   @Mock Move move;
 
@@ -48,17 +49,17 @@ class KingTest {
 
   @Test
   void diagonalMove() {
-    assertThat(king.getMoveOffsets()).contains(Diagonal.UP_RIGHT.getVector());
+    assertThat(king.getMoveOffsets()).containsOnlyOnce(Diagonal.UP_RIGHT.getVector());
   }
 
   @Test
   void horizontalMove() {
-    assertThat(king.getMoveOffsets()).contains(Horizontal.LEFT.getVector());
+    assertThat(king.getMoveOffsets()).containsOnlyOnce(Horizontal.LEFT.getVector());
   }
 
   @Test
   void verticalMove() {
-    assertThat(king.getMoveOffsets()).contains(Vertical.UP.getVector());
+    assertThat(king.getMoveOffsets()).containsOnlyOnce(Vertical.UP.getVector());
   }
 
   @Test

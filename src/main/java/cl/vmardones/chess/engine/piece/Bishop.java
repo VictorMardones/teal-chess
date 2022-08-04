@@ -21,7 +21,7 @@ import lombok.ToString;
 @Getter
 @AllArgsConstructor
 @ToString(includeFieldNames = false)
-public class Bishop implements SlidingPiece {
+public final class Bishop implements SlidingPiece {
 
   private static final Collection<int[]> MOVE_VECTORS = calculateMoveVectors();
 

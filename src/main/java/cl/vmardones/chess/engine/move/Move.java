@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 /** The action of moving a piece. */
@@ -32,7 +33,7 @@ public abstract class Move {
 
   @Getter protected Piece capturedPiece;
 
-  public Move(final Board board, final Piece piece, final Coordinate destination) {
+  protected Move(final Board board, final Piece piece, final Coordinate destination) {
     this.board = board;
     this.piece = piece;
     this.destination = destination;
@@ -72,7 +73,7 @@ public abstract class Move {
   public static final class MoveFactory {
 
     private MoveFactory() {
-      throw new IllegalStateException("You cannot instantiate me!");
+      throw new UnsupportedOperationException("You cannot instantiate me!");
     }
 
     /**
@@ -83,9 +84,9 @@ public abstract class Move {
      * @return Move that goes from the source to the destination, if possible.
      */
     public static Optional<Move> create(
-        final Collection<Move> currentPlayerLegals,
-        final Coordinate source,
-        final Coordinate destination) {
+        @NonNull final Collection<Move> currentPlayerLegals,
+        @NonNull final Coordinate source,
+        @NonNull final Coordinate destination) {
       if (source.equals(destination)) {
         return Optional.empty();
       }

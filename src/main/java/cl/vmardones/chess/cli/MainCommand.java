@@ -19,23 +19,23 @@ public class MainCommand implements Runnable {
 
   @Option(
       names = {"-D", "--debug"},
-      description = "Enable debug mode")
+      description = "Enable debug mode.")
   private boolean debugMode;
 
   @Option(
       names = {"-d", "--dark-theme"},
-      description = "Enable dark theme")
+      description = "Enable dark theme.")
   private boolean darkTheme;
 
   @Option(
       names = {"-l", "--highlight-legals"},
-      description = "Highlight legal moves when selecting a piece",
+      description = "Highlight legal moves when selecting a piece.",
       negatable = true)
   private boolean highlightLegals = true;
 
   @Option(
       names = {"-f", "--flip-board"},
-      description = "Flip the board, white appears at the top and black at the bottom")
+      description = "Flip the board, white at the top and black at the bottom.")
   private boolean flipBoard;
 
   @Override

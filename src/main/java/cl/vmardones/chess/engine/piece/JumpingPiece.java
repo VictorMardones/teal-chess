@@ -10,17 +10,18 @@ import cl.vmardones.chess.engine.board.Coordinate;
 import com.google.common.collect.ImmutableList;
 import java.util.Collection;
 import java.util.Optional;
+import lombok.NonNull;
 
 /**
  * A piece that can move to a specific set of positions. It usually doesn't matter if there are
  * other pieces in the way.
  */
-public interface JumpingPiece extends Piece {
+interface JumpingPiece extends Piece {
 
   Collection<int[]> getMoveOffsets();
 
   @Override
-  default Collection<Coordinate> calculatePossibleDestinations(final Board board) {
+  default Collection<Coordinate> calculatePossibleDestinations(@NonNull final Board board) {
     return getMoveOffsets().stream()
         .map(offset -> getPosition().to(offset[0], offset[1]))
         .filter(Optional::isPresent)

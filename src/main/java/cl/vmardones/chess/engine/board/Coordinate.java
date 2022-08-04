@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
+import lombok.NonNull;
 
 /**
  * A coordinate is one of the 64 positions where a chess piece can be. It's usually identified by
@@ -35,10 +36,6 @@ public final class Coordinate {
   /* Indexnotation initialization */
 
   private Coordinate(final int index) {
-    if (isOutsideBoard(index)) {
-      throw new InvalidCoordinateException("Index is outside chessboard: " + index);
-    }
-
     this.index = index;
   }
 
@@ -70,7 +67,7 @@ public final class Coordinate {
    * @return The created coordinate
    * @throws InvalidCoordinateException If the coordinate isn't inside the chessboard
    */
-  public static Coordinate of(final String algebraic) {
+  public static Coordinate of(@NonNull final String algebraic) {
     if (!ALGEBRAIC_NOTATION.matcher(algebraic).matches()) {
       throw new InvalidCoordinateException("Invalid algebraic notation: " + algebraic);
     }
@@ -115,7 +112,7 @@ public final class Coordinate {
    * @param other The other coordinate
    * @return True if both are on the same column
    */
-  public boolean sameColumnAs(final Coordinate other) {
+  public boolean sameColumnAs(@NonNull final Coordinate other) {
     return getColumn() == other.getColumn();
   }
 
@@ -145,7 +142,7 @@ public final class Coordinate {
    * @param other The other coordinate
    * @return True if both are on the same rank
    */
-  public boolean sameRankAs(final Coordinate other) {
+  public boolean sameRankAs(@NonNull final Coordinate other) {
     return getRank() == other.getRank();
   }
 
@@ -178,7 +175,7 @@ public final class Coordinate {
    * @param other The other coordinate
    * @return True if both are the same color
    */
-  public boolean sameColorAs(final Coordinate other) {
+  public boolean sameColorAs(@NonNull final Coordinate other) {
     return getColor() == other.getColor();
   }
 

@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
 
 /** A chess piece. */
 public interface Piece {
@@ -35,7 +36,7 @@ public interface Piece {
    * @param board Current state of the game board
    * @return List of possible moves
    */
-  default Collection<Move> calculateLegals(final Board board) {
+  default Collection<Move> calculateLegals(@NonNull final Board board) {
     return calculatePossibleDestinations(board).stream()
         .map(board::getTile)
         .filter(this::isAccessible)
@@ -45,9 +46,9 @@ public interface Piece {
         .collect(ImmutableList.toImmutableList());
   }
 
-  Collection<Coordinate> calculatePossibleDestinations(final Board board);
+  Collection<Coordinate> calculatePossibleDestinations(@NonNull final Board board);
 
-  default boolean isInMoveRange(final Board board, final Coordinate coordinate) {
+  default boolean isInMoveRange(@NonNull final Board board, @NonNull final Coordinate coordinate) {
     return calculateLegals(board).stream()
         .map(Move::getDestination)
         .anyMatch(destination -> destination == coordinate);
@@ -69,7 +70,7 @@ public interface Piece {
     return getAlliance() != other.getAlliance();
   }
 
-  default String toChar() {
+  default String toSingleChar() {
     return getPieceType().pieceName;
   }
 
@@ -84,7 +85,7 @@ public interface Piece {
    * @param destination The target destination
    * @return True if the piece can get to the destination
    */
-  default boolean isAccessible(final Tile destination) {
+  default boolean isAccessible(@NonNull final Tile destination) {
     final var pieceAtDestination = destination.getPiece();
     return pieceAtDestination.isEmpty() || isEnemyOf(pieceAtDestination.get());
   }
@@ -98,7 +99,7 @@ public interface Piece {
    * @param board The current game board
    * @return A move, selected depending on the source and destination
    */
-  default Optional<Move> createMove(final Tile destination, final Board board) {
+  default Optional<Move> createMove(@NonNull final Tile destination, @NonNull final Board board) {
     if (destination.getPiece().isEmpty()) {
       return Optional.of(new MajorMove(board, this, destination.getCoordinate()));
     }

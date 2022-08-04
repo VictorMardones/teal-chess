@@ -9,10 +9,11 @@ import cl.vmardones.chess.engine.move.Move;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 class MoveLog {
 
   @Getter private final List<Move> moves = new ArrayList<>();

@@ -28,7 +28,7 @@ import lombok.ToString;
 @Getter
 @AllArgsConstructor
 @ToString(includeFieldNames = false)
-public class King implements JumpingPiece {
+public final class King implements JumpingPiece {
 
   private static final Collection<int[]> MOVE_OFFSETS = calculateMoveOffsets();
 

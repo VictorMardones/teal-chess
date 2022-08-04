@@ -8,6 +8,7 @@ package cl.vmardones.chess.engine.player;
 import java.util.Collection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
 
 /** Represents the chess piece's color, which can be white or black. */
 @AllArgsConstructor
@@ -17,6 +18,7 @@ public enum Alliance {
   WHITE(1),
   /** The black side, on the top of the board. */
   BLACK(-1);
+
   private final int direction;
 
   /**
@@ -25,7 +27,7 @@ public enum Alliance {
    * @param players Players to choose from
    * @return The chosen player
    */
-  public Player choosePlayer(final Collection<Player> players) {
+  public Player choosePlayer(@NonNull final Collection<Player> players) {
     return players.stream().filter(player -> player.getAlliance() == this).findFirst().orElse(null);
   }
 

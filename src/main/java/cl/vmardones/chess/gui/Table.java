@@ -26,11 +26,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+// TODO: Many methods used in the GUI should be moved to the game
+// TODO: Many methods can take simpler arguments and not every class needs access to the board
 @Slf4j
 public class Table {
 
   private static final Dimension INITIAL_SIZE = new Dimension(700, 600);
-  private static final String FONT_PATH = "NotoSans-Regular.ttf";
+  private static final String FONT_NAME = "NotoSans-Regular.ttf";
 
   private final JFrame gameFrame;
   private final BoardPanel boardPanel;
@@ -61,7 +63,7 @@ public class Table {
     boardDirection = flipBoard ? BoardDirection.FLIPPED : BoardDirection.NORMAL;
 
     reloadTheme();
-    setUIFont(FontLoader.load(FONT_PATH));
+    setUIFont(FontLoader.load(FONT_NAME));
 
     game = new Game();
 
@@ -152,7 +154,7 @@ public class Table {
     final var flipBoard = new JMenuItem("Flip Board");
     flipBoard.addActionListener(
         e -> {
-          boardDirection = boardDirection.opposite();
+          boardDirection = boardDirection.getOpposite();
           boardPanel.drawBoard(game.getBoard());
         });
 
@@ -172,19 +174,19 @@ public class Table {
     return preferencesMenu;
   }
 
-  public void resetSelection() {
+  void resetSelection() {
     sourceTile = null;
     destinationTile = null;
     selectedPiece = null;
   }
 
-  public void update() {
+  void update() {
     gameHistoryPanel.redo(game.getCurrentPlayer(), moveLog);
     takenPiecesPanel.redo(moveLog);
     boardPanel.drawBoard(game.getBoard());
   }
 
-  public void addToLog(final Move move) {
+  void addToLog(final Move move) {
     moveLog.add(move);
   }
 
@@ -196,32 +198,23 @@ public class Table {
     return getGame().performMove(move);
   }
 
-  public enum BoardDirection {
-    NORMAL {
-      @Override
-      List<TilePanel> traverse(final List<TilePanel> boardTiles) {
-        return boardTiles;
-      }
+  enum BoardDirection {
+    NORMAL,
+    FLIPPED;
 
-      @Override
-      BoardDirection opposite() {
-        return FLIPPED;
-      }
-    },
-    FLIPPED {
-      @Override
-      List<TilePanel> traverse(final List<TilePanel> boardTiles) {
-        return Lists.reverse(boardTiles);
-      }
+    List<TilePanel> traverse(final List<TilePanel> boardTiles) {
+      return switch (this) {
+        case NORMAL -> boardTiles;
+        case FLIPPED -> Lists.reverse(boardTiles);
+      };
+    }
 
-      @Override
-      BoardDirection opposite() {
-        return NORMAL;
-      }
-    };
-
-    abstract List<TilePanel> traverse(final List<TilePanel> boardTiles);
-
-    abstract BoardDirection opposite();
+    BoardDirection getOpposite() {
+      return switch (this) {
+        case NORMAL -> FLIPPED;
+        case FLIPPED -> NORMAL;
+      };
+    }
+    ;
   }
 }

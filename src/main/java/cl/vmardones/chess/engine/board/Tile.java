@@ -13,6 +13,7 @@ import java.util.stream.IntStream;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
 
 /** A single chess tile, which may or may not contain a piece. */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -37,7 +38,7 @@ public abstract class Tile {
    * @param piece The piece on the tile
    * @return A new tile
    */
-  public static Tile create(final Coordinate coordinate, final Piece piece) {
+  public static Tile create(@NonNull final Coordinate coordinate, final Piece piece) {
     return piece != null
         ? new OccupiedTile(coordinate, piece)
         : EMPTY_TILES_CACHE.get(coordinate.index());
@@ -50,7 +51,7 @@ public abstract class Tile {
    */
   public abstract Optional<Piece> getPiece();
 
-  static final class EmptyTile extends Tile {
+  private static final class EmptyTile extends Tile {
 
     private EmptyTile(final Coordinate coordinate) {
       super(coordinate);
@@ -67,7 +68,7 @@ public abstract class Tile {
     }
   }
 
-  static final class OccupiedTile extends Tile {
+  private static final class OccupiedTile extends Tile {
 
     private final Piece piece;
 
@@ -83,7 +84,7 @@ public abstract class Tile {
 
     @Override
     public String toString() {
-      return piece.isBlack() ? piece.toChar().toLowerCase() : piece.toChar();
+      return piece.isBlack() ? piece.toSingleChar().toLowerCase() : piece.toSingleChar();
     }
   }
 }

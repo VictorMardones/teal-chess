@@ -14,7 +14,7 @@ class SquarePanel<T extends JPanel> extends JPanel {
 
   private final T square;
 
-  public SquarePanel(final T square) {
+  SquarePanel(final T square) {
     this.square = square;
 
     addComponentListener(resizeListener());

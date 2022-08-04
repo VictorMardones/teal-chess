@@ -12,13 +12,14 @@ import com.google.common.collect.ImmutableList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.IntStream;
+import lombok.NonNull;
 
-public interface SlidingPiece extends Piece {
+interface SlidingPiece extends Piece {
 
   Collection<int[]> getMoveVectors();
 
   @Override
-  default Collection<Coordinate> calculatePossibleDestinations(final Board board) {
+  default Collection<Coordinate> calculatePossibleDestinations(@NonNull final Board board) {
     return getMoveVectors().stream()
         .map(vector -> calculateOffsets(vector, board))
         .flatMap(Collection::stream)

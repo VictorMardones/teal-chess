@@ -24,8 +24,9 @@ class BishopTest {
 
   Bishop bishop;
 
-  Coordinate coordinate = Coordinate.of("c1");
-  Coordinate destination = Coordinate.of("d1");
+  @Mock Coordinate coordinate;
+
+  @Mock Coordinate destination;
 
   @Mock Move move;
 
@@ -46,7 +47,7 @@ class BishopTest {
 
   @Test
   void diagonalMove() {
-    assertThat(bishop.getMoveVectors()).contains(Diagonal.UP_RIGHT.getVector());
+    assertThat(bishop.getMoveVectors()).containsOnlyOnce(Diagonal.UP_RIGHT.getVector());
   }
 
   @Test

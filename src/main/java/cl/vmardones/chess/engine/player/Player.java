@@ -7,7 +7,6 @@ package cl.vmardones.chess.engine.player;
 
 import cl.vmardones.chess.engine.board.Board;
 import cl.vmardones.chess.engine.board.Coordinate;
-import cl.vmardones.chess.engine.game.Game;
 import cl.vmardones.chess.engine.move.*;
 import cl.vmardones.chess.engine.piece.King;
 import cl.vmardones.chess.engine.piece.Piece;
@@ -18,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -31,9 +31,8 @@ public abstract class Player {
 
   @Getter protected final King king;
 
-  protected final Game game;
-
   @Getter @ToString.Exclude protected final Collection<Move> legals;
+  @ToString.Exclude protected final Collection<Move> opponentLegals;
 
   private final boolean inCheck;
   private Boolean noEscapeMoves;
@@ -41,19 +40,18 @@ public abstract class Player {
   protected Player(
       final Board board,
       final King king,
-      final Game game,
       final Collection<Move> legals,
-      final Collection<Move> opponentMoves) {
+      final Collection<Move> opponentLegals) {
     this.board = board;
     this.king = king;
-    this.game = game;
+    this.opponentLegals = opponentLegals;
 
-    this.legals = ImmutableList.copyOf(Iterables.concat(legals, calculateCastles(opponentMoves)));
-    inCheck = !Player.calculateAttacksOnTile(king.getPosition(), opponentMoves).isEmpty();
+    this.legals = ImmutableList.copyOf(Iterables.concat(legals, calculateCastles(opponentLegals)));
+    inCheck = !Player.calculateAttacksOnTile(king.getPosition(), opponentLegals).isEmpty();
   }
 
   protected static Collection<Move> calculateAttacksOnTile(
-      final Coordinate kingPosition, final Collection<Move> moves) {
+      @NonNull final Coordinate kingPosition, @NonNull final Collection<Move> moves) {
     return moves.stream()
         .filter(move -> kingPosition == move.getDestination())
         .collect(ImmutableList.toImmutableList());
@@ -113,7 +111,7 @@ public abstract class Player {
     return false;
   }
 
-  public MoveTransition makeMove(final Player currentPlayer, final Move move) {
+  public MoveTransition makeMove(@NonNull final Player currentPlayer, @NonNull final Move move) {
     if (move.isNull()) {
       return new MoveTransition(board, move, MoveStatus.NULL);
     }
@@ -123,8 +121,7 @@ public abstract class Player {
     }
 
     final Collection<Move> kingAttacks =
-        Player.calculateAttacksOnTile(
-            currentPlayer.getKing().getPosition(), currentPlayer.getOpponent().getLegals());
+        Player.calculateAttacksOnTile(currentPlayer.getKing().getPosition(), opponentLegals);
 
     if (!kingAttacks.isEmpty()) {
       return new MoveTransition(board, move, MoveStatus.LEAVES_OPPONENT_IN_CHECK);
@@ -132,8 +129,6 @@ public abstract class Player {
 
     return new MoveTransition(move.execute(), move, MoveStatus.DONE);
   }
-
-  public abstract Player getOpponent();
 
   /**
    * Obtains the player's current pieces on the board.
@@ -150,7 +145,7 @@ public abstract class Player {
   public abstract Alliance getAlliance();
 
   // TODO: Refactor this method, maybe use combinator pattern
-  protected Collection<Move> calculateCastles(final Collection<Move> opponentLegals) {
+  protected Collection<Move> calculateCastles(@NonNull final Collection<Move> opponentLegals) {
 
     final List<Move> castles = new ArrayList<>();
 

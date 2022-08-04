@@ -6,7 +6,6 @@
 package cl.vmardones.chess.engine.player;
 
 import cl.vmardones.chess.engine.board.Board;
-import cl.vmardones.chess.engine.game.Game;
 import cl.vmardones.chess.engine.move.Move;
 import cl.vmardones.chess.engine.piece.King;
 import cl.vmardones.chess.engine.piece.Piece;
@@ -18,10 +17,9 @@ public class BlackPlayer extends Player {
   public BlackPlayer(
       final Board board,
       final King king,
-      final Game game,
       final Collection<Move> legals,
       final Collection<Move> opponentMoves) {
-    super(board, king, game, legals, opponentMoves);
+    super(board, king, legals, opponentMoves);
   }
 
   @Override
@@ -32,10 +30,5 @@ public class BlackPlayer extends Player {
   @Override
   public Alliance getAlliance() {
     return Alliance.BLACK;
-  }
-
-  @Override
-  public Player getOpponent() {
-    return game.getWhitePlayer();
   }
 }

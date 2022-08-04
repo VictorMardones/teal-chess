@@ -11,7 +11,7 @@ import picocli.CommandLine;
 public final class Chess {
 
   private Chess() {
-    throw new IllegalStateException("You cannot instantiate me!");
+    throw new UnsupportedOperationException("You cannot instantiate me!");
   }
 
   public static void main(final String... args) {

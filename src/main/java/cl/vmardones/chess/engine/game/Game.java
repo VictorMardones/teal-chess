@@ -14,6 +14,7 @@ import cl.vmardones.chess.engine.player.BlackPlayer;
 import cl.vmardones.chess.engine.player.Player;
 import cl.vmardones.chess.engine.player.WhitePlayer;
 import java.util.Collection;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -46,11 +47,9 @@ public class Game {
     final var blackLegals = calculateBlackLegals(board);
     log.debug("Black legals: {}", blackLegals);
 
-    final var whitePlayer =
-        new WhitePlayer(board, board.getWhiteKing(), this, whiteLegals, blackLegals);
+    final var whitePlayer = new WhitePlayer(board, board.getWhiteKing(), whiteLegals, blackLegals);
     log.debug("White player: {}", whitePlayer);
-    final var blackPlayer =
-        new BlackPlayer(board, board.getBlackKing(), this, blackLegals, whiteLegals);
+    final var blackPlayer = new BlackPlayer(board, board.getBlackKing(), blackLegals, whiteLegals);
     log.debug("Black player: {}", blackPlayer);
 
     final var turn = new Turn(board, nextMoveMaker, whitePlayer, blackPlayer);
@@ -67,8 +66,8 @@ public class Game {
     return boardService.calculateLegals(board, board.getBlackPieces());
   }
 
-  public Turn createNextTurn(final Move move) {
-    return createTurn(move.execute(), getCurrentPlayer().getOpponent().getAlliance());
+  public Turn createNextTurn(@NonNull final Move move) {
+    return createTurn(move.execute(), getOpponent().getAlliance());
   }
 
   public Board getBoard() {
@@ -85,7 +84,7 @@ public class Game {
    * @return The opponent
    */
   public Player getOpponent() {
-    return getCurrentPlayer().getOpponent();
+    return gameState.getCurrentTurn().getOpponent();
   }
 
   public Player getWhitePlayer() {
@@ -96,7 +95,7 @@ public class Game {
     return gameState.getCurrentTurn().blackPlayer();
   }
 
-  public MoveTransition performMove(final Move move) {
+  public MoveTransition performMove(@NonNull final Move move) {
     return getCurrentPlayer().makeMove(getCurrentPlayer(), move);
   }
 }

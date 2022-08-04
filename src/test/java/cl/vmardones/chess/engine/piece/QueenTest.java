@@ -26,8 +26,9 @@ class QueenTest {
 
   Queen queen;
 
-  Coordinate coordinate = Coordinate.of("c1");
-  Coordinate destination = Coordinate.of("d1");
+  @Mock Coordinate coordinate;
+
+  @Mock Coordinate destination;
 
   @Mock Move move;
 
@@ -48,17 +49,17 @@ class QueenTest {
 
   @Test
   void diagonalMove() {
-    assertThat(queen.getMoveVectors()).contains(Diagonal.DOWN_RIGHT.getVector());
+    assertThat(queen.getMoveVectors()).containsOnlyOnce(Diagonal.DOWN_RIGHT.getVector());
   }
 
   @Test
   void horizontalMove() {
-    assertThat(queen.getMoveVectors()).contains(Horizontal.LEFT.getVector());
+    assertThat(queen.getMoveVectors()).containsOnlyOnce(Horizontal.LEFT.getVector());
   }
 
   @Test
   void verticalMove() {
-    assertThat(queen.getMoveVectors()).contains(Vertical.UP.getVector());
+    assertThat(queen.getMoveVectors()).containsOnlyOnce(Vertical.UP.getVector());
   }
 
   @Test

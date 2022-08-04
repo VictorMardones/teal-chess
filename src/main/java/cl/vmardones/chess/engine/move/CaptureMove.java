@@ -36,6 +36,6 @@ public class CaptureMove extends Move {
 
   @Override
   public String toString() {
-    return piece.toChar() + getDestination().toString();
+    return piece.toSingleChar() + getDestination().toString();
   }
 }

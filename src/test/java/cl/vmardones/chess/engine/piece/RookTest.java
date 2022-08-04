@@ -25,8 +25,9 @@ class RookTest {
 
   Rook rook;
 
-  Coordinate coordinate = Coordinate.of("c1");
-  Coordinate destination = Coordinate.of("d1");
+  @Mock Coordinate coordinate;
+
+  @Mock Coordinate destination;
 
   @Mock Move move;
 
@@ -47,12 +48,12 @@ class RookTest {
 
   @Test
   void horizontalMove() {
-    assertThat(rook.getMoveVectors()).contains(Horizontal.RIGHT.getVector());
+    assertThat(rook.getMoveVectors()).containsOnlyOnce(Horizontal.RIGHT.getVector());
   }
 
   @Test
   void verticalMove() {
-    assertThat(rook.getMoveVectors()).contains(Vertical.UP.getVector());
+    assertThat(rook.getMoveVectors()).containsOnlyOnce(Vertical.UP.getVector());
   }
 
   @Test

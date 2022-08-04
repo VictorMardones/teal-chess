@@ -72,17 +72,18 @@ public class Board {
 
   /* Methods for checking the board */
 
-  public Tile getTile(final Coordinate coordinate) {
+  public Tile getTile(@NonNull final Coordinate coordinate) {
     return tiles.get(coordinate.index());
   }
 
-  public boolean contains(final Coordinate coordinate, final Piece.PieceType pieceType) {
+  public boolean contains(
+      @NonNull final Coordinate coordinate, @NonNull final Piece.PieceType pieceType) {
     final var piece = getTile(coordinate).getPiece();
 
     return piece.isPresent() && piece.get().getPieceType() == pieceType;
   }
 
-  public boolean containsNothing(final Coordinate coordinate) {
+  public boolean containsNothing(@NonNull final Coordinate coordinate) {
     return getTile(coordinate).getPiece().isEmpty();
   }
 
@@ -95,7 +96,7 @@ public class Board {
    *
    * @return The board builder
    */
-  public static BoardBuilder builder(final King whiteKing, final King blackKing) {
+  public static BoardBuilder builder(@NonNull final King whiteKing, @NonNull final King blackKing) {
     return new BoardBuilder(whiteKing, blackKing);
   }
 
@@ -142,9 +143,6 @@ public class Board {
     }
 
     public Board build() {
-      Objects.requireNonNull(whiteKing);
-      Objects.requireNonNull(blackKing);
-
       return new Board(this);
     }
   }

@@ -14,22 +14,25 @@ import java.util.Collection;
 
 record Turn(Board board, Alliance moveMaker, Player whitePlayer, Player blackPlayer) {
 
-  public Player getPlayer() {
+  Player getPlayer() {
     return switch (moveMaker) {
       case WHITE -> whitePlayer;
       case BLACK -> blackPlayer;
     };
   }
 
-  public Collection<Move> getPlayerLegals() {
+  Collection<Move> getPlayerLegals() {
     return ImmutableList.copyOf(getPlayer().getLegals());
   }
 
-  public Player getOpponent() {
-    return getPlayer().getOpponent();
+  Player getOpponent() {
+    return switch (moveMaker) {
+      case WHITE -> blackPlayer;
+      case BLACK -> whitePlayer;
+    };
   }
 
-  public Collection<Move> getOpponentLegals() {
+  Collection<Move> getOpponentLegals() {
     return ImmutableList.copyOf(getOpponent().getLegals());
   }
 }

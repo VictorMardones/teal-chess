@@ -41,6 +41,7 @@ dependencies {
 
     testImplementation("org.mockito:mockito-core:4.6.1")
     testImplementation("org.mockito:mockito-junit-jupiter:4.6.1")
+    testImplementation("org.mockito:mockito-inline:4.6.1")
 
     testImplementation("org.assertj:assertj-core:3.23.1")
 }

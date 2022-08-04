@@ -14,6 +14,16 @@ import org.junit.jupiter.api.Test;
 class CoordinateTest {
 
   @Test
+  void cache() {
+    assertThat(Coordinate.of("c7")).isEqualTo(Coordinate.of("c7"));
+  }
+
+  @Test
+  void validIndex() {
+    assertThat(Coordinate.of(63)).isEqualTo(Coordinate.of("h1"));
+  }
+
+  @Test
   void invalidIndex() {
     assertThatThrownBy(() -> Coordinate.of(-1))
         .isInstanceOf(InvalidCoordinateException.class)
@@ -21,10 +31,40 @@ class CoordinateTest {
   }
 
   @Test
+  void validAlgebraicNotation() {
+    assertThat(Coordinate.of("a8")).isEqualTo(Coordinate.of(0));
+  }
+
+  @Test
   void invalidAlgebraicNotation() {
     assertThatThrownBy(() -> Coordinate.of("x4"))
         .isInstanceOf(InvalidCoordinateException.class)
         .hasMessageContaining("x4");
+  }
+
+  @Test
+  void index() {
+    assertThat(Coordinate.of("h1").index()).isEqualTo(63);
+  }
+
+  @Test
+  void getColumn() {
+    assertThat(Coordinate.of("f5").getColumn()).isEqualTo('f');
+  }
+
+  @Test
+  void getColumnIndex() {
+    assertThat(Coordinate.of("c3").getColumnIndex()).isEqualTo(2);
+  }
+
+  @Test
+  void sameColumn() {
+    assertThat(Coordinate.of("g7").sameColumnAs(Coordinate.of("g2"))).isTrue();
+  }
+
+  @Test
+  void differentColumn() {
+    assertThat(Coordinate.of("e1").sameColumnAs(Coordinate.of("f1"))).isFalse();
   }
 
   @Test
@@ -43,18 +83,8 @@ class CoordinateTest {
   }
 
   @Test
-  void getColumn() {
-    assertThat(Coordinate.of("f5").getColumn()).isEqualTo('f');
-  }
-
-  @Test
-  void sameColumn() {
-    assertThat(Coordinate.of("g7").sameColumnAs(Coordinate.of("g2"))).isTrue();
-  }
-
-  @Test
-  void differentColumn() {
-    assertThat(Coordinate.of("e1").sameColumnAs(Coordinate.of("f1"))).isFalse();
+  void asString() {
+    assertThat(Coordinate.of("e5")).hasToString("e5");
   }
 
   @Test

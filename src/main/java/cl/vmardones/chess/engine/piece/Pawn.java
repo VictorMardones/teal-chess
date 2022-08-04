@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @ToString(includeFieldNames = false)
 @Slf4j
-public class Pawn implements JumpingPiece {
+public final class Pawn implements JumpingPiece {
 
   private Coordinate position;
   private Alliance alliance;
@@ -49,7 +50,7 @@ public class Pawn implements JumpingPiece {
   }
 
   @Override
-  public Optional<Move> createMove(final Tile destination, final Board board) {
+  public Optional<Move> createMove(@NonNull final Tile destination, @NonNull final Board board) {
 
     if (isCaptureMove(destination)) {
       if (!isEnPassantPossible(board, destination)) {

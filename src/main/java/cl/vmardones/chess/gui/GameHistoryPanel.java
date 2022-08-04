@@ -21,7 +21,7 @@ class GameHistoryPanel extends JPanel {
   private final DataModel model;
   private final JScrollPane scrollPane;
 
-  public GameHistoryPanel() {
+  GameHistoryPanel() {
     super(new BorderLayout());
     model = new DataModel();
 
@@ -43,7 +43,7 @@ class GameHistoryPanel extends JPanel {
     return centeredRenderer;
   }
 
-  public void redo(final Player currentPlayer, final MoveLog moveLog) {
+  void redo(final Player currentPlayer, final MoveLog moveLog) {
 
     final var lastMove = moveLog.getLastMove();
 
@@ -74,7 +74,7 @@ class GameHistoryPanel extends JPanel {
 
   private static class DataModel extends DefaultTableModel {
 
-    public DataModel() {
+    private DataModel() {
       super(new Vector<>(List.of("White", "Black")), 0);
     }
 

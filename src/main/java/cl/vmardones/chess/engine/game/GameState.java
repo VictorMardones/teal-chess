@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+// TODO: See if this class can be immutable
 /** A mutable class that holds the current state of the game. */
 class GameState {
 

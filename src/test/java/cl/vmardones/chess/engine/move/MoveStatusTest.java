@@ -18,6 +18,7 @@ class MoveStatusTest {
 
   @Test
   void isNotDone() {
+    assertThat(MoveStatus.NULL.isDone()).isFalse();
     assertThat(MoveStatus.LEAVES_OPPONENT_IN_CHECK.isDone()).isFalse();
     assertThat(MoveStatus.ILLEGAL.isDone()).isFalse();
   }

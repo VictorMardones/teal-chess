@@ -39,7 +39,7 @@ class BoardPanel extends JPanel {
     validate();
   }
 
-  public void drawBoard(final Board board) {
+  void drawBoard(final Board board) {
     removeAll();
 
     table
