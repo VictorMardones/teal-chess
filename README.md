@@ -1,5 +1,7 @@
 # Teal Chess
 
+![Teal Chess](assets/teal-chess.png)
+
 ## About this project
 
 This project is based on [this video tutorial series](https://www.youtube.com/playlist?list=PLOJzCFLZdG4zk5d-1_ah2B4kqZSeIlWtt), whose source code can be found on [this repository](https://github.com/amir650/BlackWidow-Chess).
