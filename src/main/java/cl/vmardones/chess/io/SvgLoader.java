@@ -8,12 +8,14 @@ package cl.vmardones.chess.io;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Optional;
+import lombok.Generated;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public final class SvgLoader {
 
+  @Generated
   private SvgLoader() {
     throw new UnsupportedOperationException("You cannot instantiate me!");
   }

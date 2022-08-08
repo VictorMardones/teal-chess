@@ -6,12 +6,14 @@
 package cl.vmardones.chess.io;
 
 import java.io.InputStream;
+import lombok.Generated;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 final class ResourceImporter {
 
+  @Generated
   private ResourceImporter() {
     throw new UnsupportedOperationException("You cannot instantiate me!");
   }

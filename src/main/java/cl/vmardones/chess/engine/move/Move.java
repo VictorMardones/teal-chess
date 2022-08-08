@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.EqualsAndHashCode;
+import lombok.Generated;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -72,6 +73,7 @@ public abstract class Move {
 
   public static final class MoveFactory {
 
+    @Generated
     private MoveFactory() {
       throw new UnsupportedOperationException("You cannot instantiate me!");
     }

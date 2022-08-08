@@ -9,6 +9,7 @@ import cl.vmardones.chess.engine.piece.Piece;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Optional;
+import lombok.Generated;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,6 +18,7 @@ public final class PieceIconLoader {
 
   private static final String PIECE_ICON_PATH = "art/pieces";
 
+  @Generated
   private PieceIconLoader() {
     throw new UnsupportedOperationException("You cannot instantiate me!");
   }

@@ -33,7 +33,7 @@ public final class Coordinate {
 
   private final int index;
 
-  /* Indexnotation initialization */
+  /* Index notation initialization */
 
   private Coordinate(final int index) {
     this.index = index;

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 import javax.imageio.ImageIO;
+import lombok.Generated;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.batik.transcoder.SVGAbstractTranscoder;
 import org.apache.batik.transcoder.TranscoderException;
@@ -22,6 +23,7 @@ import org.apache.batik.transcoder.image.PNGTranscoder;
 @Slf4j
 final class SvgImporter {
 
+  @Generated
   private SvgImporter() {
     throw new UnsupportedOperationException("You cannot instantiate me!");
   }
