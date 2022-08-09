@@ -51,13 +51,15 @@ public class MainCommand implements Runnable {
 
   static class ChessVersionProvider implements IVersionProvider {
 
+    private static final String[] UNKNOWN_VERSION = {"UNKNOWN"};
+
     @Override
     public String[] getVersion() {
 
       final var implementationVersion = getClass().getPackage().getImplementationVersion();
 
       if (implementationVersion.isBlank()) {
-        return new String[] {"UNKNOWN"};
+        return UNKNOWN_VERSION;
       }
 
       return new String[] {implementationVersion};

@@ -7,13 +7,13 @@ package cl.vmardones.chess.engine.board;
 
 import cl.vmardones.chess.engine.piece.Piece;
 import com.google.common.collect.ImmutableList;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
 
 /** A single chess tile, which may or may not contain a piece. */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -38,7 +38,7 @@ public abstract class Tile {
    * @param piece The piece on the tile
    * @return A new tile
    */
-  public static Tile create(@NonNull final Coordinate coordinate, final Piece piece) {
+  public static Tile create(@NotNull final Coordinate coordinate, final Piece piece) {
     return piece != null
         ? new OccupiedTile(coordinate, piece)
         : EMPTY_TILES_CACHE.get(coordinate.index());

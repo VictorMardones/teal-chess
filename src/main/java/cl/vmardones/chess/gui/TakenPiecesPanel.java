@@ -45,14 +45,12 @@ class TakenPiecesPanel extends JPanel {
     // TODO: Do this process on a single loop
     getTakenPieces(moveLog, Alliance.WHITE).stream()
         .map(piece -> PieceIconLoader.load(piece, INITIAL_SIZE.width / 2, INITIAL_SIZE.width / 2))
-        .filter(Optional::isPresent)
-        .map(Optional::get)
+        .flatMap(Optional::stream)
         .forEach(image -> southPanel.add(new JLabel(new ImageIcon(image))));
 
     getTakenPieces(moveLog, Alliance.BLACK).stream()
         .map(piece -> PieceIconLoader.load(piece, INITIAL_SIZE.width / 2, INITIAL_SIZE.width / 2))
-        .filter(Optional::isPresent)
-        .map(Optional::get)
+        .flatMap(Optional::stream)
         .forEach(image -> northPanel.add(new JLabel(new ImageIcon(image))));
 
     validate();

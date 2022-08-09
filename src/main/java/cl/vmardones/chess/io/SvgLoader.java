@@ -5,11 +5,11 @@
 
 package cl.vmardones.chess.io;
 
+import jakarta.validation.constraints.NotNull;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Optional;
 import lombok.Generated;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -21,7 +21,7 @@ public final class SvgLoader {
   }
 
   public static Optional<BufferedImage> load(
-      @NonNull final String path, final int width, final int height) {
+      @NotNull final String path, final int width, final int height) {
 
     final var iconResource = ResourceImporter.get(path);
 

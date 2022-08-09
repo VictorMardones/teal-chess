@@ -13,11 +13,11 @@ import cl.vmardones.chess.engine.move.MajorMove;
 import cl.vmardones.chess.engine.move.Move;
 import cl.vmardones.chess.engine.player.Alliance;
 import com.google.common.collect.ImmutableList;
+import jakarta.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
 
 /** A chess piece. */
 public interface Piece {
@@ -36,19 +36,18 @@ public interface Piece {
    * @param board Current state of the game board
    * @return List of possible moves
    */
-  default Collection<Move> calculateLegals(@NonNull final Board board) {
+  default Collection<Move> calculateLegals(@NotNull final Board board) {
     return calculatePossibleDestinations(board).stream()
         .map(board::getTile)
-        .filter(this::isAccessible)
+        .filter(this::canAccess)
         .map(tile -> createMove(tile, board))
-        .filter(Optional::isPresent)
-        .map(Optional::get)
+        .flatMap(Optional::stream)
         .collect(ImmutableList.toImmutableList());
   }
 
-  Collection<Coordinate> calculatePossibleDestinations(@NonNull final Board board);
+  Collection<Coordinate> calculatePossibleDestinations(@NotNull final Board board);
 
-  default boolean isInMoveRange(@NonNull final Board board, @NonNull final Coordinate coordinate) {
+  default boolean isInMoveRange(@NotNull final Board board, @NotNull final Coordinate coordinate) {
     return calculateLegals(board).stream()
         .map(Move::getDestination)
         .anyMatch(destination -> destination == coordinate);
@@ -62,12 +61,12 @@ public interface Piece {
     return !isWhite();
   }
 
-  default boolean isEnemyOf(final Piece other) {
-    if (other == null) {
-      return false;
-    }
+  default boolean isAllyOf(@NotNull final Piece other) {
+    return getAlliance() == other.getAlliance();
+  }
 
-    return getAlliance() != other.getAlliance();
+  default boolean isEnemyOf(@NotNull final Piece other) {
+    return !isAllyOf(other);
   }
 
   default String toSingleChar() {
@@ -79,13 +78,13 @@ public interface Piece {
   }
 
   /**
-   * Checks if the given piece can get the destination. This happens only if the destination is free
-   * or has a piece that can be captured.
+   * Checks if this piece can get to the given destination. This happens only if the destination is
+   * free or has a piece that can be captured.
    *
    * @param destination The target destination
    * @return True if the piece can get to the destination
    */
-  default boolean isAccessible(@NonNull final Tile destination) {
+  default boolean canAccess(@NotNull final Tile destination) {
     final var pieceAtDestination = destination.getPiece();
     return pieceAtDestination.isEmpty() || isEnemyOf(pieceAtDestination.get());
   }
@@ -99,7 +98,7 @@ public interface Piece {
    * @param board The current game board
    * @return A move, selected depending on the source and destination
    */
-  default Optional<Move> createMove(@NonNull final Tile destination, @NonNull final Board board) {
+  default Optional<Move> createMove(@NotNull final Tile destination, @NotNull final Board board) {
     if (destination.getPiece().isEmpty()) {
       return Optional.of(new MajorMove(board, this, destination.getCoordinate()));
     }

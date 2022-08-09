@@ -9,17 +9,16 @@ import cl.vmardones.chess.engine.board.Board;
 import cl.vmardones.chess.engine.board.Coordinate;
 import cl.vmardones.chess.engine.board.Tile;
 import com.google.common.collect.ImmutableList;
-import java.util.Collection;
-import java.util.Optional;
+import jakarta.validation.constraints.NotNull;
+import java.util.*;
 import java.util.stream.IntStream;
-import lombok.NonNull;
 
 interface SlidingPiece extends Piece {
 
   Collection<int[]> getMoveVectors();
 
   @Override
-  default Collection<Coordinate> calculatePossibleDestinations(@NonNull final Board board) {
+  default Collection<Coordinate> calculatePossibleDestinations(@NotNull final Board board) {
     return getMoveVectors().stream()
         .map(vector -> calculateOffsets(vector, board))
         .flatMap(Collection::stream)
@@ -27,13 +26,39 @@ interface SlidingPiece extends Piece {
   }
 
   private Collection<Coordinate> calculateOffsets(final int[] vector, final Board board) {
-    return IntStream.range(1, Board.SIDE_LENGTH + 1)
-        .mapToObj(i -> getPosition().to(vector[0] * i, vector[1] * i))
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .map(board::getTile)
-        .takeWhile(this::isAccessible)
+    final var tiles =
+        IntStream.range(1, Board.SIDE_LENGTH + 1)
+            .mapToObj(i -> getPosition().to(vector[0] * i, vector[1] * i))
+            .flatMap(Optional::stream)
+            .map(board::getTile)
+            .toList()
+            .listIterator();
+
+    return filterAccessible(tiles).stream()
         .map(Tile::getCoordinate)
         .collect(ImmutableList.toImmutableList());
+  }
+
+  // TODO: Replace this method with something more stream-friendly
+  private Collection<Tile> filterAccessible(final Iterator<Tile> tiles) {
+
+    final List<Tile> accessibleTiles = new ArrayList<>();
+
+    while (tiles.hasNext()) {
+      final var destination = tiles.next();
+      final var pieceAtDestination = destination.getPiece();
+
+      if (pieceAtDestination.isEmpty()) {
+        accessibleTiles.add(destination);
+      } else {
+        if (isEnemyOf(pieceAtDestination.get())) {
+          accessibleTiles.add(destination);
+        }
+
+        break;
+      }
+    }
+
+    return accessibleTiles;
   }
 }

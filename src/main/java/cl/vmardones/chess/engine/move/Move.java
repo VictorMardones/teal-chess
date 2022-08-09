@@ -8,13 +8,13 @@ package cl.vmardones.chess.engine.move;
 import cl.vmardones.chess.engine.board.Board;
 import cl.vmardones.chess.engine.board.Coordinate;
 import cl.vmardones.chess.engine.piece.Piece;
+import jakarta.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Predicate;
 import lombok.EqualsAndHashCode;
 import lombok.Generated;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 /** The action of moving a piece. */
@@ -86,9 +86,9 @@ public abstract class Move {
      * @return Move that goes from the source to the destination, if possible.
      */
     public static Optional<Move> create(
-        @NonNull final Collection<Move> currentPlayerLegals,
-        @NonNull final Coordinate source,
-        @NonNull final Coordinate destination) {
+        @NotNull final Collection<Move> currentPlayerLegals,
+        @NotNull final Coordinate source,
+        @NotNull final Coordinate destination) {
       if (source.equals(destination)) {
         return Optional.empty();
       }

@@ -13,8 +13,8 @@ import cl.vmardones.chess.engine.player.Alliance;
 import cl.vmardones.chess.engine.player.BlackPlayer;
 import cl.vmardones.chess.engine.player.Player;
 import cl.vmardones.chess.engine.player.WhitePlayer;
+import jakarta.validation.constraints.NotNull;
 import java.util.Collection;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -66,7 +66,7 @@ public class Game {
     return boardService.calculateLegals(board, board.getBlackPieces());
   }
 
-  public Turn createNextTurn(@NonNull final Move move) {
+  public Turn createNextTurn(@NotNull final Move move) {
     return createTurn(move.execute(), getOpponent().getAlliance());
   }
 
@@ -95,7 +95,7 @@ public class Game {
     return gameState.getCurrentTurn().blackPlayer();
   }
 
-  public MoveTransition performMove(@NonNull final Move move) {
+  public MoveTransition performMove(@NotNull final Move move) {
     return getCurrentPlayer().makeMove(getCurrentPlayer(), move);
   }
 }

@@ -5,11 +5,11 @@
 
 package cl.vmardones.chess.io;
 
+import jakarta.validation.constraints.NotNull;
 import java.awt.*;
 import java.io.IOException;
 import javax.swing.plaf.FontUIResource;
 import lombok.Generated;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -24,7 +24,7 @@ public final class FontLoader {
     throw new UnsupportedOperationException("You cannot instantiate me!");
   }
 
-  public static Font load(@NonNull final String fontName) {
+  public static Font load(@NotNull final String fontName) {
     try {
       final var fontResource = ResourceImporter.get(FONT_PATH + fontName);
 

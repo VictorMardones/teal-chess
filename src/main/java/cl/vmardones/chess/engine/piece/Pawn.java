@@ -15,13 +15,13 @@ import cl.vmardones.chess.engine.piece.vector.Vector;
 import cl.vmardones.chess.engine.piece.vector.Vertical;
 import cl.vmardones.chess.engine.player.Alliance;
 import com.google.common.collect.ImmutableList;
+import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,7 +50,7 @@ public final class Pawn implements JumpingPiece {
   }
 
   @Override
-  public Optional<Move> createMove(@NonNull final Tile destination, @NonNull final Board board) {
+  public Optional<Move> createMove(@NotNull final Tile destination, @NotNull final Board board) {
 
     if (isCaptureMove(destination)) {
       if (!isEnPassantPossible(board, destination)) {
@@ -122,7 +122,7 @@ public final class Pawn implements JumpingPiece {
       return false;
     }
 
-    return isFirstMove() && isAccessible(board.getTile(forward.get())) && isAccessible(destination);
+    return isFirstMove() && canAccess(board.getTile(forward.get())) && canAccess(destination);
   }
 
   private Optional<Move> createForwardMove(final Board board, final Tile destination) {

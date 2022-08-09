@@ -10,6 +10,7 @@ import cl.vmardones.chess.engine.piece.Pawn;
 import cl.vmardones.chess.engine.piece.Piece;
 import cl.vmardones.chess.engine.player.Alliance;
 import com.google.common.collect.ImmutableList;
+import jakarta.validation.constraints.NotNull;
 import java.util.*;
 import java.util.stream.IntStream;
 import lombok.*;
@@ -64,26 +65,25 @@ public class Board {
       final List<Tile> gameBoard, final Alliance alliance) {
     return gameBoard.stream()
         .map(Tile::getPiece)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
+        .flatMap(Optional::stream)
         .filter(piece -> piece.getAlliance() == alliance)
         .collect(ImmutableList.toImmutableList());
   }
 
   /* Methods for checking the board */
 
-  public Tile getTile(@NonNull final Coordinate coordinate) {
+  public Tile getTile(@NotNull final Coordinate coordinate) {
     return tiles.get(coordinate.index());
   }
 
   public boolean contains(
-      @NonNull final Coordinate coordinate, @NonNull final Piece.PieceType pieceType) {
+      @NotNull final Coordinate coordinate, @NotNull final Piece.PieceType pieceType) {
     final var piece = getTile(coordinate).getPiece();
 
     return piece.isPresent() && piece.get().getPieceType() == pieceType;
   }
 
-  public boolean containsNothing(@NonNull final Coordinate coordinate) {
+  public boolean containsNothing(@NotNull final Coordinate coordinate) {
     return getTile(coordinate).getPiece().isEmpty();
   }
 
@@ -96,7 +96,7 @@ public class Board {
    *
    * @return The board builder
    */
-  public static BoardBuilder builder(@NonNull final King whiteKing, @NonNull final King blackKing) {
+  public static BoardBuilder builder(@NotNull final King whiteKing, @NotNull final King blackKing) {
     return new BoardBuilder(whiteKing, blackKing);
   }
 

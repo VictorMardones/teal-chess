@@ -12,9 +12,9 @@ import cl.vmardones.chess.engine.move.Move;
 import cl.vmardones.chess.engine.piece.*;
 import cl.vmardones.chess.engine.player.Alliance;
 import com.google.common.collect.ImmutableList;
+import jakarta.validation.constraints.NotNull;
 import java.util.*;
 import java.util.stream.IntStream;
-import lombok.NonNull;
 
 public class BoardService {
 
@@ -65,7 +65,7 @@ public class BoardService {
     return builder.build();
   }
 
-  public String prettyPrint(@NonNull final Board board) {
+  public String prettyPrint(@NotNull final Board board) {
     final var builder = new StringBuilder();
 
     IntStream.range(MIN_TILES, MAX_TILES)
@@ -81,7 +81,7 @@ public class BoardService {
   }
 
   public Collection<Move> calculateLegals(
-      @NonNull final Board board, @NonNull final Collection<Piece> pieces) {
+      @NotNull final Board board, @NotNull final Collection<Piece> pieces) {
     return pieces.stream()
         .map(piece -> piece.calculateLegals(board))
         .flatMap(Collection::stream)

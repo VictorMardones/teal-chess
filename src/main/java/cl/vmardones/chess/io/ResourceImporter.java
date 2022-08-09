@@ -5,9 +5,9 @@
 
 package cl.vmardones.chess.io;
 
+import jakarta.validation.constraints.NotNull;
 import java.io.InputStream;
 import lombok.Generated;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -18,7 +18,7 @@ final class ResourceImporter {
     throw new UnsupportedOperationException("You cannot instantiate me!");
   }
 
-  static InputStream get(@NonNull final String path) {
+  static InputStream get(@NotNull final String path) {
     return ResourceImporter.class.getClassLoader().getResourceAsStream(path);
   }
 }

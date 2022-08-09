@@ -69,6 +69,9 @@ dependencies {
     testCompileOnly("org.projectlombok:lombok:1.18.24")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.24")
 
+    // General validations
+    implementation("org.hibernate.validator:hibernate-validator:7.0.5.Final")
+
     // Unit testing
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
     testCompileOnly("org.junit.jupiter:junit-jupiter-params:5.9.0")

@@ -55,31 +55,28 @@ class PieceTest {
   }
 
   @Test
-  void isEnemy() {
-    when(piece.getAlliance()).thenReturn(Alliance.WHITE);
-    when(destinationPiece.getAlliance()).thenReturn(Alliance.BLACK);
-
-    assertThat(piece.isEnemyOf(destinationPiece)).isTrue();
-  }
-
-  @Test
-  void isAlly() {
+  void isAllyOf() {
     when(piece.getAlliance()).thenReturn(Alliance.WHITE);
     when(destinationPiece.getAlliance()).thenReturn(Alliance.WHITE);
 
+    assertThat(piece.isAllyOf(destinationPiece)).isTrue();
     assertThat(piece.isEnemyOf(destinationPiece)).isFalse();
   }
 
   @Test
-  void isNullEnemy() {
-    assertThat(piece.isEnemyOf(null)).isFalse();
+  void isEnemyOf() {
+    when(piece.getAlliance()).thenReturn(Alliance.WHITE);
+    when(destinationPiece.getAlliance()).thenReturn(Alliance.BLACK);
+
+    assertThat(piece.isAllyOf(destinationPiece)).isFalse();
+    assertThat(piece.isEnemyOf(destinationPiece)).isTrue();
   }
 
   @Test
   void isEmptyAccesible() {
     when(destinationTile.getPiece()).thenReturn(Optional.empty());
 
-    assertThat(piece.isAccessible(destinationTile)).isTrue();
+    assertThat(piece.canAccess(destinationTile)).isTrue();
   }
 
   @Test
@@ -88,7 +85,7 @@ class PieceTest {
     when(destinationTile.getPiece()).thenReturn(Optional.of(destinationPiece));
     when(destinationPiece.getAlliance()).thenReturn(Alliance.WHITE);
 
-    assertThat(piece.isAccessible(destinationTile)).isTrue();
+    assertThat(piece.canAccess(destinationTile)).isTrue();
   }
 
   @Test
@@ -97,6 +94,6 @@ class PieceTest {
     when(destinationTile.getPiece()).thenReturn(Optional.of(destinationPiece));
     when(destinationPiece.getAlliance()).thenReturn(Alliance.BLACK);
 
-    assertThat(piece.isAccessible(destinationTile)).isFalse();
+    assertThat(piece.canAccess(destinationTile)).isFalse();
   }
 }

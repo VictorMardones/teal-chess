@@ -6,11 +6,11 @@
 package cl.vmardones.chess.io;
 
 import cl.vmardones.chess.engine.piece.Piece;
+import jakarta.validation.constraints.NotNull;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Optional;
 import lombok.Generated;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -24,7 +24,7 @@ public final class PieceIconLoader {
   }
 
   public static Optional<BufferedImage> load(
-      @NonNull final Piece piece, final int width, final int height) {
+      @NotNull final Piece piece, final int width, final int height) {
 
     final var iconResource = ResourceImporter.get(getIconPath(piece));
 
